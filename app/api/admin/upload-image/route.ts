@@ -29,8 +29,10 @@ export async function POST(req: NextRequest) {
     // Use Vercel Blob in production, local filesystem in development
     if (process.env.BLOB_READ_WRITE_TOKEN) {
       const { put } = await import('@vercel/blob')
-      const blob = await put(`blog/${filename}`, file, {
+      const buffer = Buffer.from(await file.arrayBuffer())
+      const blob = await put(`blog/${filename}`, buffer, {
         access: 'public',
+        contentType: file.type,
         addRandomSuffix: false,
       })
       return NextResponse.json({ url: blob.url })
@@ -48,3 +50,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Upload failed' }, { status: 500 })
   }
 }
+
+// Allow up to 5 MB uploads on Vercel serverless
+export const config = {
+  api: { bodyParser: false },
+}
+
+export const maxDuration = 30
