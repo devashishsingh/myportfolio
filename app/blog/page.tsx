@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { getAllPosts } from '../../lib/mdx'
 
+export const revalidate = 0
+
 export default async function Blog(){
   const posts = await getAllPosts()
 

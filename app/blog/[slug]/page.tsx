@@ -1,12 +1,15 @@
-import { getPostBySlug, getPostSlugs } from '../../../lib/mdx'
+import { getPostBySlug, getPostSlugs, getAllPosts } from '../../../lib/mdx'
 import MDXContent from '../../../components/MDXContent'
 import BlogEngagement from '../../../components/BlogEngagement'
 import CommentsSection from '../../../components/CommentsSection'
 import Link from 'next/link'
 
+export const dynamicParams = true
+export const revalidate = 0
+
 export async function generateStaticParams(){
-  const slugs = getPostSlugs().map(s=>s.replace(/\.mdx$/,''))
-  return slugs.map(slug=>({slug}))
+  const posts = await getAllPosts()
+  return posts.map(p=>({slug: p.slug}))
 }
 
 export async function generateMetadata({params}:{params:{slug:string}}){
