@@ -51,9 +51,4 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// Allow up to 5 MB uploads on Vercel serverless
-export const config = {
-  api: { bodyParser: false },
-}
-
 export const maxDuration = 30
