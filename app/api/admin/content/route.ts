@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs/promises'
 import path from 'path'
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import { prisma } from '../../../../lib/db'
 const profilePath = path.join(process.cwd(), 'data', 'profile.json')
 const projectsPath = path.join(process.cwd(), 'data', 'projects.json')
 

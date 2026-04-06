@@ -1,15 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
-import { PrismaClient } from '@prisma/client'
+import { prisma } from './db'
 
 const POSTS_PATH = path.join(process.cwd(), 'content', 'posts')
-
-let prisma: PrismaClient | null = null
-function db() {
-  if (!prisma) prisma = new PrismaClient()
-  return prisma
-}
 
 export function getPostSlugs(){
   if(!fs.existsSync(POSTS_PATH)) return []
@@ -30,7 +24,7 @@ export async function getPostBySlug(slug:string){
   }
 
   // Try database
-  const post = await db().blogPost.findUnique({ where: { slug: realSlug } })
+  const post = await prisma.blogPost.findUnique({ where: { slug: realSlug } })
   if (post) {
     const tags = (() => { try { return JSON.parse(post.tags) } catch { return [] } })()
     const words = post.content.split(/\s+/).filter(Boolean).length
@@ -74,7 +68,7 @@ export async function getAllPosts(){
   // Get DB posts
   let dbPosts: Array<Record<string, any> & { slug: string; readingTime: number }> = []
   try {
-    const rows = await db().blogPost.findMany({ where: { published: true } })
+    const rows = await prisma.blogPost.findMany({ where: { published: true } })
     dbPosts = rows.map(p => {
       const tags = (() => { try { return JSON.parse(p.tags) } catch { return [] } })()
       const words = p.content.split(/\s+/).filter(Boolean).length
