@@ -1,0 +1,30 @@
+[
+  {
+    "title": "InMyBox — DMARC Intelligence Platform",
+    "category": "Cybersecurity SaaS",
+    "excerpt": "AI-powered low-cost platform built to simplify email authentication reporting, visibility, and security posture management for businesses.",
+    "tech": ["VS Code", "AI Tools", "GitHub", "Vercel", "Supabase"],
+    "href": "/work/case-study/sample"
+  },
+  {
+    "title": "Career Intelligence Platform",
+    "category": "AI Platform",
+    "excerpt": "A student-focused intelligence platform designed to provide career clarity, growth roadmaps, and skill direction using AI-powered insights.",
+    "tech": ["VS Code", "Claude", "Supabase", "Render"],
+    "href": "/work"
+  },
+  {
+    "title": "Digital Waste Optimizer",
+    "category": "Startup MVP",
+    "excerpt": "A platform built to help businesses identify underutilized digital resources and reduce unnecessary technology spend.",
+    "tech": ["AI Tools", "VS Code", "Cloud Systems", "GitHub"],
+    "href": "/work"
+  },
+  {
+    "title": "Innovation Network Platform",
+    "category": "Community Platform",
+    "excerpt": "A collaborative ecosystem for innovators, thinkers, and builders to share ideas, showcase products, and solve real-world digital problems together.",
+    "tech": ["Next.js", "Prisma", "SQLite", "Tailwind CSS"],
+    "href": "/community"
+  }
+]

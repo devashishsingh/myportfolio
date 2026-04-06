@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model InvitationRequest {
+  id         String   @id @default(cuid())
+  fullName   String
+  email      String   @unique
+  linkedIn   String?
+  github     String?
+  portfolio  String?
+  role       String
+  interest   String
+  region     String
+  whyJoin    String
+  contribute String
+  expertise  String?
+  status     String   @default("pending") // pending | approved | rejected
+  adminNote  String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Subscriber {
+  id               String   @id @default(cuid())
+  name             String
+  email            String   @unique
+  region           String
+  interests        String // comma-separated topics
+  confirmed        Boolean  @default(false)
+  confirmToken     String?  @unique
+  unsubscribeToken String?  @unique
+  createdAt        DateTime @default(now())
+}
+
+model CommunityPost {
+  id              String   @id @default(cuid())
+  title           String
+  summary         String
+  content         String
+  category        String
+  tags            String // comma-separated
+  region          String
+  coverImage      String?
+  authorName      String
+  authorEmail     String
+  promotionReq    Boolean  @default(false)
+  featuredReq     Boolean  @default(false)
+  status          String   @default("draft") // draft | submitted | under_review | approved | rejected | published
+  adminNote       String?
+  featured        Boolean  @default(false)
+  publishedAt     DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model SpotlightItem {
+  id          String   @id @default(cuid())
+  type        String // person | startup | idea | tool | post | event | opportunity
+  title       String
+  description String
+  imageUrl    String?
+  linkUrl     String?
+  region      String?
+  badge       String?
+  displayOrder Int     @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Feedback {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  type      String   // bug | suggestion | praise | other
+  message   String
+  page      String?  // which page the feedback is about
+  status    String   @default("new") // new | reviewed | resolved
+  adminNote String?
+  createdAt DateTime @default(now())
+}
+
+model Newsletter {
+  id        String   @id @default(cuid())
+  subject   String
+  content   String
+  sentTo    Int      @default(0)
+  status    String   @default("draft") // draft | sent
+  sentAt    DateTime?
+  createdAt DateTime @default(now())
+}
+
+model BookingRequest {
+  id            String   @id @default(cuid())
+  name          String
+  email         String
+  sessionType   String   // mentorship | consulting | workshop | other
+  preferredDate String
+  preferredTime String
+  timezone      String   @default("Asia/Kuala_Lumpur")
+  message       String?
+  status        String   @default("pending") // pending | confirmed | cancelled | completed
+  adminNote     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model BlogLike {
+  id        String   @id @default(cuid())
+  slug      String
+  uid       String   // anonymous fingerprint (hashed IP + UA)
+  createdAt DateTime @default(now())
+
+  @@unique([slug, uid])
+}
+
+model BlogComment {
+  id        String   @id @default(cuid())
+  slug      String
+  name      String
+  email     String
+  message   String
+  status    String   @default("approved") // approved | pending | hidden
+  createdAt DateTime @default(now())
+}
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String?
+  author      String   @default("Devashish Singh")
+  date        String
+  category    String?
+  tags        String   @default("[]") // JSON array
+  featured    Boolean  @default(false)
+  content     String
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SiteContent {
+  id        String   @id @default(cuid())
+  key       String   @unique // 'profile' or 'projects'
+  value     String   // JSON string
+  updatedAt DateTime @updatedAt
+}

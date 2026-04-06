@@ -1,0 +1,15 @@
+node_modules/
+.next/
+out/
+.env*
+!.env.example
+*.db
+*.db-journal
+dist/
+coverage/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.local
+
+/lib/generated/prisma

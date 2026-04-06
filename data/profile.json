@@ -1,0 +1,30 @@
+{
+  "name": "Devashish Singh",
+  "role": "Cyber Coach — Mentor — Advisor",
+  "summary": "Coach and advisor on security-aware product strategy, incident response, and technical leadership. Previously: Manager / Information Security Advisor at AirAsia.",
+  "teachingLinks": [
+    {
+      "title": "Advanced Cyber Incident Response (15-day)",
+      "url": "",
+      "note": "Add a public link or upload materials to /public/teaching/ and paste the URL here."
+    }
+  ],
+  "courses": [
+    {
+      "title": "Threat Hunting & Incident Response",
+      "provider": "Self / Private workshops",
+      "year": ""
+    }
+  ],
+  "tutorials": [],
+  "experience": [
+    {
+      "title": "Manager, Information Security Advisor",
+      "company": "AirAsia",
+      "dates": "",
+      "summary": "Advised on incident response, threat detection, and security training for engineering teams."
+    }
+  ],
+  "certifications": [],
+  "education": []
+}
