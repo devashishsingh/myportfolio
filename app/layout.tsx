@@ -4,6 +4,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import WhatsAppButton from '../components/WhatsAppButton'
 import FeedbackWidget from '../components/FeedbackWidget'
+import CursorFollower from '../components/CursorFollower'
 
 export const metadata = {
   title: 'Devashish Singh — Cyber Coach, Mentor & Advisor',
@@ -37,6 +38,7 @@ export default function RootLayout({children}:{children:React.ReactNode}){
         <Footer />
         <WhatsAppButton />
         <FeedbackWidget />
+        <CursorFollower />
       </body>
     </html>
   )

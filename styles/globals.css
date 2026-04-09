@@ -142,10 +142,10 @@ body{
   background:rgba(0,0,0,0.05);
 }
 .header-icon-color svg{
-  transition:transform 0.15s ease;
+  transition:transform 0.2s ease;
 }
 .header-icon-color:hover svg{
-  transform:scale(1.1);
+  transform:scale(1.15) rotate(-5deg);
 }
 .header-hamburger{
   display:none;
@@ -256,13 +256,24 @@ body{
 }
 
 /* Navigation */
-.nav-link{color:var(--text);text-decoration:none;padding:6px 8px;border-radius:4px;transition:color .18s,background .18s}
+.nav-link{color:var(--text);text-decoration:none;padding:6px 8px;border-radius:4px;transition:color .18s,background .18s;position:relative;}
 .nav-link:hover{background:rgba(0,0,0,0.04)}
+.nav-link::after{
+  content:'';position:absolute;bottom:2px;left:8px;right:8px;
+  height:2px;background:var(--accent);border-radius:1px;
+  transform:scaleX(0);transform-origin:center;
+  transition:transform 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+.nav-link:hover::after{transform:scaleX(1);}
+.nav-contact::after{display:none;}
 
 /* Buttons */
-.btn{display:inline-block;padding:10px 16px;border-radius:6px;background:var(--text);color:#fff;text-decoration:none;font-weight:600;transition:transform .12s ease,box-shadow .12s}
-.btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,0.08)}
-.btn-outline{display:inline-block;padding:10px 16px;border-radius:6px;border:1px solid var(--text);color:var(--text);text-decoration:none;font-weight:600}
+.btn{display:inline-block;padding:10px 16px;border-radius:6px;background:var(--text);color:#fff;text-decoration:none;font-weight:600;transition:transform .18s ease,box-shadow .18s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,0.12)}
+.btn:active{transform:translateY(0);box-shadow:0 2px 6px rgba(0,0,0,0.06)}
+.btn-outline{display:inline-block;padding:10px 16px;border-radius:6px;border:1px solid var(--text);color:var(--text);text-decoration:none;font-weight:600;transition:transform .18s ease,background .18s}
+.btn-outline:hover{transform:translateY(-1px);background:rgba(0,0,0,0.03);}
+.btn-outline:active{transform:translateY(0);}
 
 /* Cards */
 .card{background:transparent;border:1px solid rgba(0,0,0,0.06);padding:18px;border-radius:8px}
@@ -603,10 +614,16 @@ footer{color:var(--muted-2)}
   justify-content:center;
   box-shadow:0 4px 14px rgba(37,211,102,0.45);
   transition:transform .2s ease, box-shadow .2s ease;
+  animation:whatsapp-pulse 3s ease-in-out infinite;
+}
+@keyframes whatsapp-pulse{
+  0%,100%{box-shadow:0 4px 14px rgba(37,211,102,0.45);}
+  50%{box-shadow:0 4px 24px rgba(37,211,102,0.65),0 0 0 8px rgba(37,211,102,0.1);}
 }
 .whatsapp-fab:hover{
-  transform:scale(1.1);
+  transform:scale(1.1) rotate(5deg);
   box-shadow:0 6px 20px rgba(37,211,102,0.55);
+  animation:none;
 }
 .whatsapp-fab:active{
   transform:scale(0.95);
@@ -634,6 +651,14 @@ footer{color:var(--muted-2)}
   border-color:#000;
   background:rgba(0,0,0,0.04);
   transform:translateY(-2px);
+}
+.footer-btn:hover svg{
+  animation:footer-icon-bounce 0.4s ease;
+}
+@keyframes footer-icon-bounce{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.25) rotate(-8deg);}
+  100%{transform:scale(1);}
 }
 
 /* ── Blog Editor ── */
@@ -1462,6 +1487,89 @@ footer{color:var(--muted-2)}
 }
 @media(max-width:400px){
   .admin-stat-grid{grid-template-columns:1fr;}
+}
+
+/* ── Toon Guide ──────────────────────────── */
+.toon-guide{display:flex;align-items:flex-start;gap:12px;z-index:90;}
+.toon-guide-inline{margin:20px auto;max-width:460px;padding:0 24px;}
+.toon-guide-fixed{position:fixed;bottom:100px;padding:16px;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.12);border:1px solid rgba(0,0,0,0.06);}
+.toon-guide-bottom-right{right:24px;}
+.toon-guide-bottom-left{left:24px;}
+.toon-guide-bubble{display:flex;flex-direction:column;gap:8px;}
+.toon-guide-text{font-size:14px;line-height:1.55;color:var(--text);margin:0;}
+.toon-guide-dismiss{
+  background:none;border:none;padding:0;
+  font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;
+  text-decoration:underline;text-underline-offset:2px;
+  align-self:flex-start;transition:color 0.2s;
+}
+.toon-guide-dismiss:hover{color:var(--text);}
+
+/* ── Scroll Hint ────────────────────────── */
+.scroll-hint{
+  display:flex;justify-content:center;
+  margin-top:-8px;margin-bottom:16px;
+  padding:12px 0;
+}
+
+/* ── Click Pulse ────────────────────────── */
+.click-pulse-wrap{position:relative;display:inline-flex;align-items:center;}
+.click-pulse-label{
+  position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  font-size:11px;color:var(--muted);white-space:nowrap;pointer-events:none;
+  margin-top:4px;
+}
+.click-pulse-ring{
+  position:absolute;inset:0;border-radius:inherit;
+  border:2px solid var(--accent);pointer-events:none;
+}
+
+/* ── Service Card Icons ─────────────────── */
+.service-card-icon{
+  transition:transform 0.3s ease;
+}
+
+/* ── Interactive card hover glow ─────────── */
+.engagement-card{
+  position:relative;overflow:hidden;
+  transition:border-color 0.3s ease;
+}
+.engagement-card::before{
+  content:'';position:absolute;top:-50%;left:-50%;
+  width:200%;height:200%;
+  background:radial-gradient(circle,rgba(255,217,61,0.06) 0%,transparent 60%);
+  opacity:0;transition:opacity 0.4s ease;pointer-events:none;
+}
+.engagement-card:hover::before{opacity:1;}
+.engagement-card:hover{border-color:rgba(0,0,0,0.15);}
+
+/* ── Page transition ──────────────────── */
+main{
+  animation:page-fade-in 0.4s ease-out;
+}
+@keyframes page-fade-in{
+  from{opacity:0;transform:translateY(8px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* ── Cursor follower dot (for interactive feel) ── */
+.cursor-dot{
+  position:fixed;width:8px;height:8px;
+  background:var(--accent);border-radius:50%;
+  pointer-events:none;z-index:9999;
+  mix-blend-mode:difference;
+  transition:transform 0.15s ease, opacity 0.15s ease;
+  transform:translate(-50%,-50%);
+}
+
+/* ── Toon Guide mobile ──────────────────── */
+@media(max-width:768px){
+  .toon-guide-fixed{left:16px!important;right:16px!important;bottom:80px;}
+  .scroll-hint{margin-top:0;}
+}
+@media(max-width:640px){
+  .toon-guide-fixed{padding:12px;}
+  .toon-guide-text{font-size:13px;}
 }
 .blog-comment-success{font-size:13px;color:#16a34a;font-weight:500;}
 .blog-comment-error{font-size:13px;color:#dc2626;}

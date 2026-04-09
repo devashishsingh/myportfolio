@@ -2,10 +2,11 @@ import Hero from '../components/Hero'
 import ServiceCard from '../components/ServiceCard'
 import ProjectCard from '../components/ProjectCard'
 import Link from 'next/link'
+import HomeInteractive from '../components/HomeInteractive'
 
 export default function Home(){
   return (
-    <div>
+    <HomeInteractive>
       <section className="pt-12">
         <Hero />
       </section>
@@ -23,6 +24,7 @@ export default function Home(){
             subtitle="For students and professionals"
             href="/book-session"
             cta="Book a Session"
+            icon="mentor"
           >
             Career guidance, cybersecurity mentoring, AI learning, leadership coaching, and practical 1:1 sessions to help you move forward with clarity and confidence.
           </ServiceCard>
@@ -31,6 +33,7 @@ export default function Home(){
             subtitle="For startups and businesses"
             href="/contact"
             cta="Let's Collaborate"
+            icon="build"
           >
             Turn ideas into secure digital realities through startup advisory, MVP planning, digital foundations, AI-led workflows, and practical execution support.
           </ServiceCard>
@@ -39,6 +42,7 @@ export default function Home(){
             subtitle="For innovators and builders"
             href="/community/join"
             cta="Request Invitation"
+            icon="community"
           >
             Be part of a curated community to share ideas, collaborate by region, contribute posts, join workshops, and solve real-world digital problems together.
           </ServiceCard>
@@ -148,6 +152,6 @@ export default function Home(){
         <h3 className="text-lg font-semibold">Featured writing</h3>
         <p className="mt-4 text-gray-700">Thoughtful pieces on product thinking, design, and research.</p>
       </section>
-    </div>
+    </HomeInteractive>
   )
 }
