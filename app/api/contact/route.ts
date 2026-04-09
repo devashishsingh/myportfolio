@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { sendEmail, contactAutoReplyEmail, adminNotificationEmail, EMAIL_CONFIG } from '../../../lib/email'
+import { createLead } from '../../../lib/leads'
 
 export async function POST(request: Request){
   try{
@@ -7,6 +8,9 @@ export async function POST(request: Request){
     const { name, email, message } = data
 
     if(!name || !email || !message) return NextResponse.json({error:'Missing fields'}, {status:400})
+
+    // Create lead
+    await createLead({ name, email, source: 'contact', message })
 
     // Send admin notification
     const notif = adminNotificationEmail('contact', {

@@ -13,7 +13,7 @@ const BlogEditor = dynamic(() => import('../../components/editor/BlogEditor'), {
   ),
 })
 
-type Tab = 'dashboard' | 'blog' | 'content' | 'invitations' | 'subscribers' | 'feedback' | 'newsletter' | 'bookings'
+type Tab = 'dashboard' | 'blog' | 'content' | 'invitations' | 'subscribers' | 'feedback' | 'newsletter' | 'bookings' | 'leads'
 
 interface Stats {
   totalInvitations: number
@@ -91,6 +91,30 @@ interface BookingItem {
   createdAt: string
 }
 
+interface LeadItem {
+  id: string
+  name: string
+  email: string
+  source: string
+  sourceId: string | null
+  message: string | null
+  meta: string | null
+  status: string
+  adminNote: string | null
+  createdAt: string
+  updatedAt: string
+}
+
+interface LeadStats {
+  total: number
+  new: number
+  acknowledged: number
+  responded: number
+  closed: number
+  today: number
+  bySource: { source: string; count: number }[]
+}
+
 export default function Admin() {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState<Tab>('dashboard')
@@ -109,6 +133,7 @@ export default function Admin() {
     { key: 'feedback', label: 'Feedback' },
     { key: 'newsletter', label: 'Newsletter' },
     { key: 'bookings', label: 'Bookings' },
+    { key: 'leads', label: '📊 Leads' },
   ]
 
   return (
@@ -142,6 +167,7 @@ export default function Admin() {
         {activeTab === 'feedback' && <FeedbackTab />}
         {activeTab === 'newsletter' && <NewsletterTab />}
         {activeTab === 'bookings' && <BookingsTab />}
+        {activeTab === 'leads' && <LeadsTab />}
       </div>
     </section>
   )
@@ -1363,6 +1389,354 @@ function BookingsTab() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ──────────────── LEADS TAB ──────────────── */
+function LeadsTab() {
+  const [leads, setLeads] = useState<LeadItem[]>([])
+  const [stats, setStats] = useState<LeadStats | null>(null)
+  const [filter, setFilter] = useState<'all' | 'new' | 'acknowledged' | 'responded' | 'closed' | 'today'>('all')
+  const [source, setSource] = useState('all')
+  const [search, setSearch] = useState('')
+  const [searchInput, setSearchInput] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [actionLoading, setActionLoading] = useState<string | null>(null)
+  const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [editNote, setEditNote] = useState<{ id: string; note: string } | null>(null)
+
+  const loadLeads = useCallback(async () => {
+    setLoading(true)
+    const params = new URLSearchParams()
+    if (filter !== 'all') params.set('filter', filter)
+    if (source !== 'all') params.set('source', source)
+    if (search) params.set('search', search)
+    const res = await fetch(`/api/admin/leads?${params}`)
+    const data = await res.json()
+    setLeads(data.leads || [])
+    setStats(data.stats || null)
+    setLoading(false)
+  }, [filter, source, search])
+
+  useEffect(() => { loadLeads() }, [loadLeads])
+
+  async function updateLead(id: string, status: string) {
+    setActionLoading(id)
+    await fetch('/api/admin/leads', {
+      method: 'PATCH',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ id, status }),
+    })
+    await loadLeads()
+    setActionLoading(null)
+  }
+
+  async function saveNote(id: string, adminNote: string) {
+    setActionLoading(id)
+    await fetch('/api/admin/leads', {
+      method: 'PATCH',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ id, adminNote }),
+    })
+    setEditNote(null)
+    await loadLeads()
+    setActionLoading(null)
+  }
+
+  async function deleteLead(id: string) {
+    if (!confirm('Delete this lead?')) return
+    setActionLoading(id)
+    await fetch('/api/admin/leads', {
+      method: 'DELETE',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ id }),
+    })
+    await loadLeads()
+    setActionLoading(null)
+  }
+
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault()
+    setSearch(searchInput)
+  }
+
+  function exportCSV() {
+    const params = new URLSearchParams()
+    params.set('format', 'csv')
+    if (filter !== 'all') params.set('filter', filter)
+    if (source !== 'all') params.set('source', source)
+    if (search) params.set('search', search)
+    window.open(`/api/admin/leads?${params}`, '_blank')
+  }
+
+  const sourceLabels: Record<string, string> = {
+    contact: '✉️ Contact',
+    booking: '📅 Booking',
+    feedback: '💬 Feedback',
+    community_invite: '🤝 Community Join',
+    community_subscribe: '📬 Subscribe',
+  }
+
+  const statusColors: Record<string, string> = {
+    new: '#f59e0b',
+    acknowledged: '#3b82f6',
+    responded: '#16a34a',
+    closed: '#6b7280',
+  }
+
+  const filterTabs = [
+    { key: 'all', label: 'All', count: stats?.total || 0 },
+    { key: 'new', label: 'New', count: stats?.new || 0 },
+    { key: 'today', label: 'Today', count: stats?.today || 0 },
+    { key: 'acknowledged', label: 'Acknowledged', count: stats?.acknowledged || 0 },
+    { key: 'responded', label: 'Responded', count: stats?.responded || 0 },
+    { key: 'closed', label: 'Closed', count: stats?.closed || 0 },
+  ]
+
+  if (loading && !stats) return <p style={{ color: 'var(--muted)' }}>Loading leads...</p>
+
+  return (
+    <div>
+      {/* Header row */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
+        <h2 style={{ fontSize: 20, fontWeight: 600, margin: 0 }}>Lead Management</h2>
+        <button onClick={exportCSV} className="btn" style={{ fontSize: 12, padding: '6px 16px', display: 'flex', alignItems: 'center', gap: 6 }}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export CSV
+        </button>
+      </div>
+
+      {/* Stats row */}
+      {stats && (
+        <div className="admin-stat-grid" style={{ marginBottom: 20 }}>
+          {stats.bySource.map(s => (
+            <div key={s.source} className="admin-stat-card">
+              <p style={{ fontSize: 28, fontWeight: 700, lineHeight: 1 }}>{s.count}</p>
+              <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>{sourceLabels[s.source] || s.source}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Filter tabs */}
+      <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
+        {filterTabs.map(f => (
+          <button
+            key={f.key}
+            onClick={() => setFilter(f.key as typeof filter)}
+            className={`admin-filter-btn ${filter === f.key ? 'active' : ''}`}
+          >
+            {f.label} ({f.count})
+          </button>
+        ))}
+      </div>
+
+      {/* Source filter + search */}
+      <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap', alignItems: 'center' }}>
+        <select
+          value={source}
+          onChange={e => setSource(e.target.value)}
+          style={{
+            padding: '7px 12px', borderRadius: 6, border: '1px solid rgba(0,0,0,0.15)',
+            fontSize: 13, background: '#fff', cursor: 'pointer',
+          }}
+        >
+          <option value="all">All Sources</option>
+          <option value="contact">✉️ Contact</option>
+          <option value="booking">📅 Booking</option>
+          <option value="feedback">💬 Feedback</option>
+          <option value="community_invite">🤝 Community Join</option>
+          <option value="community_subscribe">📬 Subscribe</option>
+        </select>
+        <form onSubmit={handleSearch} style={{ display: 'flex', gap: 6 }}>
+          <input
+            type="text"
+            value={searchInput}
+            onChange={e => setSearchInput(e.target.value)}
+            placeholder="Search name, email, message..."
+            style={{
+              padding: '7px 12px', borderRadius: 6, border: '1px solid rgba(0,0,0,0.15)',
+              fontSize: 13, width: 260,
+            }}
+          />
+          <button type="submit" className="btn" style={{ fontSize: 12, padding: '6px 12px' }}>Search</button>
+          {search && (
+            <button type="button" onClick={() => { setSearch(''); setSearchInput('') }} className="btn-outline" style={{ fontSize: 12, padding: '6px 12px' }}>
+              Clear
+            </button>
+          )}
+        </form>
+      </div>
+
+      {/* Leads list */}
+      {leads.length === 0 ? (
+        <p style={{ color: 'var(--muted)', fontSize: 14, padding: '20px 0' }}>
+          No {filter === 'all' ? '' : filter} leads{source !== 'all' ? ` from ${sourceLabels[source] || source}` : ''}{search ? ` matching "${search}"` : ''}.
+        </p>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <p style={{ fontSize: 13, color: 'var(--muted)' }}>Showing {leads.length} lead{leads.length !== 1 ? 's' : ''}</p>
+          {leads.map(lead => {
+            const isExpanded = expandedId === lead.id
+            const meta = lead.meta ? JSON.parse(lead.meta) : null
+            const isEditing = editNote?.id === lead.id
+
+            return (
+              <div key={lead.id} className="admin-invitation-card">
+                {/* Top row */}
+                <div
+                  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, cursor: 'pointer', flexWrap: 'wrap' }}
+                  onClick={() => setExpandedId(isExpanded ? null : lead.id)}
+                >
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: 16 }}>{sourceLabels[lead.source]?.charAt(0) || '📋'}</span>
+                      <strong style={{ fontSize: 15 }}>{lead.name}</strong>
+                      <span style={{
+                        padding: '2px 10px', borderRadius: 999, fontSize: 11, fontWeight: 600,
+                        background: `${statusColors[lead.status] || '#666'}18`,
+                        color: statusColors[lead.status] || '#666',
+                      }}>
+                        {lead.status}
+                      </span>
+                      <span style={{
+                        padding: '2px 8px', borderRadius: 999, fontSize: 10, fontWeight: 500,
+                        background: '#f3f4f6', color: '#6b7280',
+                      }}>
+                        {sourceLabels[lead.source] || lead.source}
+                      </span>
+                    </div>
+                    <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0 }}>
+                      {lead.email} · {new Date(lead.createdAt).toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                    style={{ transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s', flexShrink: 0, marginTop: 4 }}>
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                </div>
+
+                {/* Expanded details */}
+                {isExpanded && (
+                  <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+                    {/* Message */}
+                    {lead.message && (
+                      <div style={{ padding: '12px 16px', background: '#fafafa', borderRadius: 8, fontSize: 14, lineHeight: 1.6, marginBottom: 12 }}>
+                        {lead.message}
+                      </div>
+                    )}
+
+                    {/* Meta data */}
+                    {meta && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+                        {Object.entries(meta).map(([k, v]) => (
+                          <span key={k} style={{
+                            padding: '3px 10px', borderRadius: 6, fontSize: 12,
+                            background: '#f0f4ff', color: '#4b5563',
+                          }}>
+                            <strong>{k}:</strong> {String(v)}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Admin note */}
+                    {lead.adminNote && !isEditing && (
+                      <div style={{ padding: '10px 14px', background: '#fffbeb', borderRadius: 8, fontSize: 13, marginBottom: 12, border: '1px solid #fde68a' }}>
+                        <strong>Note:</strong> {lead.adminNote}
+                      </div>
+                    )}
+
+                    {/* Note editor */}
+                    {isEditing && (
+                      <div style={{ marginBottom: 12 }}>
+                        <textarea
+                          value={editNote.note}
+                          onChange={e => setEditNote({ ...editNote, note: e.target.value })}
+                          rows={3}
+                          placeholder="Add your note..."
+                          style={{
+                            width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid rgba(0,0,0,0.15)',
+                            fontSize: 13, resize: 'vertical', fontFamily: 'inherit',
+                          }}
+                        />
+                        <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
+                          <button
+                            onClick={() => saveNote(lead.id, editNote.note)}
+                            disabled={actionLoading === lead.id}
+                            className="btn" style={{ fontSize: 12, padding: '5px 14px' }}
+                          >
+                            Save Note
+                          </button>
+                          <button onClick={() => setEditNote(null)} className="btn-outline" style={{ fontSize: 12, padding: '5px 12px' }}>
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Actions */}
+                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+                      {lead.status === 'new' && (
+                        <button
+                          onClick={() => updateLead(lead.id, 'acknowledged')}
+                          disabled={actionLoading === lead.id}
+                          className="btn" style={{ fontSize: 12, padding: '5px 12px', background: '#3b82f6' }}
+                        >
+                          Acknowledge
+                        </button>
+                      )}
+                      {(lead.status === 'new' || lead.status === 'acknowledged') && (
+                        <button
+                          onClick={() => updateLead(lead.id, 'responded')}
+                          disabled={actionLoading === lead.id}
+                          className="btn" style={{ fontSize: 12, padding: '5px 12px', background: '#16a34a' }}
+                        >
+                          Mark Responded
+                        </button>
+                      )}
+                      {lead.status !== 'closed' && (
+                        <button
+                          onClick={() => updateLead(lead.id, 'closed')}
+                          disabled={actionLoading === lead.id}
+                          className="btn-outline" style={{ fontSize: 12, padding: '5px 12px' }}
+                        >
+                          Close
+                        </button>
+                      )}
+                      {lead.status === 'closed' && (
+                        <button
+                          onClick={() => updateLead(lead.id, 'new')}
+                          disabled={actionLoading === lead.id}
+                          className="btn-outline" style={{ fontSize: 12, padding: '5px 12px' }}
+                        >
+                          Reopen
+                        </button>
+                      )}
+                      {!isEditing && (
+                        <button
+                          onClick={() => setEditNote({ id: lead.id, note: lead.adminNote || '' })}
+                          className="btn-outline" style={{ fontSize: 12, padding: '5px 12px' }}
+                        >
+                          {lead.adminNote ? 'Edit Note' : 'Add Note'}
+                        </button>
+                      )}
+                      <button
+                        onClick={() => deleteLead(lead.id)}
+                        disabled={actionLoading === lead.id}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: '#dc2626', padding: '5px 8px' }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )
+          })}
         </div>
       )}
     </div>

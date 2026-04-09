@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '../../../lib/db'
 import { sendEmail, adminNotificationEmail, EMAIL_CONFIG } from '../../../lib/email'
+import { createLead } from '../../../lib/leads'
 
 export async function POST(req: NextRequest) {
   try {
@@ -24,7 +25,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Message too long (max 2000 characters).' }, { status: 400 })
     }
 
-    await prisma.feedback.create({
+    const fb = await prisma.feedback.create({
       data: {
         name: name.slice(0, 100),
         email: email.slice(0, 200),
@@ -33,6 +34,9 @@ export async function POST(req: NextRequest) {
         page: page?.slice(0, 200) || null,
       },
     })
+
+    // Create lead
+    await createLead({ name, email, source: 'feedback', sourceId: fb.id, message, meta: { type, page: page || '' } })
 
     // Notify admin
     const typeLabels: Record<string, string> = { bug: '🐛 Bug', suggestion: '💡 Suggestion', praise: '🎉 Praise', other: '💬 Other' }

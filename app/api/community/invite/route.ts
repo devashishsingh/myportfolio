@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '../../../../lib/db'
 import { sendEmail, joinAcknowledgmentEmail, adminNotificationEmail, EMAIL_CONFIG } from '../../../../lib/email'
+import { createLead } from '../../../../lib/leads'
 
 export async function POST(req: NextRequest) {
   try {
@@ -36,6 +37,14 @@ export async function POST(req: NextRequest) {
         contribute: contribute.trim(),
         expertise: expertise?.trim() || null,
       },
+    })
+
+    // Create lead
+    await createLead({
+      name: fullName.trim(), email: email.trim().toLowerCase(),
+      source: 'community_invite',
+      message: whyJoin.trim().substring(0, 500),
+      meta: { role: role.trim(), interest: interest.trim(), region: region.trim() },
     })
 
     // Send acknowledgment to applicant

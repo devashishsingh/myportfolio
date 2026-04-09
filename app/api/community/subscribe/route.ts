@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '../../../../lib/db'
 import { randomBytes } from 'crypto'
 import { sendEmail, subscriberConfirmationEmail, adminNotificationEmail, EMAIL_CONFIG } from '../../../../lib/email'
+import { createLead } from '../../../../lib/leads'
 
 export async function POST(req: NextRequest) {
   try {
@@ -34,6 +35,14 @@ export async function POST(req: NextRequest) {
         confirmToken,
         unsubscribeToken,
       },
+    })
+
+    // Create lead
+    await createLead({
+      name: name.trim(), email: email.trim().toLowerCase(),
+      source: 'community_subscribe',
+      message: `Subscribed with interests: ${interests.trim()}`,
+      meta: { region: region.trim(), interests: interests.trim() },
     })
 
     // Send confirmation email to subscriber

@@ -153,3 +153,17 @@ model SiteContent {
   value     String   // JSON string
   updatedAt DateTime @updatedAt
 }
+
+model Lead {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  source      String   // contact | booking | feedback | community_invite | community_subscribe
+  sourceId    String?  // ID of the related record (booking id, feedback id, etc.)
+  message     String?  // summary or original message
+  meta        String?  // JSON string with extra data (session type, region, interests, etc.)
+  status      String   @default("new") // new | acknowledged | responded | closed
+  adminNote   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
