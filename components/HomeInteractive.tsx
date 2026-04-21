@@ -39,29 +39,36 @@ export default function HomeInteractive({ children }: { children: React.ReactNod
         </SectionReveal>
       )}
 
-      {/* Community section */}
+      {/* Stats section */}
       {sections[3] && (
         <SectionReveal>
           {sections[3]}
         </SectionReveal>
       )}
 
-      {/* Subscribe section */}
+      {/* Community section */}
       {sections[4] && (
         <SectionReveal>
           {sections[4]}
         </SectionReveal>
       )}
 
-      {/* Featured writing section */}
+      {/* Subscribe section */}
       {sections[5] && (
         <SectionReveal>
           {sections[5]}
         </SectionReveal>
       )}
 
+      {/* Featured writing section */}
+      {sections[6] && (
+        <SectionReveal>
+          {sections[6]}
+        </SectionReveal>
+      )}
+
       {/* Any remaining sections */}
-      {sections.slice(6).map((section, i) => (
+      {sections.slice(7).map((section, i) => (
         <SectionReveal key={i}>
           {section}
         </SectionReveal>

@@ -1,7 +1,7 @@
 export default function Footer(){
   return (
-    <footer className="border-t border-gray-100 mt-20">
-      <div className="container-wide py-10 flex flex-col md:flex-row items-start justify-between text-sm text-gray-600">
+    <footer>
+      <div className="container-wide py-10 flex flex-col md:flex-row items-start justify-between text-sm" style={{color:'var(--text-muted)'}}>
         <div>
           <img src="/images/devashish_singh_logo_option_1.svg" alt="Devashish Singh" style={{height:'84px',width:'auto',marginBottom:'12px'}} />
           <div className="mt-3 flex flex-wrap gap-3">
@@ -18,12 +18,12 @@ export default function Footer(){
               <span>Discord</span>
             </a>
             <a href="mailto:devashish.singh12@gmail.com" className="footer-btn" aria-label="Email">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EA4335" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
               <span>Email</span>
             </a>
           </div>
         </div>
-        <div className="mt-6 md:mt-0 text-right">© {new Date().getFullYear()} Devashish Singh</div>
+        <div className="mt-6 md:mt-0 text-right" style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:12,color:'var(--text-muted)'}}>© {new Date().getFullYear()} Devashish Singh</div>
       </div>
     </footer>
   )

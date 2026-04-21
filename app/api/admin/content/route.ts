@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs/promises'
 import path from 'path'
 import { prisma } from '../../../../lib/db'
+
+export const dynamic = 'force-dynamic'
+
 const profilePath = path.join(process.cwd(), 'data', 'profile.json')
 const projectsPath = path.join(process.cwd(), 'data', 'projects.json')
 

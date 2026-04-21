@@ -117,7 +117,7 @@ export default function BookSessionPage() {
                   padding: '16px 20px',
                   border: form.sessionType === t.value ? '2px solid #1a1a1a' : '1px solid #e5e5e5',
                   cursor: 'pointer',
-                  background: form.sessionType === t.value ? '#fafafa' : '#fff',
+                  background: form.sessionType === t.value ? '#fff' : '#fff',
                   transition: 'all 0.15s ease',
                 }}
               >

@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react'
 
 const FEEDBACK_TYPES = [
-  { value: 'bug', label: '🐛 Something\u2019s Broken', color: '#ef4444' },
-  { value: 'suggestion', label: '💡 I Have an Idea', color: '#f59e0b' },
-  { value: 'praise', label: '🎉 Loving It!', color: '#16a34a' },
-  { value: 'other', label: '💬 Something Else', color: '#6366f1' },
+  { value: 'bug', label: '🐛 Something\u2019s Broken', color: '#111' },
+  { value: 'suggestion', label: '💡 I Have an Idea', color: '#111' },
+  { value: 'praise', label: '🎉 Loving It!', color: '#111' },
+  { value: 'other', label: '💬 Something Else', color: '#111' },
 ]
 
 export default function FeedbackWidget() {
@@ -109,8 +109,8 @@ export default function FeedbackWidget() {
                         borderRadius: 999,
                         fontSize: 12,
                         fontWeight: 500,
-                        border: form.type === t.value ? `2px solid ${t.color}` : '1px solid rgba(0,0,0,0.12)',
-                        background: form.type === t.value ? `${t.color}10` : 'transparent',
+                        border: form.type === t.value ? `2px solid ${t.color}` : '1px solid rgba(0,0,0,0.10)',
+                        background: form.type === t.value ? `${t.color}12` : 'transparent',
                         color: form.type === t.value ? t.color : 'var(--muted)',
                         cursor: 'pointer',
                         transition: 'all 0.15s ease',
@@ -156,7 +156,7 @@ export default function FeedbackWidget() {
                 />
 
                 {errorMsg && (
-                  <p style={{ fontSize: 12, color: '#dc2626', marginBottom: 10 }}>{errorMsg}</p>
+                  <p style={{ fontSize: 12, color: '#555', marginBottom: 10 }}>{errorMsg}</p>
                 )}
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

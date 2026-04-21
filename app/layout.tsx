@@ -5,10 +5,13 @@ import Footer from '../components/Footer'
 import WhatsAppButton from '../components/WhatsAppButton'
 import FeedbackWidget from '../components/FeedbackWidget'
 import CursorFollower from '../components/CursorFollower'
+import ScrollProgress from '../components/ScrollProgress'
+import PageTransition from '../components/PageTransition'
 
 export const metadata = {
   title: 'Devashish Singh — Cyber Coach, Mentor & Advisor',
   description: 'Coach and advisor for founders and engineering teams — security-aware product strategy, incident response, and technical leadership.',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://devashishsingh.com'),
 }
 
 export default function RootLayout({children}:{children:React.ReactNode}){
@@ -33,8 +36,11 @@ export default function RootLayout({children}:{children:React.ReactNode}){
         </Script>
       </head>
       <body>
+        <ScrollProgress />
         <Header />
-        <main className="py-12">{children}</main>
+        <main className="py-12">
+          <PageTransition>{children}</PageTransition>
+        </main>
         <Footer />
         <WhatsAppButton />
         <FeedbackWidget />

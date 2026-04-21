@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '../../../lib/db'
+import { EMAIL_CONFIG } from '../../../lib/email'
 import { sendEmail, bookingConfirmationEmail, adminNotificationEmail } from '../../../lib/email'
 import { createLead } from '../../../lib/leads'
 
@@ -17,7 +18,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid email' }, { status: 400 })
     }
 
-    const validTypes = ['mentorship', 'consulting', 'workshop', 'other']
+    const validTypes = ['mentorship', 'consulting', 'workshop', 'other', 'study']
     if (!validTypes.includes(sessionType)) {
       return NextResponse.json({ error: 'Invalid session type' }, { status: 400 })
     }
@@ -42,7 +43,15 @@ export async function POST(request: Request) {
     })
 
     // Send confirmation to the person booking
-    const confirmEmail = bookingConfirmationEmail(name, sessionType, preferredDate, preferredTime, timezone || 'Asia/Kuala_Lumpur')
+    const calendarLink = EMAIL_CONFIG.calendarUrl || undefined
+    const confirmEmail = bookingConfirmationEmail(
+      name,
+      sessionType,
+      preferredDate,
+      preferredTime,
+      timezone || 'Asia/Kuala_Lumpur',
+      calendarLink
+    )
     await sendEmail({ to: email, ...confirmEmail })
 
     // Notify admin

@@ -108,7 +108,7 @@ export default function CommunityPage() {
       </section>
 
       {/* What You Can Do */}
-      <section style={{ background: '#fafafa', borderTop: '1px solid rgba(0,0,0,0.06)', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+      <section style={{ background: '#fff', borderTop: '1px solid rgba(0,0,0,0.06)', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
         <div className="container-wide" style={{ paddingTop: 60, paddingBottom: 60 }}>
           <h2 className="display-font" style={{ fontSize: 28, marginBottom: 32, textAlign: 'center' }}>
             What You Can Do Here

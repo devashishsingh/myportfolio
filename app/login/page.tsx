@@ -43,11 +43,13 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter admin password"
             required
+            disabled={loading}
             style={{
               padding: '12px 16px',
-              border: '1px solid rgba(0,0,0,0.15)',
+              border: `1px solid ${error ? '#dc2626' : 'rgba(0,0,0,0.15)'}`,
               borderRadius: '8px',
               fontSize: '14px',
+              backgroundColor: error ? 'rgba(220, 38, 38, 0.05)' : '#fff',
               outline: 'none',
               transition: 'border-color 0.18s',
             }}

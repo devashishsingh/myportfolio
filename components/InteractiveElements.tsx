@@ -143,7 +143,7 @@ export function Sparkle({ style }: { style?: React.CSSProperties }) {
       animate={{ rotate: [0, 180, 360], scale: [1, 1.2, 1] }}
       transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
     >
-      <path d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5L8 0Z" fill="#FFD93D" />
+      <path d="M8 0L9.5 6.5L16 8L9.5 9.5L8 16L6.5 9.5L0 8L6.5 6.5L8 0Z" fill="#111" />
     </motion.svg>
   )
 }
