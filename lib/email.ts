@@ -1,17 +1,16 @@
 // ─── Email Configuration ─────────────────────────────────────────────
-// Update these when you have your own email domain ready.
 // All emails gracefully degrade to console.log when not configured.
 
 export const EMAIL_CONFIG = {
-  // SendGrid API key
-  apiKey: process.env.SENDGRID_API_KEY || '',
+  // Resend API key
+  apiKey: process.env.RESEND_API_KEY || '',
 
-  // Your verified sender email (must match SendGrid verified sender)
-  fromEmail: process.env.SENDER_EMAIL || 'hello@yourdomain.com',
+  // Your verified sender email (must match domain verified in Resend)
+  fromEmail: process.env.SENDER_EMAIL || 'hello@devashishsingh.com',
   fromName: process.env.SENDER_NAME || 'Devashish',
 
   // Where admin notifications go
-  adminEmail: process.env.CONTACT_TARGET_EMAIL || 'admin@yourdomain.com',
+  adminEmail: process.env.CONTACT_TARGET_EMAIL || 'hello@devashishsingh.com',
 
   // Base URL for links in emails
   baseUrl: process.env.BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'),
@@ -21,7 +20,7 @@ export const EMAIL_CONFIG = {
 }
 
 function isConfigured(): boolean {
-  return !!(EMAIL_CONFIG.apiKey && EMAIL_CONFIG.adminEmail && EMAIL_CONFIG.fromEmail !== 'hello@yourdomain.com')
+  return !!(EMAIL_CONFIG.apiKey)
 }
 
 // ─── Core Send Function ──────────────────────────────────────────────
@@ -41,26 +40,24 @@ export async function sendEmail({ to, subject, html, text }: EmailPayload): Prom
   }
 
   try {
-    const res = await fetch('https://api.sendgrid.com/v3/mail/send', {
+    const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${EMAIL_CONFIG.apiKey}`,
       },
       body: JSON.stringify({
-        personalizations: [{ to: [{ email: to }] }],
-        from: { email: EMAIL_CONFIG.fromEmail, name: EMAIL_CONFIG.fromName },
+        from: `${EMAIL_CONFIG.fromName} <${EMAIL_CONFIG.fromEmail}>`,
+        to: [to],
         subject,
-        content: [
-          ...(text ? [{ type: 'text/plain', value: text }] : []),
-          { type: 'text/html', value: html },
-        ],
+        html,
+        ...(text ? { text } : {}),
       }),
     })
 
     if (!res.ok) {
       const err = await res.text()
-      console.error('[Email] SendGrid error:', err)
+      console.error('[Email] Resend error:', err)
       return false
     }
 

@@ -7,6 +7,7 @@ import FeedbackWidget from '../components/FeedbackWidget'
 import CursorFollower from '../components/CursorFollower'
 import ScrollProgress from '../components/ScrollProgress'
 import PageTransition from '../components/PageTransition'
+import AnnouncementModal from '../components/AnnouncementModal'
 
 export const metadata = {
   title: 'Devashish Singh — Cyber Coach, Mentor & Advisor',
@@ -44,6 +45,7 @@ export default function RootLayout({children}:{children:React.ReactNode}){
         <Footer />
         <WhatsAppButton />
         <FeedbackWidget />
+        <AnnouncementModal />
         <CursorFollower />
       </body>
     </html>

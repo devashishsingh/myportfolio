@@ -82,7 +82,7 @@ export default function Hero(){
           </motion.div>
 
           <motion.div variants={childVariants}>
-            <p className="hero-lead" style={{transform:'translateZ(15px)'}}>Drawing on 14+ years of experience across cybersecurity, digital transformation, and innovation, I help individuals, startups, and organizations turn ideas into impactful solutions, build strong digital foundations, and thrive securely in an evolving world.</p>
+            <p className="hero-lead" style={{transform:'translateZ(15px)'}}>With 14+ years of hands-on experience in cybersecurity and digital innovation, I help students and fresh graduates cut through confusion and focus on what truly works in the real world.<br/><br/>No generic advice—just practical direction, skill clarity, and honest insights into how hiring actually works.<br/><br/>If you're unsure about your path or want to stand out, let's talk—you'll walk away with a clearer roadmap.</p>
           </motion.div>
 
           <motion.div variants={childVariants}>
