@@ -1,7 +1,21 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllPosts } from '../../lib/mdx'
 
 export const revalidate = 0
+
+export const metadata: Metadata = {
+  title: 'Blog',
+  description: 'Long-form writing on cybersecurity, AI-led development, product strategy, and technical leadership by Devashish Singh.',
+  keywords: ['cybersecurity blog', 'AI development', 'product strategy', 'technical writing', 'Devashish Singh', 'blog', 'indie dev'],
+  alternates: { canonical: '/blog' },
+  openGraph: {
+    title: 'Blog — Devashish Singh',
+    description: 'Long-form writing on cybersecurity, AI-led development, product strategy, and technical leadership.',
+    url: '/blog',
+    type: 'website',
+  },
+}
 
 export default async function Blog(){
   const posts = await getAllPosts()

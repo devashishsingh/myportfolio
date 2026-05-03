@@ -1,4 +1,18 @@
+import type { Metadata } from 'next'
 import profile from '../../data/profile.json'
+
+export const metadata: Metadata = {
+  title: 'About',
+  description: 'Learn about Devashish Singh — Cyber Coach, Mentor & Advisor. Former Information Security Advisor at AirAsia. Helping founders and teams build securely.',
+  keywords: ['Devashish Singh', 'about', 'cybersecurity expert', 'AirAsia security', 'mentor', 'advisor', 'Malaysia'],
+  alternates: { canonical: '/about' },
+  openGraph: {
+    title: 'About Devashish Singh — Cyber Coach, Mentor & Advisor',
+    description: 'Former Information Security Advisor at AirAsia. Helping founders, developers, and engineering teams navigate cybersecurity and technical leadership.',
+    url: '/about',
+    type: 'profile',
+  },
+}
 
 export default function About(){
   return (

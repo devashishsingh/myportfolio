@@ -1,4 +1,17 @@
+import type { Metadata } from 'next'
 import ServiceCard from '../../components/ServiceCard'
+
+export const metadata: Metadata = {
+  title: 'Services',
+  description: 'Cybersecurity consulting, mentoring, portfolio reviews, and workshops by Devashish Singh. Tailored advisory for founders, teams, and early-career professionals.',
+  keywords: ['cybersecurity consulting', 'mentoring', 'portfolio review', 'workshops', 'technical advisory', 'startup consulting', 'Devashish Singh'],
+  alternates: { canonical: '/services' },
+  openGraph: {
+    title: 'Services — Devashish Singh',
+    description: 'Cybersecurity consulting, 1:1 mentoring, portfolio reviews, and workshops. Tailored to founders, engineering teams, and early-career professionals.',
+    url: '/services',
+  },
+}
 
 export default function Services(){
   return (

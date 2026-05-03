@@ -1,0 +1,14 @@
+[
+  {
+    "view": "desktop",
+    "hasRequest": true,
+    "hasModalTitle": true,
+    "modalVisible": true
+  },
+  {
+    "view": "mobile",
+    "hasRequest": true,
+    "hasCancel": true,
+    "hasModalTitle": true
+  }
+]

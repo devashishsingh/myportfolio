@@ -1,5 +1,18 @@
+import type { Metadata } from 'next'
 import ProjectCard from '../../components/ProjectCard'
 import projects from '../../data/projects.json'
+
+export const metadata: Metadata = {
+  title: 'Work',
+  description: 'Real-world platforms, MVPs, and problem-solving systems built by Devashish Singh through AI-assisted development and cloud-first execution.',
+  keywords: ['portfolio', 'projects', 'MVP', 'AI development', 'cloud', 'startup builds', 'Devashish Singh', 'case studies'],
+  alternates: { canonical: '/work' },
+  openGraph: {
+    title: 'Work — Devashish Singh',
+    description: 'Real-world platforms, MVPs, and problem-solving systems. AI-assisted development and cloud-first execution in action.',
+    url: '/work',
+  },
+}
 
 export default function Work(){
   return (

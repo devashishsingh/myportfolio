@@ -1,3 +1,17 @@
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Teaching & Mentoring',
+  description: 'Workshops, 1:1 mentoring, speaking engagements, and portfolio reviews by Devashish Singh. Practical cybersecurity, AI development, and career skills.',
+  keywords: ['teaching', 'workshops', 'mentoring', 'speaking', 'portfolio review', 'cybersecurity training', 'Devashish Singh'],
+  alternates: { canonical: '/teaching' },
+  openGraph: {
+    title: 'Teaching & Mentoring — Devashish Singh',
+    description: 'Workshops, 1:1 mentoring, speaking engagements, and portfolio reviews. Practical skills for teams, creators, and early professionals.',
+    url: '/teaching',
+  },
+}
+
 export default function Teaching(){
   return (
     <section className="container-wide" style={{ paddingTop: 40, paddingBottom: 60 }}>

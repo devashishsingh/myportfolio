@@ -2,11 +2,14 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Community — Devashish Singh',
+  title: 'Community',
   description: 'A curated community where ideas are protected, fuelled, and nurtured — never stolen. Share, showcase, and grow your tech ideas into full-fledged solutions with mentorship and collaboration.',
+  keywords: ['developer community', 'tech community', 'startup community', 'mentorship', 'collaboration', 'Devashish Singh', 'Malaysia', 'Southeast Asia'],
+  alternates: { canonical: '/community' },
   openGraph: {
     title: 'Community — Devashish Singh',
     description: 'A safe space to fuel ideas, showcase products, and grow innovations into reality — together.',
+    url: '/community',
   },
 }
 

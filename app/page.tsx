@@ -15,8 +15,25 @@ import type { SessionType } from '../lib/booking-config'
 
 export default function Home(){
   const [bookingSession, setBookingSession] = useState<SessionType | null>(null)
+
+  const websiteJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Devashish Singh',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://devashishsingh.com',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://devashishsingh.com'}/blog?q={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
+  }
+
   return (
     <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
     <HomeInteractive>
       <section className="pt-12">
         <Hero />
