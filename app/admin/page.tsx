@@ -74,6 +74,7 @@ interface NewsletterItem {
   sentTo: number
   status: string
   sentAt: string | null
+  scheduledAt: string | null
   createdAt: string
 }
 
@@ -1106,19 +1107,25 @@ function NewsletterTab() {
 
   useEffect(() => { loadNewsletters() }, [loadNewsletters])
 
-  async function handleSend(asDraft: boolean) {
+  async function handleSend(mode: 'send' | 'draft' | 'schedule') {
     if (!subject || !content) { setStatusMsg('Subject and content are required.'); return }
     setSending(true)
     setStatusMsg('')
     try {
+      const body =
+        mode === 'send'     ? { subject, content, send: true } :
+        mode === 'schedule' ? { subject, content, schedule: true } :
+                              { subject, content, send: false }
       const res = await fetch('/api/admin/newsletter', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ subject, content, send: !asDraft }),
+        body: JSON.stringify(body),
       })
       const data = await res.json()
       if (res.ok) {
-        setStatusMsg(asDraft ? 'Saved as draft.' : `Sent to ${data.sentTo} subscribers.`)
+        if (mode === 'send')     setStatusMsg(`Sent to ${data.sentTo} subscribers.`)
+        if (mode === 'draft')    setStatusMsg('Saved as draft.')
+        if (mode === 'schedule') setStatusMsg(`Scheduled for ${new Date(data.scheduledAt).toLocaleDateString('en-MY', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at 8:00 AM MYT.`)
         setSubject('')
         setContent('')
         await loadNewsletters()
@@ -1166,15 +1173,23 @@ function NewsletterTab() {
           />
           <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
             <button
-              onClick={() => handleSend(false)}
+              onClick={() => handleSend('send')}
               disabled={sending}
               className="btn"
               style={{ fontSize: 13, padding: '8px 20px' }}
             >
-              {sending ? 'Sending...' : 'Send to All Subscribers'}
+              {sending ? 'Sending...' : 'Send Now'}
             </button>
             <button
-              onClick={() => handleSend(true)}
+              onClick={() => handleSend('schedule')}
+              disabled={sending}
+              className="btn"
+              style={{ fontSize: 13, padding: '8px 20px', background: '#0891b2' }}
+            >
+              {sending ? 'Scheduling...' : '⏰ Schedule — Next Monday 8 AM MYT'}
+            </button>
+            <button
+              onClick={() => handleSend('draft')}
               disabled={sending}
               className="btn-outline"
               style={{ fontSize: 13, padding: '8px 20px' }}
@@ -1202,6 +1217,8 @@ function NewsletterTab() {
                   <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>
                     {nl.status === 'sent'
                       ? `Sent to ${nl.sentTo} subscribers on ${new Date(nl.sentAt || nl.createdAt).toLocaleDateString()}`
+                      : nl.status === 'scheduled' && nl.scheduledAt
+                      ? `Scheduled for ${new Date(nl.scheduledAt).toLocaleDateString('en-MY', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at 8:00 AM MYT`
                       : `Draft — ${new Date(nl.createdAt).toLocaleDateString()}`
                     }
                   </div>
@@ -1209,8 +1226,8 @@ function NewsletterTab() {
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                   <span style={{
                     padding: '2px 10px', borderRadius: 999, fontSize: 11, fontWeight: 600,
-                    background: nl.status === 'sent' ? '#dcfce7' : '#fef3c7',
-                    color: nl.status === 'sent' ? '#16a34a' : '#f59e0b',
+                    background: nl.status === 'sent' ? '#dcfce7' : nl.status === 'scheduled' ? '#dbeafe' : '#fef3c7',
+                    color: nl.status === 'sent' ? '#16a34a' : nl.status === 'scheduled' ? '#1d4ed8' : '#f59e0b',
                   }}>
                     {nl.status}
                   </span>

@@ -7,6 +7,17 @@ function isAuthed() {
   return isAuthenticated()
 }
 
+/** Returns the next Monday at 00:00 UTC (= 08:00 MYT) */
+function nextMondayMYT(): Date {
+  const now = new Date()
+  const day = now.getUTCDay() // 0=Sun, 1=Mon, …, 6=Sat
+  const daysUntilMonday = day === 1 ? 7 : (8 - day) % 7 || 7
+  const next = new Date(now)
+  next.setUTCDate(now.getUTCDate() + daysUntilMonday)
+  next.setUTCHours(0, 0, 0, 0) // 00:00 UTC = 08:00 MYT
+  return next
+}
+
 // GET — list newsletters
 export async function GET() {
   if (!isAuthed()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -22,9 +33,18 @@ export async function POST(request: Request) {
   if (!isAuthed()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   try {
-    const { subject, content, send } = await request.json()
+    const { subject, content, send, schedule } = await request.json()
     if (!subject || !content) {
       return NextResponse.json({ error: 'Subject and content required' }, { status: 400 })
+    }
+
+    // ── Schedule for next Monday 8 AM MYT ──
+    if (schedule) {
+      const scheduledAt = nextMondayMYT()
+      const newsletter = await prisma.newsletter.create({
+        data: { subject, content, status: 'scheduled', scheduledAt },
+      })
+      return NextResponse.json({ status: 'scheduled', scheduledAt: scheduledAt.toISOString(), id: newsletter.id })
     }
 
     if (send) {
