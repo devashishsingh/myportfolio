@@ -327,7 +327,7 @@ function BlogTab() {
             <input value={title} onChange={e => setTitle(e.target.value)} className="editor-input" placeholder="Your blog post title" required />
           </div>
           <div>
-            <label className="editor-label">Slug <span style={{ color: '#999', fontWeight: 400 }}>(auto if empty)</span></label>
+            <label className="editor-label">Slug <span style={{ color: '#666', fontWeight: 400 }}>(auto if empty)</span></label>
             <input value={slug} onChange={e => setSlug(e.target.value)} className="editor-input" placeholder="my-blog-post" />
           </div>
           <div>
@@ -343,7 +343,7 @@ function BlogTab() {
             <input value={category} onChange={e => setCategory(e.target.value)} className="editor-input" placeholder="e.g. Cybersecurity" />
           </div>
           <div>
-            <label className="editor-label">Tags <span style={{ color: '#999', fontWeight: 400 }}>(comma separated)</span></label>
+            <label className="editor-label">Tags <span style={{ color: '#666', fontWeight: 400 }}>(comma separated)</span></label>
             <input value={tags} onChange={e => setTags(e.target.value)} className="editor-input" placeholder="dmarc, email, security" />
             {tagList.length > 0 && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
@@ -713,7 +713,7 @@ function InvitationsTab() {
               </div>
             </div>
             <div style={{ marginBottom: 14 }}>
-              <label className="editor-label">Personal Message <span style={{ color: '#999', fontWeight: 400 }}>(optional — leave empty for default invite)</span></label>
+              <label className="editor-label">Personal Message <span style={{ color: '#666', fontWeight: 400 }}>(optional — leave empty for default invite)</span></label>
               <textarea
                 value={inviteMessage}
                 onChange={e => setInviteMessage(e.target.value)}

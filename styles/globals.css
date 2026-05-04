@@ -5,6 +5,31 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Skip link for keyboard / screen-reader users (WCAG 2.4.1) */
+.skip-to-content{
+  position:absolute;
+  left:-9999px;
+  top:auto;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  z-index:10000;
+  background:#111;
+  color:#fff;
+  padding:12px 16px;
+  border-radius:6px;
+  font-weight:600;
+  text-decoration:none;
+}
+.skip-to-content:focus{
+  left:16px;
+  top:16px;
+  width:auto;
+  height:auto;
+  outline:2px solid #fff;
+  outline-offset:2px;
+}
+
 :root{
   --bg:#ffffff;
   --text:#111111;

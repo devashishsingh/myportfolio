@@ -103,9 +103,10 @@ export default function RootLayout({children}:{children:React.ReactNode}){
         </Script>
       </head>
       <body>
+        <a href="#main-content" className="skip-to-content">Skip to main content</a>
         <ScrollProgress />
         <Header />
-        <main className="py-12">
+        <main id="main-content" className="py-12">
           <PageTransition>{children}</PageTransition>
         </main>
         <Footer />
