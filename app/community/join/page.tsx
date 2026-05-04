@@ -2,21 +2,18 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { REGIONS, INTEREST_AREAS } from '../../../lib/constants'
+import { INTEREST_AREAS } from '../../../lib/constants'
+
+const CUSTOM_INTEREST = '__custom__'
 
 export default function JoinCommunity() {
   const [form, setForm] = useState({
     fullName: '',
     email: '',
-    linkedIn: '',
     github: '',
-    portfolio: '',
-    role: '',
     interest: '',
-    region: '',
-    whyJoin: '',
-    contribute: '',
-    expertise: '',
+    customInterest: '',
+    tellMore: '',
   })
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
@@ -27,13 +24,27 @@ export default function JoinCommunity() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setStatus('sending')
     setErrorMsg('')
+    const interest = form.interest === CUSTOM_INTEREST
+      ? form.customInterest.trim()
+      : form.interest
+    if (!interest) {
+      setStatus('error')
+      setErrorMsg('Please choose or enter an area of interest.')
+      return
+    }
+    setStatus('sending')
     try {
       const res = await fetch('/api/community/invite', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          fullName: form.fullName,
+          email: form.email,
+          github: form.github,
+          interest,
+          tellMore: form.tellMore,
+        }),
       })
       const json = await res.json()
       if (res.ok) {
@@ -74,13 +85,12 @@ export default function JoinCommunity() {
           Request Invitation
         </h1>
         <p style={{ color: 'var(--muted)', fontSize: 16, marginBottom: 32, lineHeight: 1.6 }}>
-          The Builders Hub is a curated community. All requests are reviewed personally by Devashish Singh. 
-          Please fill in the details below so we can understand your background and interests.
+          The Builders Hub is a curated community. Tell us a bit about yourself and what you&apos;re
+          building toward — every request is reviewed personally.
         </p>
 
         <form onSubmit={handleSubmit}>
           <div className="community-form-grid">
-            {/* Full Name */}
             <div className="community-form-field full-width">
               <label className="editor-label">Full Name *</label>
               <input
@@ -92,9 +102,8 @@ export default function JoinCommunity() {
               />
             </div>
 
-            {/* Email */}
             <div className="community-form-field full-width">
-              <label className="editor-label">Email *</label>
+              <label className="editor-label">Email Address *</label>
               <input
                 type="email"
                 value={form.email}
@@ -105,120 +114,58 @@ export default function JoinCommunity() {
               />
             </div>
 
-            {/* LinkedIn */}
-            <div className="community-form-field">
-              <label className="editor-label">LinkedIn</label>
-              <input
-                value={form.linkedIn}
-                onChange={e => update('linkedIn', e.target.value)}
-                className="editor-input"
-                placeholder="https://linkedin.com/in/..."
-              />
-            </div>
-
-            {/* GitHub */}
-            <div className="community-form-field">
-              <label className="editor-label">GitHub</label>
+            <div className="community-form-field full-width">
+              <label className="editor-label">
+                GitHub <span style={{ color: '#999', fontWeight: 400 }}>(if any)</span>
+              </label>
               <input
                 value={form.github}
                 onChange={e => update('github', e.target.value)}
                 className="editor-input"
-                placeholder="https://github.com/..."
+                placeholder="https://github.com/yourhandle"
               />
             </div>
 
-            {/* Portfolio */}
             <div className="community-form-field full-width">
-              <label className="editor-label">Portfolio / Website</label>
-              <input
-                value={form.portfolio}
-                onChange={e => update('portfolio', e.target.value)}
-                className="editor-input"
-                placeholder="https://yoursite.com"
-              />
-            </div>
-
-            {/* Role */}
-            <div className="community-form-field">
-              <label className="editor-label">Role / Profession *</label>
-              <input
-                value={form.role}
-                onChange={e => update('role', e.target.value)}
-                className="editor-input"
-                placeholder="e.g. Software Engineer, Founder, Student"
-                required
-              />
-            </div>
-
-            {/* Interest Area */}
-            <div className="community-form-field">
-              <label className="editor-label">Primary Interest *</label>
+              <label className="editor-label">Area of Interest *</label>
               <select
                 value={form.interest}
                 onChange={e => update('interest', e.target.value)}
                 className="editor-input"
                 required
               >
-                <option value="">Select interest area</option>
+                <option value="">Select an area</option>
                 {INTEREST_AREAS.map(i => (
                   <option key={i} value={i}>{i}</option>
                 ))}
+                <option value={CUSTOM_INTEREST}>Other (write your own)…</option>
               </select>
+              {form.interest === CUSTOM_INTEREST && (
+                <input
+                  value={form.customInterest}
+                  onChange={e => update('customInterest', e.target.value)}
+                  className="editor-input"
+                  placeholder="Type your area of interest"
+                  style={{ marginTop: 8 }}
+                  required
+                />
+              )}
             </div>
 
-            {/* Region */}
             <div className="community-form-field full-width">
-              <label className="editor-label">Region *</label>
-              <select
-                value={form.region}
-                onChange={e => update('region', e.target.value)}
-                className="editor-input"
-                required
-              >
-                <option value="">Select your region</option>
-                {REGIONS.map(r => (
-                  <option key={r} value={r}>{r}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* Why Join */}
-            <div className="community-form-field full-width">
-              <label className="editor-label">Why do you want to join? *</label>
+              <label className="editor-label">Tell us more about your interest *</label>
               <textarea
-                value={form.whyJoin}
-                onChange={e => update('whyJoin', e.target.value)}
+                value={form.tellMore}
+                onChange={e => update('tellMore', e.target.value)}
                 className="editor-input"
-                placeholder="Tell us what brought you here and what you hope to gain..."
-                rows={3}
+                placeholder="e.g. I am a backend engineer exploring AI agents, and I desire to build my own indie SaaS. Looking for builders to learn alongside."
+                rows={5}
                 required
                 style={{ resize: 'vertical' }}
               />
-            </div>
-
-            {/* What to Contribute */}
-            <div className="community-form-field full-width">
-              <label className="editor-label">What do you want to contribute? *</label>
-              <textarea
-                value={form.contribute}
-                onChange={e => update('contribute', e.target.value)}
-                className="editor-input"
-                placeholder="Share how you can add value to the community..."
-                rows={3}
-                required
-                style={{ resize: 'vertical' }}
-              />
-            </div>
-
-            {/* Expertise */}
-            <div className="community-form-field full-width">
-              <label className="editor-label">Startup / Project / Area of Expertise <span style={{ color: '#999', fontWeight: 400 }}>(optional)</span></label>
-              <input
-                value={form.expertise}
-                onChange={e => update('expertise', e.target.value)}
-                className="editor-input"
-                placeholder="e.g. Building an AI-based security tool"
-              />
+              <small style={{ color: 'var(--muted)', fontSize: 12, display: 'block', marginTop: 6 }}>
+                Share where you are today and where you want to go. e.g. &quot;I am __, and I desire to be __.&quot;
+              </small>
             </div>
           </div>
 
