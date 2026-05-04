@@ -1,88 +1,64 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
 
 interface Course {
   id: string
   title: string
-  tagline: string
-  level: 'Beginner' | 'Intermediate' | 'Advanced'
-  duration: string
-  outcomes: string[]
-  projects: string[]
-  videoUrl?: string // YouTube embed URL or null for "coming soon"
-  fee: string
+  tagline?: string
+  category: string // e.g. 'Cybersecurity', 'AI', 'Indie SaaS', 'Cloud', 'Career'
+  level?: 'Beginner' | 'Intermediate' | 'Advanced'
+  duration?: string
+  outcomes?: string[]
+  projects?: string[]
+  videoUrl?: string // YouTube embed URL or empty for "coming soon"
+  fee?: string
 }
 
-const COURSES: Course[] = [
-  {
-    id: 'cyber-fundamentals',
-    title: 'Cybersecurity Fundamentals — The Practitioner Path',
-    tagline: 'Learn security by breaking and defending real systems, not by memorizing acronyms.',
-    level: 'Beginner',
-    duration: '6 weeks · ~5 hrs/week',
-    outcomes: [
-      'Set up your own home lab with virtual machines',
-      'Run real reconnaissance on test targets you own',
-      'Read and write basic detection rules (Sigma / KQL)',
-      'Build a working DMARC + SPF + DKIM setup for a domain',
-    ],
-    projects: [
-      'Audit and harden a real WordPress site',
-      'Investigate a simulated phishing incident end-to-end',
-      'Ship one detection rule to a public repo',
-    ],
-    videoUrl: '',
-    fee: '₹4,999 — pay only after you ship all 3 projects',
-  },
-  {
-    id: 'ai-for-builders',
-    title: 'AI for Builders — Ship a Real Product in 30 Days',
-    tagline: 'No theory marathons. You build a working AI tool by week one.',
-    level: 'Intermediate',
-    duration: '4 weeks · ~6 hrs/week',
-    outcomes: [
-      'Use OpenAI-compatible APIs with strict JSON output',
-      'Design prompt pipelines that survive real users',
-      'Add a vector store and retrieve over your own data',
-      'Deploy a Next.js + AI app to Vercel for free',
-    ],
-    projects: [
-      'Build a chatbot grounded in your own PDFs',
-      'Build a content rewriter for a real client/use case',
-      'Ship one project publicly with a writeup',
-    ],
-    videoUrl: '',
-    fee: '₹6,999 — pay only after your project is live on the internet',
-  },
-  {
-    id: 'indie-saas-launch',
-    title: 'Indie SaaS Launchpad — Idea to First Paying User',
-    tagline: 'Stop tutorial-hopping. Pick one painful problem and ship it.',
-    level: 'Advanced',
-    duration: '8 weeks · ~7 hrs/week',
-    outcomes: [
-      'Validate an idea with 10 real conversations before writing code',
-      'Set up Next.js + Postgres + auth + payments end-to-end',
-      'Launch on a real domain with analytics and feedback loops',
-      'Do basic distribution: SEO, social, communities',
-    ],
-    projects: [
-      'Validation report from 10 user interviews',
-      'A live SaaS deployed on your own domain',
-      'First paying user (or strong written attempt with feedback)',
-    ],
-    videoUrl: '',
-    fee: '₹9,999 — pay only when you have a live product and real feedback',
-  },
-]
+// Add courses here. Until then the page shows a graceful empty state.
+const COURSES: Course[] = []
+
+const CATEGORIES = [
+  'Cybersecurity',
+  'AI & Machine Learning',
+  'Indie SaaS',
+  'Cloud & DevOps',
+  'Web Development',
+  'Career & Mindset',
+  'Other',
+] as const
+
+const LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const
 
 export default function StudyTogetherPage() {
   const [selected, setSelected] = useState<Course | null>(null)
   const [form, setForm] = useState({ fullName: '', email: '', motivation: '' })
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
+
+  // Filters
+  const [query, setQuery] = useState('')
+  const [activeCategory, setActiveCategory] = useState<string>('All')
+  const [activeLevel, setActiveLevel] = useState<string>('All')
+
+  const filteredCourses = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    return COURSES.filter(c => {
+      if (activeCategory !== 'All' && c.category !== activeCategory) return false
+      if (activeLevel !== 'All' && c.level !== activeLevel) return false
+      if (!q) return true
+      const hay = [
+        c.title,
+        c.tagline || '',
+        c.category,
+        c.level || '',
+        ...(c.outcomes || []),
+        ...(c.projects || []),
+      ].join(' ').toLowerCase()
+      return hay.includes(q)
+    })
+  }, [query, activeCategory, activeLevel])
 
   function openInterest(course: Course) {
     setSelected(course)
@@ -126,9 +102,12 @@ export default function StudyTogetherPage() {
       {/* Hero */}
       <div style={{ maxWidth: 760, margin: '0 auto 48px', textAlign: 'center' }}>
         <p className="muted-label" style={{ marginBottom: 12 }}>Let&apos;s Study Together</p>
-        <h1 className="display-font" style={{ fontSize: 'clamp(32px, 6vw, 52px)', lineHeight: 1.1, marginBottom: 16 }}>
+        <h1 className="display-font" style={{ fontSize: 'clamp(32px, 6vw, 52px)', lineHeight: 1.1, marginBottom: 12 }}>
           Less theory. More projects. Real outcomes.
         </h1>
+        <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 14, letterSpacing: '0.01em' }}>
+          Your one-stop shop for every learning — cybersecurity, AI, indie SaaS and more.
+        </p>
         <p style={{ color: 'var(--muted)', fontSize: 17, lineHeight: 1.7, marginBottom: 24 }}>
           Hands-on cohorts where we roll up sleeves and build real things together. Every course
           ends with a shipped project &mdash; and you only pay when you finish.
@@ -173,23 +152,107 @@ export default function StudyTogetherPage() {
 
       {/* Courses */}
       <div style={{ maxWidth: 1080, margin: '0 auto' }}>
-        <h2 className="display-font" style={{ fontSize: 'clamp(22px, 4vw, 30px)', marginBottom: 24, textAlign: 'center' }}>
+        <h2 className="display-font" style={{ fontSize: 'clamp(22px, 4vw, 30px)', marginBottom: 16, textAlign: 'center' }}>
           Courses
         </h2>
+
+        {/* Filters */}
+        <div style={{ marginBottom: 28 }}>
+          {/* Search */}
+          <div style={{ maxWidth: 520, margin: '0 auto 16px' }}>
+            <input
+              type="search"
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              placeholder="🔍 Search courses by topic, skill, or keyword…"
+              className="editor-input"
+              aria-label="Search courses"
+            />
+          </div>
+
+          {/* Category pills */}
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 10 }}>
+            {(['All', ...CATEGORIES] as string[]).map(cat => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={activeCategory === cat ? 'community-interest-chip is-active' : 'community-interest-chip'}
+                style={{
+                  cursor: 'pointer',
+                  background: activeCategory === cat ? '#111' : 'transparent',
+                  color: activeCategory === cat ? '#fff' : 'inherit',
+                }}
+                aria-pressed={activeCategory === cat}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Level pills */}
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap' }}>
+            {(['All', ...LEVELS] as string[]).map(lvl => (
+              <button
+                key={lvl}
+                onClick={() => setActiveLevel(lvl)}
+                className={activeLevel === lvl ? 'community-interest-chip is-active' : 'community-interest-chip'}
+                style={{
+                  cursor: 'pointer',
+                  fontSize: 12,
+                  background: activeLevel === lvl ? '#111' : 'transparent',
+                  color: activeLevel === lvl ? '#fff' : 'inherit',
+                }}
+                aria-pressed={activeLevel === lvl}
+              >
+                {lvl === 'All' ? 'All Levels' : lvl}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Empty state */}
+        {filteredCourses.length === 0 && (
+          <div className="card-3d" style={{ padding: 40, textAlign: 'center', maxWidth: 560, margin: '0 auto' }}>
+            <div style={{ fontSize: 42, marginBottom: 12 }}>📚</div>
+            <h3 className="display-font" style={{ fontSize: 22, marginBottom: 10 }}>
+              {COURSES.length === 0 ? 'Courses dropping soon' : 'No courses match your filters'}
+            </h3>
+            <p style={{ color: 'var(--muted)', fontSize: 14, lineHeight: 1.7, marginBottom: 18 }}>
+              {COURSES.length === 0
+                ? 'I’m hand-crafting the first batch of project-first courses. Drop your interest below and I’ll personally email you the moment a relevant cohort opens.'
+                : 'Try clearing the search or picking a different category.'}
+            </p>
+            {COURSES.length === 0 ? (
+              <Link href="/contact" className="btn btn-3d">Tell me what you want to learn</Link>
+            ) : (
+              <button
+                className="btn-outline"
+                onClick={() => { setQuery(''); setActiveCategory('All'); setActiveLevel('All') }}
+              >
+                Reset filters
+              </button>
+            )}
+          </div>
+        )}
+
+        {filteredCourses.length > 0 && (
         <div className="grid md:grid-cols-2 gap-6">
-          {COURSES.map(course => (
+          {filteredCourses.map(course => (
             <article key={course.id} className="card-3d" style={{ padding: 24, display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', gap: 8, marginBottom: 12, flexWrap: 'wrap' }}>
-                <span className="community-badge">{course.level}</span>
-                <span className="community-badge">{course.duration}</span>
+                <span className="community-badge">{course.category}</span>
+                {course.level && <span className="community-badge">{course.level}</span>}
+                {course.duration && <span className="community-badge">{course.duration}</span>}
               </div>
 
               <h3 className="display-font" style={{ fontSize: 22, lineHeight: 1.25, marginBottom: 8 }}>
                 {course.title}
               </h3>
-              <p style={{ color: 'var(--muted)', fontSize: 14, lineHeight: 1.6, marginBottom: 16 }}>
-                {course.tagline}
-              </p>
+              {course.tagline && (
+                <p style={{ color: 'var(--muted)', fontSize: 14, lineHeight: 1.6, marginBottom: 16 }}>
+                  {course.tagline}
+                </p>
+              )}
 
               {/* Video demo placeholder */}
               <div
@@ -224,32 +287,38 @@ export default function StudyTogetherPage() {
                 )}
               </div>
 
-              <div style={{ marginBottom: 14 }}>
-                <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  What you&apos;ll be able to do
-                </p>
-                <ul style={{ paddingLeft: 18, color: 'var(--muted)', fontSize: 14, lineHeight: 1.6 }}>
-                  {course.outcomes.map(o => (
-                    <li key={o} style={{ marginBottom: 4 }}>{o}</li>
-                  ))}
-                </ul>
-              </div>
+              {course.outcomes && course.outcomes.length > 0 && (
+                <div style={{ marginBottom: 14 }}>
+                  <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    What you&apos;ll be able to do
+                  </p>
+                  <ul style={{ paddingLeft: 18, color: 'var(--muted)', fontSize: 14, lineHeight: 1.6 }}>
+                    {course.outcomes.map(o => (
+                      <li key={o} style={{ marginBottom: 4 }}>{o}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
-              <div style={{ marginBottom: 16 }}>
-                <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  Projects you&apos;ll ship
-                </p>
-                <ul style={{ paddingLeft: 18, color: 'var(--muted)', fontSize: 14, lineHeight: 1.6 }}>
-                  {course.projects.map(p => (
-                    <li key={p} style={{ marginBottom: 4 }}>{p}</li>
-                  ))}
-                </ul>
-              </div>
+              {course.projects && course.projects.length > 0 && (
+                <div style={{ marginBottom: 16 }}>
+                  <p style={{ fontSize: 13, fontWeight: 700, marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    Projects you&apos;ll ship
+                  </p>
+                  <ul style={{ paddingLeft: 18, color: 'var(--muted)', fontSize: 14, lineHeight: 1.6 }}>
+                    {course.projects.map(p => (
+                      <li key={p} style={{ marginBottom: 4 }}>{p}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               <div style={{ marginTop: 'auto', paddingTop: 12, borderTop: '1px dashed var(--border)' }}>
-                <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 12 }}>
-                  <strong style={{ color: 'var(--text-primary)' }}>Fee:</strong> {course.fee}
-                </p>
+                {course.fee && (
+                  <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 12 }}>
+                    <strong style={{ color: 'var(--text-primary)' }}>Fee:</strong> {course.fee}
+                  </p>
+                )}
                 <button onClick={() => openInterest(course)} className="btn btn-3d" style={{ width: '100%' }}>
                   Show Interest &amp; Enroll
                 </button>
@@ -257,6 +326,7 @@ export default function StudyTogetherPage() {
             </article>
           ))}
         </div>
+        )}
       </div>
 
       {/* Footer note */}
