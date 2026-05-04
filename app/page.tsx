@@ -77,9 +77,9 @@ export default function Home(){
           <ServiceCard
             title="Let's Study Together"
             subtitle="For students and serious learners"
-            cta="Start Learning"
+            href="/study"
+            cta="Explore Courses"
             icon="mentor"
-            onCtaClick={() => setBookingSession('study')}
           >
             Stop learning in isolation. Build consistency, stay accountable, and focus only on what truly matters. Join structured study sessions designed around real-world skills, guided direction, and practical problem-solving—so your effort actually translates into progress.
           </ServiceCard>
