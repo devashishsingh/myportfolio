@@ -135,9 +135,9 @@ export default function CommentsSection({ slug }: Props) {
 
       {/* Comments List */}
       {loading ? (
-        <p style={{ color: '#999', fontSize: 14 }}>Loading comments...</p>
+        <p style={{ color: '#666', fontSize: 14 }}>Loading comments...</p>
       ) : comments.length === 0 ? (
-        <p style={{ color: '#999', fontSize: 14, marginTop: 16 }}>No comments yet. Be the first to share your thoughts.</p>
+        <p style={{ color: '#666', fontSize: 14, marginTop: 16 }}>No comments yet. Be the first to share your thoughts.</p>
       ) : (
         <div className="blog-comments-list">
           {comments.map((c) => (

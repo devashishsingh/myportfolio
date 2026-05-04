@@ -153,7 +153,7 @@ export default function BookingModal({ sessionType, isOpen, onClose }: BookingMo
             <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 700, fontFamily: 'Syne, sans-serif' }}>
               {session.label}
             </h2>
-            <p style={{ margin: '4px 0 0 0', fontSize: '13px', color: '#999' }}>
+            <p style={{ margin: '4px 0 0 0', fontSize: '13px', color: '#666' }}>
               {session.description}
             </p>
           </div>
@@ -164,11 +164,11 @@ export default function BookingModal({ sessionType, isOpen, onClose }: BookingMo
               border: 'none',
               cursor: 'pointer',
               fontSize: '24px',
-              color: '#999',
+              color: '#666',
               transition: 'color 0.2s',
             }}
             onMouseEnter={(e) => (e.currentTarget.style.color = '#111')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = '#999')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = '#666')}
           >
             ✕
           </button>

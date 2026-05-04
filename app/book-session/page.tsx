@@ -92,7 +92,7 @@ export default function BookSessionPage() {
   return (
     <main className="page-container" style={{ maxWidth: 700, margin: '0 auto', padding: '40px 24px 80px' }}>
       <div style={{ marginBottom: 48 }}>
-        <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 2, color: '#999', marginBottom: 8 }}>Book a Session</p>
+        <p style={{ fontSize: 12, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 2, color: '#666', marginBottom: 8 }}>Book a Session</p>
         <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 40, fontWeight: 700, letterSpacing: '-1px', marginBottom: 16 }}>
           Let&apos;s Talk
         </h1>
@@ -130,7 +130,7 @@ export default function BookSessionPage() {
                   style={{ display: 'none' }}
                 />
                 <span style={{ fontSize: 15, fontWeight: 600, display: 'block', marginBottom: 4 }}>{t.label}</span>
-                <span style={{ fontSize: 13, color: '#999' }}>{t.desc}</span>
+                <span style={{ fontSize: 13, color: '#666' }}>{t.desc}</span>
               </label>
             ))}
           </div>

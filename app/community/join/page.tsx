@@ -116,7 +116,7 @@ export default function JoinCommunity() {
 
             <div className="community-form-field full-width">
               <label className="editor-label">
-                GitHub <span style={{ color: '#999', fontWeight: 400 }}>(if any)</span>
+                GitHub <span style={{ color: '#666', fontWeight: 400 }}>(if any)</span>
               </label>
               <input
                 value={form.github}

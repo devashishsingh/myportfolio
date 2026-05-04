@@ -86,7 +86,7 @@ export default function BlogEditor({ content, onChange }: BlogEditorProps) {
   if (!editor) {
     return (
       <div className="blog-editor">
-        <div style={{ minHeight: 400, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999' }}>
+        <div style={{ minHeight: 400, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666' }}>
           Loading editor...
         </div>
       </div>

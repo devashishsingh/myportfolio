@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic'
 const BlogEditor = dynamic(() => import('../../components/editor/BlogEditor'), {
   ssr: false,
   loading: () => (
-    <div style={{ minHeight: 400, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(0,0,0,0.15)', borderRadius: 8, color: '#999' }}>
+    <div style={{ minHeight: 400, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(0,0,0,0.15)', borderRadius: 8, color: '#666' }}>
       Loading editor...
     </div>
   ),
