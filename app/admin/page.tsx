@@ -1554,6 +1554,7 @@ function LeadsTab() {
       {/* Source filter + search */}
       <div style={{ display: 'flex', gap: 12, marginBottom: 20, flexWrap: 'wrap', alignItems: 'center' }}>
         <select
+          aria-label="Filter by source"
           value={source}
           onChange={e => setSource(e.target.value)}
           style={{

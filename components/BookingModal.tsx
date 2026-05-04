@@ -222,6 +222,7 @@ export default function BookingModal({ sessionType, isOpen, onClose }: BookingMo
                 />
                 <select
                   className="booking-input"
+                  aria-label="Preferred time"
                   value={form.preferredTime}
                   onChange={(e) => setForm({ ...form, preferredTime: e.target.value })}
                   required
@@ -235,6 +236,7 @@ export default function BookingModal({ sessionType, isOpen, onClose }: BookingMo
 
               <select
                 className="booking-input"
+                aria-label="Timezone"
                 value={form.timezone}
                 onChange={(e) => setForm({ ...form, timezone: e.target.value })}
               >

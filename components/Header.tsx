@@ -115,10 +115,10 @@ export default function Header(){
 
         {/* Right: Search bar + Icons */}
         <div className="header-right">
-          <button className="header-search-trigger" onClick={()=>setSearchOpen(true)} aria-label="Search">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-            <span className="header-search-label">search</span>
-            <kbd className="header-search-kbd">CTRL K</kbd>
+          <button className="header-search-trigger" onClick={()=>setSearchOpen(true)}>
+            <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+            <span className="header-search-label">Search</span>
+            <kbd aria-hidden="true" className="header-search-kbd">CTRL K</kbd>
           </button>
 
           <a href="https://discord.gg/25ufGG4fSR" target="_blank" rel="noopener noreferrer" aria-label="Discord" className="header-icon header-icon-color">

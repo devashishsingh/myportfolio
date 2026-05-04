@@ -104,6 +104,7 @@ export default function BlogEditor({ content, onChange }: BlogEditorProps) {
       <div className="editor-toolbar">
         {/* Font Family */}
         <select
+          aria-label="Font family"
           onChange={e => editor.chain().focus().setFontFamily(e.target.value).run()}
           className="toolbar-select"
           title="Font Family"
@@ -113,6 +114,7 @@ export default function BlogEditor({ content, onChange }: BlogEditorProps) {
 
         {/* Heading / Size */}
         <select
+          aria-label="Text style"
           value={currentHeading}
           onChange={e => {
             const level = parseInt(e.target.value)
