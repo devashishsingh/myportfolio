@@ -19,40 +19,6 @@ interface Course {
 // Add courses here. Until then the page shows a graceful empty state.
 const COURSES: Course[] = []
 
-const CATEGORIES = [
-  'Cybersecurity',
-  'Ethical Hacking & Pentesting',
-  'AI & Machine Learning',
-  'Generative AI & LLMs',
-  'Prompt Engineering',
-  'Data Science',
-  'Data Engineering',
-  'Indie SaaS',
-  'Startups & Entrepreneurship',
-  'Product Management',
-  'No-Code & Low-Code',
-  'Web Development',
-  'Frontend (React/Next.js)',
-  'Backend & APIs',
-  'Mobile Development',
-  'Cloud & DevOps',
-  'Linux & Sysadmin',
-  'Networking',
-  'Databases & SQL',
-  'Blockchain & Web3',
-  'Game Development',
-  'UI/UX Design',
-  'Digital Marketing',
-  'SEO & Content',
-  'Personal Branding',
-  'Freelancing',
-  'Career & Mindset',
-  'Productivity & Habits',
-  'Leadership & Soft Skills',
-  'Finance & Investing',
-  'Other',
-] as const
-
 const LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const
 
 export default function StudyTogetherPage() {
@@ -65,6 +31,16 @@ export default function StudyTogetherPage() {
   const [query, setQuery] = useState('')
   const [activeCategory, setActiveCategory] = useState<string>('All')
   const [activeLevel, setActiveLevel] = useState<string>('All')
+
+  // Build categories dynamically from the courses that actually exist.
+  // No courses → no category filter row at all.
+  const CATEGORIES = useMemo(() => {
+    const set = new Set<string>()
+    for (const c of COURSES) {
+      if (c.category) set.add(c.category)
+    }
+    return Array.from(set).sort((a, b) => a.localeCompare(b))
+  }, [])
 
   const filteredCourses = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -194,24 +170,26 @@ export default function StudyTogetherPage() {
             />
           </div>
 
-          {/* Category pills */}
-          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 10 }}>
-            {(['All', ...CATEGORIES] as string[]).map(cat => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={activeCategory === cat ? 'community-interest-chip is-active' : 'community-interest-chip'}
-                style={{
-                  cursor: 'pointer',
-                  background: activeCategory === cat ? '#111' : 'transparent',
-                  color: activeCategory === cat ? '#fff' : 'inherit',
-                }}
-                aria-pressed={activeCategory === cat}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+          {/* Category pills (only when we actually have courses with categories) */}
+          {CATEGORIES.length > 0 && (
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 10 }}>
+              {(['All', ...CATEGORIES] as string[]).map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={activeCategory === cat ? 'community-interest-chip is-active' : 'community-interest-chip'}
+                  style={{
+                    cursor: 'pointer',
+                    background: activeCategory === cat ? '#111' : 'transparent',
+                    color: activeCategory === cat ? '#fff' : 'inherit',
+                  }}
+                  aria-pressed={activeCategory === cat}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Level pills */}
           <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap' }}>
