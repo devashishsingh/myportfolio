@@ -2,45 +2,71 @@ import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 import { prisma } from './db'
+import { processPost, readPostFile } from './blog-engine'
 
 const POSTS_PATH = path.join(process.cwd(), 'content', 'posts')
 
 export function getPostSlugs(){
   if(!fs.existsSync(POSTS_PATH)) return []
-  return fs.readdirSync(POSTS_PATH).filter(fn=>fn.endsWith('.mdx'))
+  return fs.readdirSync(POSTS_PATH)
+    .filter(fn=>fn.endsWith('.mdx') && !fn.endsWith('.v2.mdx'))
 }
 
 export async function getPostBySlug(slug:string){
   const realSlug = slug.replace(/\.mdx$/, '')
 
-  // Try filesystem first
-  const fullPath = path.join(POSTS_PATH, `${realSlug}.mdx`)
-  if (fs.existsSync(fullPath)) {
-    const fileContents = fs.readFileSync(fullPath, 'utf8')
-    const {data, content} = matter(fileContents)
-    const words = content.split(/\s+/).filter(Boolean).length
-    const readingTime = Math.max(1, Math.ceil(words / 200))
-    return { frontMatter: { ...(data as Record<string, any>), readingTime } as Record<string, any>, content }
+  // Try filesystem first (engine handles v1/v2 selection)
+  const fileRead = readPostFile(realSlug)
+  if (fileRead) {
+    const { doc, renderableMdx } = processPost(fileRead.raw, realSlug)
+    return {
+      frontMatter: {
+        title: doc.title,
+        description: doc.description,
+        author: doc.author,
+        date: doc.date,
+        category: doc.category,
+        tags: doc.tags,
+        featured: doc.featured,
+        readingTime: doc.readingTimeMinutes,
+        contentVersion: doc.contentVersion,
+        quality: doc.quality,
+      } as Record<string, any>,
+      content: renderableMdx,
+      doc,
+    }
   }
 
   // Try database
   const post = await prisma.blogPost.findUnique({ where: { slug: realSlug } })
   if (post) {
     const tags = (() => { try { return JSON.parse(post.tags) } catch { return [] } })()
-    const words = post.content.split(/\s+/).filter(Boolean).length
-    const readingTime = Math.max(1, Math.ceil(words / 200))
+    // Reconstruct a raw MDX-with-frontmatter string so the engine can process it uniformly
+    const fmYaml = matter.stringify(post.content || '', {
+      title: post.title,
+      description: post.description || '',
+      author: post.author,
+      date: post.date,
+      category: post.category || '',
+      tags,
+      featured: post.featured,
+    })
+    const { doc, renderableMdx } = processPost(fmYaml, realSlug)
     return {
       frontMatter: {
-        title: post.title,
-        description: post.description || '',
-        author: post.author,
-        date: post.date,
-        category: post.category || '',
-        tags,
-        featured: post.featured,
-        readingTime,
+        title: doc.title,
+        description: doc.description,
+        author: doc.author,
+        date: doc.date,
+        category: doc.category,
+        tags: doc.tags,
+        featured: doc.featured,
+        readingTime: doc.readingTimeMinutes,
+        contentVersion: doc.contentVersion,
+        quality: doc.quality,
       } as Record<string, any>,
-      content: post.content,
+      content: renderableMdx,
+      doc,
     }
   }
 
@@ -48,7 +74,7 @@ export async function getPostBySlug(slug:string){
 }
 
 export async function getAllPosts(){
-  // Get filesystem posts
+  // Get filesystem posts (skip .v2.mdx variants — they're alternate renderings of the same slug)
   const slugs = getPostSlugs()
   const fsPosts = await Promise.all(slugs.map(async (fileName)=>{
     const fullPath = path.join(POSTS_PATH, fileName)
