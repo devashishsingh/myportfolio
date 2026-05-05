@@ -52,6 +52,18 @@ function MemberLoginInner() {
         Enter your member email. We'll send a one-tap sign-in link — valid 15 minutes, single use. No password to remember.
       </p>
 
+      <div style={{
+        marginBottom: 24,
+        padding: '12px 14px',
+        background: '#fffae0',
+        border: '2px solid #1a1a1a',
+        boxShadow: '4px 4px 0 0 #f4b942',
+        fontSize: 13,
+        lineHeight: 1.6,
+      }}>
+        <strong>📌 Bookmark this page.</strong> Sessions last 2 hours, then you'll need a fresh magic link. Bookmarking <code style={{ padding: '1px 5px', background: '#fff', border: '1px solid #1a1a1a', fontFamily: 'IBM Plex Mono, monospace', fontSize: 12 }}>/community/login</code> makes re-entry one tap away.
+      </div>
+
       {error === 'invalid_or_expired' && (
         <div style={{ marginBottom: 20, padding: 14, border: '2px solid #1a1a1a', background: '#fff0f0', boxShadow: '4px 4px 0 0 #dc2626' }}>
           That sign-in link is expired or already used. Request a fresh one below.

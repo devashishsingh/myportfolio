@@ -318,6 +318,7 @@ export function memberApprovedEmail(opts: {
   const leaderboardUrl = `${base}/community/leaderboard`
   const membersUrl = `${base}/community/members`
   const profileEditUrl = `${base}/community/me`
+  const loginUrl = `${base}/community/login`
 
   return {
     subject: `You're in the Builders Hub${founderNumber ? ` — Founding Member #${String(founderNumber).padStart(2, '0')}` : ''}`,
@@ -331,10 +332,17 @@ export function memberApprovedEmail(opts: {
       <h3 style="margin-top:28px;">⚡ Your first 5 minutes</h3>
       <ol style="padding-left:20px; line-height:1.8;">
         <li><a href="${magicLoginUrl}"><strong>Sign in</strong></a> with your one-tap link (valid 15 min, single use)</li>
+        <li><strong>Bookmark <a href="${loginUrl}">${loginUrl}</a></strong> — sessions last 2 hours, then you'll request a fresh magic link from there</li>
         <li><a href="${profileEditUrl}"><strong>Set up your profile</strong></a> — handle, bio, tracks, what you're working on, "open to" flags</li>
         <li><a href="${channelUrl}"><strong>Join the private Discord</strong></a> and post in <em>#introductions</em></li>
         <li><a href="${challengesUrl}"><strong>Pick a live challenge</strong></a> and submit before the timer closes</li>
       </ol>
+
+      <div style="margin:18px 0; padding:12px 14px; background:#fffae0; border:2px solid #1a1a1a; box-shadow:4px 4px 0 0 #f4b942;">
+        <p style="margin:0; font-size:14px; line-height:1.6;">
+          🔐 <strong>Security note:</strong> we don't use passwords. Each sign-in is a one-tap link to your inbox. Sessions auto-expire after 2 hours — bookmark <a href="${loginUrl}">${loginUrl}</a> so re-entry is one tap away.
+        </p>
+      </div>
 
       <h3 style="margin-top:28px;">🪪 Your member identity</h3>
       <ul style="padding-left:20px; line-height:1.7;">
@@ -393,9 +401,9 @@ export function memberApprovedEmail(opts: {
         <li>First look at new courses, labs, and revenue-share opportunities</li>
       </ul>
 
-      <h3 style="margin-top:28px;">📌 Quick links</h3>
+      <h3 style="margin-top:28px;">📌 Quick links <span style="font-weight:400; color:#6b6b6b; font-size:13px;">(bookmark these)</span></h3>
       <ul style="padding-left:20px; line-height:1.7;">
-        <li>Sign in: <a href="${magicLoginUrl}">${magicLoginUrl}</a></li>
+        <li><strong>Member sign-in:</strong> <a href="${loginUrl}">${loginUrl}</a></li>
         <li>Welcome / dashboard: <a href="${welcomeUrl}">${welcomeUrl}</a></li>
         <li>Edit profile: <a href="${profileEditUrl}">${profileEditUrl}</a></li>
         <li>Live challenges: <a href="${challengesUrl}">${challengesUrl}</a></li>
@@ -415,9 +423,12 @@ export function memberApprovedEmail(opts: {
       ``,
       `YOUR FIRST 5 MINUTES`,
       `1. Sign in (15-min link): ${magicLoginUrl}`,
-      `2. Set up profile: ${profileEditUrl}`,
-      `3. Join Discord: ${channelUrl}`,
-      `4. Pick a challenge: ${challengesUrl}`,
+      `2. Bookmark the login page: ${loginUrl}  (sessions last 2 hours)`,
+      `3. Set up profile: ${profileEditUrl}`,
+      `4. Join Discord: ${channelUrl}`,
+      `5. Pick a challenge: ${challengesUrl}`,
+      ``,
+      `SECURITY: no passwords. Each sign-in is a one-tap link. Sessions auto-expire after 2 hours.`,
       ``,
       `WHAT'S OPEN TO YOU`,
       `- Public profile + member directory: ${membersUrl}`,
@@ -431,8 +442,8 @@ export function memberApprovedEmail(opts: {
       `- Featured product showcases`,
       discountCode ? `- 20% off courses/workshops/1:1 — code: ${discountCode}` : '',
       ``,
-      `QUICK LINKS`,
-      `Sign in:       ${magicLoginUrl}`,
+      `QUICK LINKS (bookmark these)`,
+      `Sign in page:  ${loginUrl}`,
       `Dashboard:     ${welcomeUrl}`,
       `Edit profile:  ${profileEditUrl}`,
       `Challenges:    ${challengesUrl}`,
@@ -454,17 +465,19 @@ export function memberLoginEmail(opts: {
   magicLoginUrl: string
 }): { subject: string; html: string; text: string } {
   const { name, magicLoginUrl } = opts
+  const loginUrl = `${EMAIL_CONFIG.baseUrl}/community/login`
   return {
     subject: 'Your Builders Hub sign-in link',
     html: baseTemplate(`
       <span class="badge">Sign-in link</span>
       <h2>Tap to sign in.</h2>
       <p>Hi ${name},</p>
-      <p>Here's your one-time sign-in link. Valid for 15 minutes — single use.</p>
+      <p>Here's your one-time sign-in link. Valid for <strong>15 minutes</strong>, single use. Once you sign in, your session lasts <strong>2 hours</strong>.</p>
       <a href="${magicLoginUrl}" class="cta">Sign in to Builders Hub →</a>
+      <p style="margin-top:18px; font-size:13px; color:#6b6b6b;">📌 Tip: bookmark <a href="${loginUrl}">${loginUrl}</a> — that's where you request a fresh link whenever your session expires.</p>
       <p class="quiet">Didn't request this? Ignore the email — the link can't be reused.</p>
       <p class="signature">— ${EMAIL_CONFIG.fromName}</p>
     `, 'Builders Hub · sign-in'),
-    text: `Hi ${name},\n\nSign in (15-min link, single use): ${magicLoginUrl}\n\nDidn't request this? Ignore the email.\n\n— ${EMAIL_CONFIG.fromName}`,
+    text: `Hi ${name},\n\nSign in (15-min link, single use): ${magicLoginUrl}\n\nSession lasts 2 hours. Bookmark ${loginUrl} for quick re-entry next time.\n\nDidn't request this? Ignore the email.\n\n— ${EMAIL_CONFIG.fromName}`,
   }
 }

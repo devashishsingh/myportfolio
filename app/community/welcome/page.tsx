@@ -50,6 +50,20 @@ export default async function CommunityWelcomePage() {
         </div>
       )}
 
+      {member && (
+        <div style={{
+          padding: 14,
+          border: '2px solid #1a1a1a',
+          background: '#fffae0',
+          boxShadow: '4px 4px 0 0 #f4b942',
+          marginBottom: 32,
+          fontSize: 14,
+          lineHeight: 1.6,
+        }}>
+          <strong>📌 Bookmark <code style={{ padding: '1px 5px', background: '#fff', border: '1px solid #1a1a1a', fontFamily: 'IBM Plex Mono, monospace', fontSize: 12 }}>/community/login</code></strong> — sessions last 2 hours for security. After that, request a fresh magic link from the same page (one tap, lands in your inbox).
+        </div>
+      )}
+
       {/* Quick links — visible to all */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 10, marginBottom: 32 }}>
         <Link href="/community/challenges" style={{ textDecoration: 'none' }}><QuickTile emoji="🎯" label="Challenges" /></Link>

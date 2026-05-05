@@ -1,7 +1,8 @@
 // Member magic-link auth.
 // - Login request: generate raw token, store its SHA-256 hash, email the raw token in a magic link.
-// - Verify: lookup by hash, ensure not used and not expired, mark used, mint a long-lived session token.
-// - Session: another row with purpose='session' + 30d expiry; cookie carries raw token, server matches via hash.
+// - Verify: lookup by hash, ensure not used and not expired, mark used, mint a short-lived session token.
+// - Session: another row with purpose='session' + 2-hour expiry; cookie carries raw token, server matches via hash.
+//   Members must request a fresh magic link after each session expires — keeps accounts secure on shared devices.
 
 import { createHash, randomBytes } from 'crypto'
 import { cookies } from 'next/headers'
@@ -9,7 +10,8 @@ import { prisma } from './db'
 
 export const MEMBER_COOKIE = 'member_session'
 const LOGIN_LINK_TTL_MIN = 15
-const SESSION_TTL_DAYS = 30
+const SESSION_TTL_HOURS = 2
+const SESSION_TTL_SECONDS = SESSION_TTL_HOURS * 60 * 60
 
 export function hashToken(token: string): string {
   return createHash('sha256').update(token).digest('hex')
@@ -41,7 +43,7 @@ export async function consumeLoginToken(rawToken: string): Promise<string | null
 export async function createSessionToken(memberId: string): Promise<string> {
   const raw = newRawToken()
   const tokenHash = hashToken(raw)
-  const expiresAt = new Date(Date.now() + SESSION_TTL_DAYS * 24 * 60 * 60 * 1000)
+  const expiresAt = new Date(Date.now() + SESSION_TTL_SECONDS * 1000)
   await prisma.memberSession.create({
     data: { memberId, tokenHash, purpose: 'session', expiresAt },
   })
@@ -53,7 +55,7 @@ export const MEMBER_COOKIE_OPTIONS = {
   secure: process.env.NODE_ENV === 'production',
   sameSite: 'lax' as const,
   path: '/',
-  maxAge: SESSION_TTL_DAYS * 24 * 60 * 60,
+  maxAge: SESSION_TTL_SECONDS,
 }
 
 export async function getMemberFromCookie(): Promise<{ id: string; email: string; handle: string; displayName: string; founderNumber: number | null } | null> {
