@@ -321,7 +321,7 @@ function WaitlistForm() {
     <form onSubmit={submit}>
       <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 6 }}>Reserve a seat (waitlist)</h3>
       <p style={{ color: 'var(--muted)', fontSize: 14, marginBottom: 16, lineHeight: 1.6 }}>
-        Pay nothing today. Early-bird at <strong>{COHORT.fee.earlyBirdInr}</strong> / {COHORT.fee.earlyBirdUsd} for the {COHORT.earlyBirdEndsLabel} who confirm. Standard {COHORT.fee.inr} / {COHORT.fee.usd} after.
+        Free to reserve. <strong>You only pay closer to the start date</strong> — I&apos;ll email you a few days before with enrolment details. Early-bird at <strong>{COHORT.fee.earlyBirdInr}</strong> / {COHORT.fee.earlyBirdUsd} for the {COHORT.earlyBirdEndsLabel} who confirm. Standard {COHORT.fee.inr} / {COHORT.fee.usd} after. Priced to be genuinely affordable for students and career-switchers.
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10, marginBottom: 10 }}>
         <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Full name" required style={inputStyle} />
@@ -415,7 +415,7 @@ function Pricing() {
       <div style={{ maxWidth: 980, margin: '0 auto' }}>
         <h2 className="display-font" style={{ fontSize: 'clamp(28px, 5vw, 40px)', textAlign: 'center', marginBottom: 12 }}>Pricing</h2>
         <p style={{ color: 'var(--muted)', textAlign: 'center', marginBottom: 40, fontSize: 16 }}>
-          14-day full refund. No corporate fluff. Scholarship seats reserved each cohort.
+          Genuinely affordable. Reserve free now — pay only closer to the cohort start. 14-day full refund. Scholarship seats reserved each cohort.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 18 }}>
           <PriceTier
@@ -440,7 +440,7 @@ function Pricing() {
           />
         </div>
         <p style={{ marginTop: 28, fontSize: 13, color: 'var(--muted-2)', textAlign: 'center' }}>
-          Reserve a seat first — I&apos;ll personally email you with enrolment + payment details when seats open. Scholarship seats available; mention it in the waitlist form.
+          No payment today. Reserve free — I&apos;ll personally email enrolment details before the cohort starts. Direct bank/UPI transfer for now (online checkout coming later). Scholarship seats available; mention it in the waitlist form.
         </p>
       </div>
     </section>
