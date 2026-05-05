@@ -67,7 +67,7 @@ export default function Hero(){
 
           <motion.div variants={childVariants}>
             <div className="muted-label" style={{display:'flex',alignItems:'center',gap:6}}>
-              Leader · Mentor · Builder · Innovator · Futuristic
+              Cybersecurity practitioner · Cohort instructor · Indie founder
               <Sparkle />
             </div>
           </motion.div>
@@ -82,19 +82,19 @@ export default function Hero(){
           </motion.div>
 
           <motion.div variants={childVariants}>
-            <p className="hero-lead" style={{transform:'translateZ(15px)'}}>With 14+ years of hands-on experience in cybersecurity and digital innovation, I help students and fresh graduates cut through confusion and focus on what truly works in the real world.<br/><br/>No generic advice—just practical direction, skill clarity, and honest insights into how hiring actually works.<br/><br/>If you're unsure about your path or want to stand out, let's talk—you'll walk away with a clearer roadmap.</p>
+            <p className="hero-lead" style={{transform:'translateZ(15px)'}}>I help career-switchers break into <strong>cybersecurity &amp; AI</strong> with 12-week cohorts, real labs, and recruiter intros for top grads.<br/><br/>14+ years shipping security at scale (ex-AirAsia InfoSec, founder of InMyBox + DMARC Labs). I teach what I run in production every week — no outdated slides, no theory that doesn&apos;t survive triage.<br/><br/>Start free with the 5-day email mini-course, or reserve a seat in Cohort #1.</p>
           </motion.div>
 
           <motion.div variants={childVariants}>
-            <div className="hero-cta" style={{transform:'translateZ(20px)', display:'flex', gap:16, alignItems:'center'}}>
+            <div className="hero-cta" style={{transform:'translateZ(20px)', display:'flex', gap:16, alignItems:'center', flexWrap:'wrap'}}>
               <MagneticButton strength={0.35}>
                 <motion.div whileTap={{ scale: 0.97 }}>
-                  <Link href="/work" className="btn btn-3d" style={{ height:44, minWidth:170, display:'inline-flex', alignItems:'center', justifyContent:'center', borderRadius:8 }}>View work</Link>
+                  <Link href="/study" className="btn btn-3d" style={{ height:44, minWidth:200, display:'inline-flex', alignItems:'center', justifyContent:'center', borderRadius:8 }}>See the cohort →</Link>
                 </motion.div>
               </MagneticButton>
               <MagneticButton strength={0.35}>
                 <motion.div whileTap={{ scale: 0.97 }}>
-                  <Link href="/contact" className="btn-outline btn-3d" style={{ height:44, minWidth:170, display:'inline-flex', alignItems:'center', justifyContent:'center', borderRadius:8 }}>Contact</Link>
+                  <Link href="/study#free" className="btn-outline btn-3d" style={{ height:44, minWidth:200, display:'inline-flex', alignItems:'center', justifyContent:'center', borderRadius:8 }}>Free 5-day mini-course</Link>
                 </motion.div>
               </MagneticButton>
             </div>
@@ -102,7 +102,7 @@ export default function Hero(){
 
           <motion.div variants={childVariants}>
             <p style={{ fontFamily:"'IBM Plex Mono',monospace", fontSize:11, color:'var(--text-muted)', letterSpacing:'0.05em', marginTop:16 }}>
-              Cybersecurity · Digital Transformation · AI · Leadership
+              Next cohort starts Aug 2026 · 30 seats · Early-bird for first 10
             </p>
           </motion.div>
         </motion.div>

@@ -52,9 +52,45 @@ export default async function MonthlySpotlight() {
           </Link>
         ))}
       </div>
+      {/* Fade-out FOMO peek */}
+      <div style={{ maxWidth: 860, margin: '24px auto 0', position: 'relative' }}>
+        <div aria-hidden style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+          gap: 12,
+          filter: 'blur(4px) saturate(0.6)',
+          opacity: 0.5,
+          pointerEvents: 'none',
+        }}>
+          {[4, 5, 6, 7].map(n => (
+            <div key={n} style={{ padding: '14px 16px', border: '2px solid #1a1a1a', background: '#fff' }}>
+              <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, color: 'var(--muted)' }}>#{n}</div>
+              <div style={{ fontWeight: 700, fontSize: 14, marginTop: 4 }}>████████ ████</div>
+              <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>███ pts · ███</div>
+            </div>
+          ))}
+        </div>
+        <div style={{
+          position: 'absolute', inset: 0,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: 'linear-gradient(to top, rgba(253,250,246,0.95) 30%, rgba(253,250,246,0.4))',
+        }}>
+          <Link href="/community/login" style={{
+            padding: '10px 22px',
+            border: '2px solid #1a1a1a',
+            background: '#fffae0',
+            boxShadow: '4px 4px 0 0 #f4b942',
+            fontWeight: 700,
+            fontSize: 14,
+            textDecoration: 'none',
+            color: '#1a1a1a',
+          }}>
+            🔓 Sign in to see ranks #4–50
+          </Link>
+        </div>
+      </div>
       <p style={{ textAlign: 'center', marginTop: 22, fontSize: 13, color: 'var(--muted)' }}>
-        <Link href="/community/leaderboard" style={{ textDecoration: 'underline', fontWeight: 600 }}>See full leaderboard →</Link>
-        <span style={{ marginLeft: 6 }}>(members only)</span>
+        Not a member yet? <Link href="/community/join" style={{ textDecoration: 'underline', fontWeight: 600 }}>Apply to the Builders Hub →</Link>
       </p>
     </section>
   )
