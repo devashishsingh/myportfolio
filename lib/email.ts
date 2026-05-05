@@ -313,26 +313,137 @@ export function memberApprovedEmail(opts: {
 }): { subject: string; html: string; text: string } {
   const { name, founderNumber, magicLoginUrl, channelUrl, welcomeUrl, discountCode } = opts
   const founderLine = founderNumber ? `Founding Member <strong>#${String(founderNumber).padStart(2, '0')}</strong>` : 'Welcome aboard'
+  const base = EMAIL_CONFIG.baseUrl
+  const challengesUrl = `${base}/community/challenges`
+  const leaderboardUrl = `${base}/community/leaderboard`
+  const membersUrl = `${base}/community/members`
+  const profileEditUrl = `${base}/community/me`
+
   return {
     subject: `You're in the Builders Hub${founderNumber ? ` — Founding Member #${String(founderNumber).padStart(2, '0')}` : ''}`,
     html: baseTemplate(`
       <span class="badge">Application approved</span>
       <h2>You're in.</h2>
       <p>Hi ${name},</p>
-      <p>Welcome to the <strong>Builders Hub</strong> — a small, curated room for tech builders, founders and operators who'd rather ship than scroll.</p>
+      <p>Welcome to the <strong>Builders Hub</strong> — a small, curated room for tech builders, founders and operators who'd rather ship than scroll. Here's everything that's open to you starting now.</p>
       <p style="font-family:'Patrick Hand','Comic Sans MS',cursive; font-size:22px; margin:18px 0 10px;">${founderLine}</p>
-      <p>Your first 5 minutes:</p>
-      <ul>
-        <li><a href="${magicLoginUrl}">Sign in to your member dashboard</a> (one-tap link, valid 15 min)</li>
-        <li><a href="${channelUrl}">Join the private Discord channel</a></li>
-        <li><a href="${welcomeUrl}">Read the welcome page</a> — manifesto, monthly call, member directory</li>
+
+      <h3 style="margin-top:28px;">⚡ Your first 5 minutes</h3>
+      <ol style="padding-left:20px; line-height:1.8;">
+        <li><a href="${magicLoginUrl}"><strong>Sign in</strong></a> with your one-tap link (valid 15 min, single use)</li>
+        <li><a href="${profileEditUrl}"><strong>Set up your profile</strong></a> — handle, bio, tracks, what you're working on, "open to" flags</li>
+        <li><a href="${channelUrl}"><strong>Join the private Discord</strong></a> and post in <em>#introductions</em></li>
+        <li><a href="${challengesUrl}"><strong>Pick a live challenge</strong></a> and submit before the timer closes</li>
+      </ol>
+
+      <h3 style="margin-top:28px;">🪪 Your member identity</h3>
+      <ul style="padding-left:20px; line-height:1.7;">
+        <li><strong>Public profile</strong> at <code>/community/your-handle</code> — bio, region, tracks, social links, badges, points</li>
+        <li><strong>Member directory</strong> — discover and DM other builders: <a href="${membersUrl}">${membersUrl}</a></li>
+        <li><strong>"Open to"</strong> toggles let you signal Collaboration / Hire / Mentorship</li>
+        ${founderNumber ? `<li>Permanent <strong>Founding Member badge</strong> on your profile (only the first 50 ever get this)</li>` : ''}
       </ul>
-      ${discountCode ? `<p>Members get <strong>20% off</strong> any course, workshop, or 1:1 — code: <code style="background:#fffae0; padding:3px 8px; border:1.5px solid #1a1a1a; font-family:'IBM Plex Mono',monospace;">${discountCode}</code></p>` : ''}
+
+      <h3 style="margin-top:28px;">🎯 Challenges, quizzes &amp; labs</h3>
+      <p style="margin:6px 0;">Live drops with real timers. Three formats:</p>
+      <ul style="padding-left:20px; line-height:1.7;">
+        <li><strong>Challenges</strong> — build/ship something, judged on rubric</li>
+        <li><strong>Quizzes</strong> — quick knowledge checks</li>
+        <li><strong>Labs</strong> — hands-on guided exercises</li>
+      </ul>
+      <p style="margin:6px 0;">Approved submissions earn Builder Points + the optional skill badge. AI-assisted is fine — just be honest about it in your submission notes.</p>
+
+      <h3 style="margin-top:28px;">🏆 Builder Points &amp; Leaderboard</h3>
+      <table cellspacing="0" cellpadding="6" style="border-collapse:collapse; margin:8px 0; font-size:14px;">
+        <tr><td style="border-bottom:1px solid #1a1a1a; padding-right:18px;">Approved challenge</td><td style="border-bottom:1px solid #1a1a1a;"><strong>+50 pts</strong> (varies by difficulty)</td></tr>
+        <tr><td style="border-bottom:1px solid #1a1a1a; padding-right:18px;">Quiz pass / lab complete</td><td style="border-bottom:1px solid #1a1a1a;"><strong>+10–30 pts</strong></td></tr>
+        <tr><td style="border-bottom:1px solid #1a1a1a; padding-right:18px;">Helpful answer (Discord)</td><td style="border-bottom:1px solid #1a1a1a;"><strong>+5 pts</strong></td></tr>
+        <tr><td style="border-bottom:1px solid #1a1a1a; padding-right:18px;">Published writeup</td><td style="border-bottom:1px solid #1a1a1a;"><strong>+25 pts</strong></td></tr>
+        <tr><td style="padding-right:18px;">4-week active streak</td><td><strong>+25 bonus</strong> (auto)</td></tr>
+      </table>
+      <p style="margin:6px 0;">
+        <a href="${leaderboardUrl}"><strong>Members-only leaderboard</strong></a> tracks monthly + all-time. Top 3 each month get a public spotlight on the Community page. Monthly board resets on the 1st.
+      </p>
+
+      <h3 style="margin-top:28px;">🎖 Badges you can earn</h3>
+      <ul style="padding-left:20px; line-height:1.7;">
+        <li><strong>Founding</strong> — first 50 members (permanent)</li>
+        <li><strong>Builder I → IV</strong> — auto-awarded at 100 / 500 / 1500 / 5000 lifetime points</li>
+        <li><strong>Skill apprentices</strong> — Cyber, AI, Cloud, Systems, Networks, Coding, Gaming, Digital — earned via challenges &amp; labs</li>
+        <li><strong>Contributor &amp; Event</strong> badges for writeups, mentorship, monthly-call attendance</li>
+      </ul>
+
+      <h3 style="margin-top:28px;">💬 Discord channel layout</h3>
+      <ul style="padding-left:20px; line-height:1.7;">
+        <li><em>#introductions</em> — say hi, drop your handle</li>
+        <li><em>#wins</em> &amp; <em>#stuck</em> — ship logs and help requests</li>
+        <li><em>#challenges</em> — discuss the live drop</li>
+        <li><em>#showcase</em> — promote your product, get feedback</li>
+        <li><em>#hiring</em> &amp; <em>#collab</em> — opportunities</li>
+        <li><em>#office-hours</em> — open async Q&amp;A with me</li>
+      </ul>
+      <p style="margin:6px 0;">Etiquette: be specific, no link-dumps, search before asking, lift others up.</p>
+
+      <h3 style="margin-top:28px;">🎁 Member perks</h3>
+      <ul style="padding-left:20px; line-height:1.7;">
+        ${discountCode ? `<li><strong>20% off</strong> any course, workshop, or 1:1 — code: <code style="background:#fffae0; padding:3px 8px; border:1.5px solid #1a1a1a; font-family:'IBM Plex Mono',monospace;">${discountCode}</code></li>` : ''}
+        <li>Monthly live call with me (recording shared after)</li>
+        <li>Open async office hours on Discord</li>
+        <li>Featured product showcases on the platform</li>
+        <li>First look at new courses, labs, and revenue-share opportunities</li>
+      </ul>
+
+      <h3 style="margin-top:28px;">📌 Quick links</h3>
+      <ul style="padding-left:20px; line-height:1.7;">
+        <li>Sign in: <a href="${magicLoginUrl}">${magicLoginUrl}</a></li>
+        <li>Welcome / dashboard: <a href="${welcomeUrl}">${welcomeUrl}</a></li>
+        <li>Edit profile: <a href="${profileEditUrl}">${profileEditUrl}</a></li>
+        <li>Live challenges: <a href="${challengesUrl}">${challengesUrl}</a></li>
+        <li>Leaderboard: <a href="${leaderboardUrl}">${leaderboardUrl}</a></li>
+        <li>Member directory: <a href="${membersUrl}">${membersUrl}</a></li>
+        <li>Discord: <a href="${channelUrl}">${channelUrl}</a></li>
+      </ul>
+
       <a href="${magicLoginUrl}" class="cta">Sign in &amp; explore →</a>
-      <p class="quiet">Reply to this email if anything looks off — it lands in my inbox.</p>
+      <p class="quiet">Reply to this email if anything looks off — it lands in my inbox. Welcome aboard.</p>
       <p class="signature">— ${EMAIL_CONFIG.fromName}</p>
     `, 'Sketchbook · welcome'),
-    text: `Hi ${name},\n\nWelcome to the Builders Hub${founderNumber ? ` — Founding Member #${String(founderNumber).padStart(2, '0')}` : ''}.\n\nSign in (15-min link): ${magicLoginUrl}\nDiscord: ${channelUrl}\nWelcome page: ${welcomeUrl}\n${discountCode ? `\nMember discount: ${discountCode} (20% off)\n` : ''}\n— ${EMAIL_CONFIG.fromName}`,
+    text: [
+      `Hi ${name},`,
+      ``,
+      `Welcome to the Builders Hub${founderNumber ? ` — Founding Member #${String(founderNumber).padStart(2, '0')}` : ''}.`,
+      ``,
+      `YOUR FIRST 5 MINUTES`,
+      `1. Sign in (15-min link): ${magicLoginUrl}`,
+      `2. Set up profile: ${profileEditUrl}`,
+      `3. Join Discord: ${channelUrl}`,
+      `4. Pick a challenge: ${challengesUrl}`,
+      ``,
+      `WHAT'S OPEN TO YOU`,
+      `- Public profile + member directory: ${membersUrl}`,
+      `- Live challenges, quizzes, labs (real timers, points + badges)`,
+      `- Builder Points: +50 challenge, +25 writeup, +5 helpful answer, +25 4-week streak`,
+      `- Members-only leaderboard (monthly + all-time): ${leaderboardUrl}`,
+      `- Top-3 monthly spotlight on the public Community page`,
+      `- Auto-awarded Builder I-IV badges at 100/500/1500/5000 pts`,
+      `- Skill, Contributor, and Event badges`,
+      `- Monthly live call + open Discord office hours`,
+      `- Featured product showcases`,
+      discountCode ? `- 20% off courses/workshops/1:1 — code: ${discountCode}` : '',
+      ``,
+      `QUICK LINKS`,
+      `Sign in:       ${magicLoginUrl}`,
+      `Dashboard:     ${welcomeUrl}`,
+      `Edit profile:  ${profileEditUrl}`,
+      `Challenges:    ${challengesUrl}`,
+      `Leaderboard:   ${leaderboardUrl}`,
+      `Members:       ${membersUrl}`,
+      `Discord:       ${channelUrl}`,
+      ``,
+      `Reply to this email if anything looks off — it lands in my inbox.`,
+      ``,
+      `— ${EMAIL_CONFIG.fromName}`,
+    ].filter(Boolean).join('\n'),
   }
 }
 
