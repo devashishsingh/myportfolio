@@ -9,9 +9,9 @@ const COHORT = {
   id: 'cyber-foundations-c1',
   title: 'Cyber Foundations — Cohort #1',
   tagline: 'A small, hands-on cohort. Live sessions, weekly labs, personal feedback.',
-  startDate: 'Aug 11, 2026',
+  startDate: 'Flexible — set with the cohort',
   duration: '12 weeks',
-  cadence: '2 live sessions/week + 1 weekly lab',
+  cadence: 'Weekend or evening slots · 2 live sessions/week + 1 weekly lab',
   seats: 30,
   outcomes: [
     'Hands-on labs each week — curriculum being finalized for Cohort #1',
@@ -31,15 +31,15 @@ const COHORT = {
 }
 
 const FREE_COURSE = {
-  id: 'cyber-essentials-free',
-  title: 'Cyber Essentials — 5 lesson email course',
-  tagline: 'A short, honest intro to how I think about security. Delivered to your inbox over 5 days.',
+  id: 'career-foundations-free',
+  title: 'Career Foundations — 5 lesson email course',
+  tagline: 'A short, honest intro to the five tracks I work across — cybersecurity, AI, and the data stack. One foundational lesson each, sent to your inbox.',
   lessons: [
-    'Day 1 · How attackers actually pick their targets',
-    'Day 2 · The SOC mindset — alerts, noise, and what matters',
-    'Day 3 · Incident response basics',
-    'Day 4 · Network basics for security',
-    'Day 5 · Cloud security fundamentals',
+    'Lesson 1 · Cybersecurity — how attackers actually pick their targets',
+    "Lesson 2 · AI & ML — what's real and what's hype for builders",
+    'Lesson 3 · Data engineering — pipelines, the unsexy backbone of everything',
+    'Lesson 4 · Data science — turning messy data into decisions',
+    'Lesson 5 · Data analytics — good questions, dashboards, and storytelling',
   ],
 }
 
@@ -94,14 +94,14 @@ function Hero() {
           Learn cybersecurity &amp; AI <span style={{ background: 'linear-gradient(transparent 60%, #fffae0 60%)' }}>with me.</span>
         </h1>
         <p style={{ fontSize: 18, color: 'var(--muted)', maxWidth: 660, margin: '0 auto 28px', lineHeight: 1.7 }}>
-          Small, hands-on cohorts and 1:1 guidance from someone who&apos;s spent 14+ years in the field (ex-AirAsia InfoSec, building security products independently since). I teach what I&apos;m actually doing each week, in a room small enough that I&apos;ll know your name.
+          Small, hands-on cohorts and 1:1 guidance from someone who&apos;s spent 14+ years in the field. I teach what I&apos;ve actually been doing in the trenches — the kind of practical work that lands you a real job.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 18 }}>
           <a href="#cohort" className="btn btn-3d">See the cohort →</a>
-          <a href="#free" className="btn-outline">Start with the free 5-day intro</a>
+          <a href="#free" className="btn-outline">Start with the free 5-lesson intro</a>
         </div>
         <p style={{ fontSize: 13, color: 'var(--muted-2)' }}>
-          Cohort #1 · {COHORT.duration} · Starts {COHORT.startDate} · Small group
+          Small group · Weekend &amp; evening options · Start date set with the cohort
         </p>
       </div>
     </section>
@@ -165,7 +165,7 @@ function FreeMiniCourse() {
             <div>
               <h3 style={{ fontSize: 22, fontWeight: 700, marginBottom: 10 }}>Check your inbox 📬</h3>
               <p style={{ color: 'var(--muted)', lineHeight: 1.6 }}>
-                Day 1 lands within a few minutes. Reply if it doesn&apos;t show up — peek in spam.
+                Lesson 1 lands within a few minutes. Reply if it doesn&apos;t show up — peek in spam.
               </p>
             </div>
           ) : (
@@ -190,13 +190,13 @@ function FreeMiniCourse() {
               />
               <div style={{ height: 14 }} />
               <button type="submit" disabled={status === 'sending'} className="btn btn-3d" style={{ width: '100%', padding: '12px 20px' }}>
-                {status === 'sending' ? 'Sending…' : 'Send me Day 1 →'}
+                {status === 'sending' ? 'Sending…' : 'Send me Lesson 1 →'}
               </button>
               {status === 'error' && (
                 <p style={{ marginTop: 10, fontSize: 13, color: '#dc2626' }}>{errorMsg}</p>
               )}
               <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted-2)' }}>
-                One lesson per day for 5 days. Unsubscribe anytime.
+                Five foundational lessons — one per track. Unsubscribe anytime.
               </p>
             </form>
           )}

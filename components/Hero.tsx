@@ -82,7 +82,7 @@ export default function Hero(){
           </motion.div>
 
           <motion.div variants={childVariants}>
-            <p className="hero-lead" style={{transform:'translateZ(15px)'}}>I run small, hands-on cohorts in <strong>cybersecurity &amp; AI</strong> — the kind I wish I&apos;d had when I was starting out.<br/><br/>14+ years in the field (ex-AirAsia InfoSec, building security products independently since). I teach what I&apos;m actually doing each week, in a room small enough that I&apos;ll know your name.<br/><br/>If that sounds like the kind of learning you want, start with the free 5-day intro — or have a look at the cohorts and reach out.</p>
+            <p className="hero-lead" style={{transform:'translateZ(15px)'}}>I run small, hands-on cohorts in <strong>cybersecurity &amp; AI</strong> — the kind I wish I&apos;d had when I was starting out.<br/><br/>14+ years in the field. I teach what I&apos;ve actually been doing in the trenches — the kind of practical work that lands you a real job, in a room small enough that I&apos;ll know your name.<br/><br/>If that sounds like the kind of learning you want, start with the free 5-lesson intro — or have a look at the cohorts and reach out.</p>
           </motion.div>
 
           <motion.div variants={childVariants}>
@@ -94,7 +94,7 @@ export default function Hero(){
               </MagneticButton>
               <MagneticButton strength={0.35}>
                 <motion.div whileTap={{ scale: 0.97 }}>
-                  <Link href="/study#free" className="btn-outline btn-3d" style={{ height:44, minWidth:200, display:'inline-flex', alignItems:'center', justifyContent:'center', borderRadius:8 }}>Free 5-day intro</Link>
+                  <Link href="/study#free" className="btn-outline btn-3d" style={{ height:44, minWidth:200, display:'inline-flex', alignItems:'center', justifyContent:'center', borderRadius:8 }}>Free 5-lesson intro</Link>
                 </motion.div>
               </MagneticButton>
             </div>
