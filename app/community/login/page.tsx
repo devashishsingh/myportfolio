@@ -1,10 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 
 export default function MemberLoginPage() {
+  return (
+    <Suspense fallback={<div className="container-narrow" style={{ maxWidth: 540, margin: '0 auto', padding: '80px 20px 120px' }}><p className="muted-label">Loading…</p></div>}>
+      <MemberLoginInner />
+    </Suspense>
+  )
+}
+
+function MemberLoginInner() {
   const params = useSearchParams()
   const error = params?.get('error')
   const signedOut = params?.get('signed_out')
