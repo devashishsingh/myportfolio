@@ -1,16 +1,20 @@
 // ─── Email Configuration ─────────────────────────────────────────────
 // All emails gracefully degrade to console.log when not configured.
 
+// Resend (and most SMTP) reject mailbox-part casing variants on some routes;
+// addresses are normalized to lowercase to match the verified sender record.
+const lc = (v: string | undefined, fallback: string) => (v && v.trim() ? v.trim().toLowerCase() : fallback)
+
 export const EMAIL_CONFIG = {
   // Resend API key
   apiKey: process.env.RESEND_API_KEY || '',
 
   // Your verified sender email (must match domain verified in Resend)
-  fromEmail: process.env.SENDER_EMAIL || 'hello@devashishsingh.com',
+  fromEmail: lc(process.env.SENDER_EMAIL, 'hello@devashishsingh.com'),
   fromName: process.env.SENDER_NAME || 'Devashish',
 
   // Where admin notifications go
-  adminEmail: process.env.CONTACT_TARGET_EMAIL || 'hello@devashishsingh.com',
+  adminEmail: lc(process.env.CONTACT_TARGET_EMAIL, 'hello@devashishsingh.com'),
 
   // Base URL for links in emails
   baseUrl: process.env.BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'),
@@ -33,8 +37,15 @@ interface EmailPayload {
 }
 
 export async function sendEmail({ to, subject, html, text }: EmailPayload): Promise<boolean> {
+  // Normalize recipient — Resend rejects some uppercase mailbox parts.
+  const recipient = (to || '').trim().toLowerCase()
+  if (!recipient) {
+    console.error('[Email] Empty recipient')
+    return false
+  }
+
   if (!isConfigured()) {
-    console.log(`[Email] Not configured. Would send to ${to}: "${subject}"`)
+    console.log(`[Email] Not configured. Would send to ${recipient}: "${subject}"`)
     console.log(`[Email] Body preview: ${(text || html).substring(0, 200)}...`)
     return true // graceful degradation
   }
@@ -48,7 +59,7 @@ export async function sendEmail({ to, subject, html, text }: EmailPayload): Prom
       },
       body: JSON.stringify({
         from: `${EMAIL_CONFIG.fromName} <${EMAIL_CONFIG.fromEmail}>`,
-        to: [to],
+        to: [recipient],
         subject,
         html,
         ...(text ? { text } : {}),
