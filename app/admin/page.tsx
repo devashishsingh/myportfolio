@@ -733,6 +733,7 @@ function InvitationsTab() {
   const [loading, setLoading] = useState(true)
   const [expandedId, setExpandedId] = useState<string | null>(null)
   const [actionLoading, setActionLoading] = useState<string | null>(null)
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
 
   // Invite via email state
   const [showInviteForm, setShowInviteForm] = useState(false)
@@ -777,37 +778,49 @@ function InvitationsTab() {
   }
 
   async function updateStatus(id: string, status: string, adminNote?: string) {
+    // Optimistic update
+    const prev = invitations
+    const target = invitations.find(i => i.id === id)
+    setInvitations(invitations.map(i => i.id === id ? { ...i, status, ...(adminNote ? { adminNote } : {}) } : i))
     setActionLoading(id)
-    await fetch('/api/admin/community', {
-      method: 'PATCH',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ id, status, adminNote }),
-    })
-    // Send approval email when approving
-    if (status === 'approved') {
-      const inv = invitations.find(i => i.id === id)
-      if (inv) {
-        await fetch('/api/admin/send-invite', {
+
+    try {
+      const res = await fetch('/api/admin/community', {
+        method: 'PATCH',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ id, status, adminNote }),
+      })
+      if (!res.ok) throw new Error('Update failed')
+
+      // Fire approval email in background (non-blocking)
+      if (status === 'approved' && target) {
+        fetch('/api/admin/send-invite', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({
-            name: inv.fullName,
-            email: inv.email,
-            message: `Hi ${inv.fullName},\n\nGreat news! Your request to join the Builders Hub has been approved.\n\nWelcome to the community. You are now part of a curated group of tech professionals, founders, and innovators.\n\nWe'll be in touch with next steps and community updates.\n\n— Devashish Singh\nCyber Coach · Mentor · Advisor`,
+            name: target.fullName,
+            email: target.email,
+            message: `Hi ${target.fullName},\n\nGreat news! Your request to join the Builders Hub has been approved.\n\nWelcome to the community. You are now part of a curated group of tech professionals, founders, and innovators.\n\nWe'll be in touch with next steps and community updates.\n\n— Devashish Singh\nCyber Coach · Mentor · Advisor`,
           }),
-        }).catch(() => {}) // non-blocking
+        }).catch(() => {})
       }
+    } catch {
+      setInvitations(prev) // rollback
+    } finally {
+      setActionLoading(null)
     }
-    await loadInvitations()
-    setActionLoading(null)
   }
 
   async function deleteInvitation(id: string) {
-    if (!confirm('Delete this invitation request?')) return
-    setActionLoading(id)
-    await fetch(`/api/admin/community?id=${id}&type=invitation`, { method: 'DELETE' })
-    await loadInvitations()
-    setActionLoading(null)
+    // Optimistic remove
+    const prev = invitations
+    setInvitations(invitations.filter(i => i.id !== id))
+    try {
+      const res = await fetch(`/api/admin/community?id=${id}&type=invitation`, { method: 'DELETE' })
+      if (!res.ok) throw new Error('Delete failed')
+    } catch {
+      setInvitations(prev) // rollback
+    }
   }
 
   const filtered = filter === 'all' ? invitations : invitations.filter(i => i.status === filter)
@@ -982,11 +995,19 @@ function InvitationsTab() {
                       </button>
                     )}
                     <button
-                      onClick={() => deleteInvitation(inv.id)}
+                      onClick={() => {
+                        if (confirmDeleteId === inv.id) {
+                          setConfirmDeleteId(null)
+                          deleteInvitation(inv.id)
+                        } else {
+                          setConfirmDeleteId(inv.id)
+                          setTimeout(() => setConfirmDeleteId(c => c === inv.id ? null : c), 3000)
+                        }
+                      }}
                       disabled={actionLoading === inv.id}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: '#dc2626', padding: '6px 8px' }}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: '#dc2626', padding: '6px 8px', fontWeight: confirmDeleteId === inv.id ? 700 : 400 }}
                     >
-                      Delete
+                      {confirmDeleteId === inv.id ? 'Click again to confirm' : 'Delete'}
                     </button>
                   </div>
                 </div>
@@ -1015,9 +1036,14 @@ function SubscribersTab() {
   useEffect(() => { loadSubscribers() }, [loadSubscribers])
 
   async function deleteSubscriber(id: string) {
-    if (!confirm('Remove this subscriber?')) return
-    await fetch(`/api/admin/community?id=${id}&type=subscriber`, { method: 'DELETE' })
-    await loadSubscribers()
+    const prev = subscribers
+    setSubscribers(subscribers.filter(s => s.id !== id))
+    try {
+      const res = await fetch(`/api/admin/community?id=${id}&type=subscriber`, { method: 'DELETE' })
+      if (!res.ok) throw new Error('Delete failed')
+    } catch {
+      setSubscribers(prev)
+    }
   }
 
   function exportCSV() {
