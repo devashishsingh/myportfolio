@@ -54,6 +54,7 @@ export default async function CommunityWelcomePage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 10, marginBottom: 32 }}>
         <Link href="/community/challenges" style={{ textDecoration: 'none' }}><QuickTile emoji="🎯" label="Challenges" /></Link>
         <Link href="/community/members" style={{ textDecoration: 'none' }}><QuickTile emoji="👥" label="Members" /></Link>
+        {member && <Link href="/community/leaderboard" style={{ textDecoration: 'none' }}><QuickTile emoji="🏆" label="Leaderboard" /></Link>}
         {member && <Link href="/community/me" style={{ textDecoration: 'none' }}><QuickTile emoji="✏️" label="Edit profile" /></Link>}
         {member && <Link href={`/community/${member.handle}`} style={{ textDecoration: 'none' }}><QuickTile emoji="👤" label="My profile" /></Link>}
       </div>

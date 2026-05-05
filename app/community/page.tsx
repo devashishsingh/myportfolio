@@ -1,5 +1,8 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import MonthlySpotlight from './MonthlySpotlight'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Community',
@@ -112,6 +115,9 @@ export default function CommunityPage() {
           ))}
         </div>
       </section>
+
+      {/* Monthly Top-3 spotlight */}
+      <MonthlySpotlight />
 
       {/* What You Can Do */}
       <section style={{ background: '#fff', borderTop: '1px solid rgba(0,0,0,0.06)', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>

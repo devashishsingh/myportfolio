@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '../../../../../lib/db'
 import { isAuthenticated } from '../../../../../lib/auth'
+import { awardPoints, revokePoints } from '../../../../../lib/points'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -52,27 +53,14 @@ export async function PATCH(req: NextRequest) {
 
   // Award points + badge on approval transition.
   if (becomesApproved && !wasApproved) {
-    const award = submission.challenge.points
-    await prisma.$transaction([
-      prisma.member.update({
-        where: { id: submission.memberId },
-        data: {
-          points: { increment: award },
-          monthPoints: { increment: award },
-          lastActiveAt: new Date(),
-        },
-      }),
-      prisma.pointEvent.create({
-        data: {
-          memberId: submission.memberId,
-          action: 'challenge_win',
-          points: award,
-          refType: 'challenge',
-          refId: submission.challengeId,
-          note: `Approved: ${submission.challenge.title}`,
-        },
-      }),
-    ])
+    await awardPoints({
+      memberId: submission.memberId,
+      action: 'challenge_win',
+      points: submission.challenge.points,
+      refType: 'challenge',
+      refId: submission.challengeId,
+      note: `Approved: ${submission.challenge.title}`,
+    })
 
     // Optional badge
     if (submission.challenge.badgeSlug) {
@@ -87,26 +75,14 @@ export async function PATCH(req: NextRequest) {
 
   // Reverse points if approval is being undone
   if (wasApproved && !becomesApproved) {
-    const award = submission.challenge.points
-    await prisma.$transaction([
-      prisma.member.update({
-        where: { id: submission.memberId },
-        data: {
-          points: { decrement: award },
-          monthPoints: { decrement: award },
-        },
-      }),
-      prisma.pointEvent.create({
-        data: {
-          memberId: submission.memberId,
-          action: 'manual_revoke',
-          points: -award,
-          refType: 'challenge',
-          refId: submission.challengeId,
-          note: `Reverted approval: ${submission.challenge.title}`,
-        },
-      }),
-    ])
+    await revokePoints({
+      memberId: submission.memberId,
+      action: 'manual_revoke',
+      points: submission.challenge.points,
+      refType: 'challenge',
+      refId: submission.challengeId,
+      note: `Reverted approval: ${submission.challenge.title}`,
+    })
   }
 
   return NextResponse.json({ ok: true, submission: updated })
