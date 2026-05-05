@@ -80,14 +80,21 @@ export async function destroySession(rawToken: string | undefined) {
 }
 
 // Slugify a name into a URL-safe handle. Adds 4-char rand suffix for uniqueness.
+// Reserved prefixes prevent collisions with sub-routes under /community/.
+const RESERVED_HANDLES = new Set([
+  'login', 'logout', 'me', 'members', 'welcome', 'join', 'subscribe',
+  'challenges', 'challenge', 'admin', 'api', 'leaderboard', 'new', 'edit',
+])
+
 export function generateHandle(displayName: string): string {
-  const base = displayName
+  let base = displayName
     .toLowerCase()
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
-    .slice(0, 24)
+    .slice(0, 24) || 'builder'
+  if (RESERVED_HANDLES.has(base)) base = `${base}-builder`
   const suffix = randomBytes(2).toString('hex')
-  return `${base || 'builder'}-${suffix}`
+  return `${base}-${suffix}`
 }

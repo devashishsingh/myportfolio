@@ -13,7 +13,7 @@ const BlogEditor = dynamic(() => import('../../components/editor/BlogEditor'), {
   ),
 })
 
-type Tab = 'dashboard' | 'blog' | 'content' | 'invitations' | 'subscribers' | 'feedback' | 'newsletter' | 'bookings' | 'leads'
+type Tab = 'dashboard' | 'blog' | 'content' | 'invitations' | 'subscribers' | 'feedback' | 'newsletter' | 'bookings' | 'leads' | 'challenges'
 
 interface Stats {
   totalInvitations: number
@@ -135,6 +135,7 @@ export default function Admin() {
     { key: 'newsletter', label: 'Newsletter' },
     { key: 'bookings', label: 'Bookings' },
     { key: 'leads', label: 'ðŸ“Š Leads' },
+    { key: 'challenges', label: 'ðŸŽ¯ Challenges' },
   ]
 
   return (
@@ -169,6 +170,7 @@ export default function Admin() {
         {activeTab === 'newsletter' && <NewsletterTab />}
         {activeTab === 'bookings' && <BookingsTab />}
         {activeTab === 'leads' && <LeadsTab />}
+        {activeTab === 'challenges' && <ChallengesTab />}
       </div>
     </section>
   )
@@ -1922,6 +1924,238 @@ function LeadsTab() {
           })}
         </div>
       )}
+    </div>
+  )
+}
+
+
+// --- Challenges Tab (Phase 4) --------------------------------------
+
+function ChallengesTab() {
+  const [challenges, setChallenges] = useState<any[]>([])
+  const [submissions, setSubmissions] = useState<any[]>([])
+  const [view, setView] = useState<'list' | 'create' | 'submissions'>('list')
+  const [loading, setLoading] = useState(true)
+
+  async function load() {
+    setLoading(true)
+    try {
+      const [cRes, sRes] = await Promise.all([
+        fetch('/api/admin/challenges'),
+        fetch('/api/admin/challenges/submissions?status=pending'),
+      ])
+      const cData = await cRes.json()
+      const sData = await sRes.json()
+      setChallenges(cData.challenges || [])
+      setSubmissions(sData.submissions || [])
+    } finally { setLoading(false) }
+  }
+
+  useEffect(() => { load() }, [])
+
+  return (
+    <div>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
+        <button onClick={() => setView('list')} className={view === 'list' ? 'btn btn-3d' : 'btn-outline'} style={{ padding: '6px 14px', fontSize: 13 }}>All ({challenges.length})</button>
+        <button onClick={() => setView('submissions')} className={view === 'submissions' ? 'btn btn-3d' : 'btn-outline'} style={{ padding: '6px 14px', fontSize: 13 }}>?? Pending ({submissions.length})</button>
+        <button onClick={() => setView('create')} className={view === 'create' ? 'btn btn-3d' : 'btn-outline'} style={{ padding: '6px 14px', fontSize: 13 }}>+ New Challenge</button>
+      </div>
+
+      {loading && <p style={{ color: 'var(--muted)' }}>Loading…</p>}
+
+      {!loading && view === 'list' && <ChallengeList challenges={challenges} onChange={load} />}
+      {!loading && view === 'create' && <ChallengeCreator onCreated={() => { setView('list'); load() }} />}
+      {!loading && view === 'submissions' && <SubmissionsGrader submissions={submissions} onChange={load} />}
+    </div>
+  )
+}
+
+function ChallengeList({ challenges, onChange }: { challenges: any[]; onChange: () => void }) {
+  async function togglePublish(id: string, published: boolean) {
+    await fetch('/api/admin/challenges', {
+      method: 'PATCH', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ id, published }),
+    })
+    onChange()
+  }
+
+  async function remove(id: string) {
+    if (!confirm('Delete this challenge and all submissions? Cannot be undone.')) return
+    await fetch(`/api/admin/challenges?id=${id}`, { method: 'DELETE' })
+    onChange()
+  }
+
+  if (challenges.length === 0) return <p style={{ color: 'var(--muted)', fontStyle: 'italic' }}>No challenges yet. Click "+ New Challenge" to create one.</p>
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {challenges.map(c => {
+        const closed = new Date(c.closesAt) < new Date()
+        return (
+          <div key={c.id} style={{ padding: 14, border: '2px solid #1a1a1a', background: '#fff', boxShadow: '4px 4px 0 0 #1a1a1a' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+              <div style={{ flex: 1, minWidth: 200 }}>
+                <strong style={{ fontSize: 16 }}>{c.title}</strong>
+                <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>
+                  {c.kind} · L{c.difficulty} · {c.points}pts · {c._count.submissions} subs · closes {new Date(c.closesAt).toLocaleString()}
+                </p>
+                <p style={{ fontSize: 13, marginTop: 6 }}>{c.brief}</p>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12 }}>
+                <span style={{ padding: '3px 8px', background: c.published ? '#dcfce7' : '#f3f4f6', border: '1px solid #1a1a1a' }}>
+                  {c.published ? '?? Live' : '? Draft'}
+                </span>
+                {closed && <span style={{ padding: '3px 8px', background: '#fee2e2', border: '1px solid #1a1a1a' }}>Closed</span>}
+                <button onClick={() => togglePublish(c.id, !c.published)} className="btn-outline" style={{ fontSize: 11, padding: '4px 8px' }}>
+                  {c.published ? 'Unpublish' : 'Publish'}
+                </button>
+                <button onClick={() => remove(c.id)} className="btn-outline" style={{ fontSize: 11, padding: '4px 8px', color: '#dc2626' }}>Delete</button>
+              </div>
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+function ChallengeCreator({ onCreated }: { onCreated: () => void }) {
+  const [form, setForm] = useState({
+    title: '', kind: 'challenge', track: '', difficulty: 2,
+    brief: '', body: '', rubric: '', points: 50, badgeSlug: '',
+    hoursOpen: 24, published: true, featured: false,
+  })
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
+
+  function set<K extends keyof typeof form>(k: K, v: typeof form[K]) { setForm(f => ({ ...f, [k]: v })) }
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault()
+    setSaving(true); setError('')
+    try {
+      const res = await fetch('/api/admin/challenges', {
+        method: 'POST', headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Create failed')
+      onCreated()
+    } catch (err: any) { setError(err.message); setSaving(false) }
+  }
+
+  const inputStyle: React.CSSProperties = { padding: '8px 12px', border: '2px solid #1a1a1a', fontSize: 14, fontFamily: 'inherit', background: '#fff', width: '100%' }
+
+  return (
+    <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 14, maxWidth: 720 }}>
+      <label><div style={{ fontSize: 11, marginBottom: 4, fontFamily: 'IBM Plex Mono, monospace', textTransform: 'uppercase', letterSpacing: '0.14em' }}>Title *</div>
+        <input style={inputStyle} value={form.title} onChange={e => set('title', e.target.value)} required maxLength={200} />
+      </label>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 10 }}>
+        <label><div style={{ fontSize: 11, marginBottom: 4 }}>Kind</div>
+          <select style={inputStyle} value={form.kind} onChange={e => set('kind', e.target.value)}>
+            <option value="challenge">?? Challenge</option>
+            <option value="quiz">?? Quiz</option>
+            <option value="lab">?? Lab</option>
+          </select>
+        </label>
+        <label><div style={{ fontSize: 11, marginBottom: 4 }}>Track</div>
+          <select style={inputStyle} value={form.track} onChange={e => set('track', e.target.value)}>
+            <option value="">— any —</option>
+            <option value="cyber">cyber</option><option value="ai">ai</option><option value="cloud">cloud</option>
+            <option value="systems">systems</option><option value="networks">networks</option><option value="coding">coding</option>
+            <option value="gaming">gaming</option><option value="digital">digital</option>
+          </select>
+        </label>
+        <label><div style={{ fontSize: 11, marginBottom: 4 }}>Difficulty (1-5)</div>
+          <input type="number" style={inputStyle} value={form.difficulty} onChange={e => set('difficulty', Number(e.target.value))} min={1} max={5} />
+        </label>
+        <label><div style={{ fontSize: 11, marginBottom: 4 }}>Points</div>
+          <input type="number" style={inputStyle} value={form.points} onChange={e => set('points', Number(e.target.value))} min={0} max={500} />
+        </label>
+        <label><div style={{ fontSize: 11, marginBottom: 4 }}>Hours open</div>
+          <input type="number" style={inputStyle} value={form.hoursOpen} onChange={e => set('hoursOpen', Number(e.target.value))} min={1} max={720} />
+        </label>
+        <label><div style={{ fontSize: 11, marginBottom: 4 }}>Badge slug (opt)</div>
+          <input style={inputStyle} value={form.badgeSlug} onChange={e => set('badgeSlug', e.target.value)} placeholder="cyber-apprentice" />
+        </label>
+      </div>
+
+      <label><div style={{ fontSize: 11, marginBottom: 4 }}>Brief (1-2 lines, shown on cards) *</div>
+        <input style={inputStyle} value={form.brief} onChange={e => set('brief', e.target.value)} required maxLength={500} />
+      </label>
+
+      <label><div style={{ fontSize: 11, marginBottom: 4 }}>Body (full prompt — markdown ok) *</div>
+        <textarea style={{ ...inputStyle, minHeight: 200, resize: 'vertical' }} value={form.body} onChange={e => set('body', e.target.value)} required maxLength={20000} />
+      </label>
+
+      <label><div style={{ fontSize: 11, marginBottom: 4 }}>Rubric / how it gets graded (optional)</div>
+        <textarea style={{ ...inputStyle, minHeight: 100, resize: 'vertical' }} value={form.rubric} onChange={e => set('rubric', e.target.value)} maxLength={5000} />
+      </label>
+
+      <div style={{ display: 'flex', gap: 16 }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}><input type="checkbox" checked={form.published} onChange={e => set('published', e.target.checked)} /> Publish immediately</label>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}><input type="checkbox" checked={form.featured} onChange={e => set('featured', e.target.checked)} /> Featured (gold border)</label>
+      </div>
+
+      {error && <p style={{ color: '#dc2626', fontSize: 14 }}>? {error}</p>}
+
+      <button type="submit" disabled={saving} className="btn btn-3d" style={{ alignSelf: 'flex-start', padding: '10px 22px' }}>
+        {saving ? 'Creating…' : 'Create challenge'}
+      </button>
+    </form>
+  )
+}
+
+function SubmissionsGrader({ submissions, onChange }: { submissions: any[]; onChange: () => void }) {
+  async function grade(id: string, status: 'approved' | 'rejected', score?: number, adminNote?: string) {
+    await fetch('/api/admin/challenges/submissions', {
+      method: 'PATCH', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ id, status, score, adminNote }),
+    })
+    onChange()
+  }
+
+  if (submissions.length === 0) return <p style={{ color: 'var(--muted)', fontStyle: 'italic' }}>No pending submissions. ??</p>
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+      {submissions.map(s => <SubmissionCard key={s.id} s={s} onGrade={grade} />)}
+    </div>
+  )
+}
+
+function SubmissionCard({ s, onGrade }: { s: any; onGrade: (id: string, status: 'approved' | 'rejected', score?: number, adminNote?: string) => Promise<void> }) {
+  const [score, setScore] = useState(70)
+  const [note, setNote] = useState('')
+  const [busy, setBusy] = useState(false)
+
+  async function decide(status: 'approved' | 'rejected') {
+    setBusy(true)
+    await onGrade(s.id, status, score, note)
+    setBusy(false)
+  }
+
+  return (
+    <div style={{ padding: 16, border: '2px solid #1a1a1a', background: '#fff', boxShadow: '4px 4px 0 0 #1a1a1a' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, marginBottom: 10 }}>
+        <div>
+          <strong>{s.member.displayName}</strong> <span style={{ color: 'var(--muted)', fontSize: 12 }}>@{s.member.handle}</span>
+          <p style={{ fontSize: 12, color: 'var(--muted)' }}>on <em>{s.challenge.title}</em> · {s.challenge.points}pts · {new Date(s.submittedAt).toLocaleString()}</p>
+        </div>
+      </div>
+      <details>
+        <summary style={{ cursor: 'pointer', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>View writeup ({s.content.length} chars)</summary>
+        <pre style={{ whiteSpace: 'pre-wrap', fontSize: 13, background: '#fdfaf6', padding: 12, border: '1.5px solid #1a1a1a', maxHeight: 400, overflow: 'auto' }}>{s.content}</pre>
+        {s.url && <p style={{ marginTop: 8, fontSize: 13 }}>Proof: <a href={s.url} target="_blank" rel="noopener noreferrer">{s.url}</a></p>}
+      </details>
+      <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', marginTop: 12 }}>
+        <label style={{ fontSize: 12 }}>Score: <input type="number" value={score} onChange={e => setScore(Number(e.target.value))} min={0} max={100} style={{ width: 60, padding: 4, border: '1.5px solid #1a1a1a', marginLeft: 4 }} />/100</label>
+        <input value={note} onChange={e => setNote(e.target.value)} placeholder="Note for member (optional)" style={{ flex: 1, minWidth: 180, padding: 6, border: '1.5px solid #1a1a1a', fontSize: 13 }} />
+        <button disabled={busy} onClick={() => decide('approved')} className="btn btn-3d" style={{ padding: '6px 14px', fontSize: 13 }}>? Approve & award</button>
+        <button disabled={busy} onClick={() => decide('rejected')} className="btn-outline" style={{ padding: '6px 14px', fontSize: 13, color: '#dc2626' }}>? Reject</button>
+      </div>
     </div>
   )
 }

@@ -50,6 +50,14 @@ export default async function CommunityWelcomePage() {
         </div>
       )}
 
+      {/* Quick links — visible to all */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 10, marginBottom: 32 }}>
+        <Link href="/community/challenges" style={{ textDecoration: 'none' }}><QuickTile emoji="🎯" label="Challenges" /></Link>
+        <Link href="/community/members" style={{ textDecoration: 'none' }}><QuickTile emoji="👥" label="Members" /></Link>
+        {member && <Link href="/community/me" style={{ textDecoration: 'none' }}><QuickTile emoji="✏️" label="Edit profile" /></Link>}
+        {member && <Link href={`/community/${member.handle}`} style={{ textDecoration: 'none' }}><QuickTile emoji="👤" label="My profile" /></Link>}
+      </div>
+
       {/* Founding 50 counter */}
       <div style={{ padding: 18, border: '2px dashed #1a1a1a', background: '#fdfaf6', marginBottom: 36 }}>
         <p style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 12, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 6 }}>Founding Members</p>
@@ -153,6 +161,15 @@ function Bullet({ emoji, title, body }: { emoji: string; title: string; body: st
       <p style={{ fontSize: 22, marginBottom: 4 }}>{emoji}</p>
       <p style={{ fontWeight: 700, marginBottom: 4 }}>{title}</p>
       <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.5 }}>{body}</p>
+    </div>
+  )
+}
+
+function QuickTile({ emoji, label }: { emoji: string; label: string }) {
+  return (
+    <div style={{ padding: 16, border: '2px solid #1a1a1a', background: '#fff', boxShadow: '4px 4px 0 0 #1a1a1a', textAlign: 'center', color: '#1a1a1a' }}>
+      <div style={{ fontSize: 24, marginBottom: 4 }}>{emoji}</div>
+      <div style={{ fontSize: 13, fontWeight: 700 }}>{label}</div>
     </div>
   )
 }

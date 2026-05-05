@@ -172,9 +172,9 @@ model Lead {
 // ─── Builders Hub: Members & Gamification ────────────────────────────
 
 model Member {
-  id            String          @id @default(cuid())
-  email         String          @unique
-  handle        String          @unique
+  id            String                @id @default(cuid())
+  email         String                @unique
+  handle        String                @unique
   displayName   String
   avatarUrl     String?
   bio           String?
@@ -182,22 +182,23 @@ model Member {
   githubUrl     String?
   siteUrl       String?
   region        String?
-  tracks        String          @default("[]") // JSON array: ["cyber","ai","cloud","systems","networks","coding","gaming","digital"]
+  tracks        String                @default("[]") // JSON array: ["cyber","ai","cloud","systems","networks","coding","gaming","digital"]
   workingOn     String?
-  openToCollab  Boolean         @default(false)
-  openToHire    Boolean         @default(false)
-  openToMentor  Boolean         @default(false)
-  founderNumber Int?            @unique
-  points        Int             @default(0)
-  monthPoints   Int             @default(0)
-  streakWeeks   Int             @default(0)
+  openToCollab  Boolean               @default(false)
+  openToHire    Boolean               @default(false)
+  openToMentor  Boolean               @default(false)
+  founderNumber Int?                  @unique
+  points        Int                   @default(0)
+  monthPoints   Int                   @default(0)
+  streakWeeks   Int                   @default(0)
   lastActiveAt  DateTime?
-  joinedAt      DateTime        @default(now())
-  invitationId  String?         @unique
+  joinedAt      DateTime              @default(now())
+  invitationId  String?               @unique
   subscriberId  String?
   sessions      MemberSession[]
   badges        MemberBadge[]
   pointEvents   PointEvent[]
+  submissions   ChallengeSubmission[]
 
   @@index([points])
   @@index([monthPoints])
@@ -256,3 +257,51 @@ model PointEvent {
   @@index([memberId])
   @@index([createdAt])
 }
+
+// ─── Challenges Engine (Phase 4) ─────────────────────────────────────
+
+model Challenge {
+  id          String                @id @default(cuid())
+  slug        String                @unique
+  title       String
+  kind        String // challenge | quiz | lab
+  track       String? // cyber | ai | cloud | systems | networks | coding | gaming | digital
+  difficulty  Int                   @default(2) // 1-5
+  brief       String // short pitch
+  body        String // markdown — full prompt, rules, AI-resistance notes
+  rubric      String? // markdown — how grading works
+  points      Int                   @default(50)
+  badgeSlug   String? // award this badge on win
+  opensAt     DateTime              @default(now())
+  closesAt    DateTime
+  published   Boolean               @default(false)
+  featured    Boolean               @default(false)
+  createdBy   String? // admin email
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+  submissions ChallengeSubmission[]
+
+  @@index([closesAt])
+  @@index([published, closesAt])
+}
+
+model ChallengeSubmission {
+  id          String    @id @default(cuid())
+  challengeId String
+  challenge   Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  memberId    String
+  member      Member    @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  content     String // markdown writeup
+  url         String? // optional repo / demo / proof link
+  status      String    @default("pending") // pending | approved | rejected
+  score       Int? // grade 0-100
+  adminNote   String?
+  submittedAt DateTime  @default(now())
+  gradedAt    DateTime?
+
+  @@index([challengeId])
+  @@index([memberId])
+  @@index([status])
+}
+
+// --- Challenges Engine ---
