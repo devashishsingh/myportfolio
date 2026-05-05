@@ -394,7 +394,7 @@ export function memberApprovedEmail(opts: {
 
       <h3 style="margin-top:28px;">🎁 Member perks</h3>
       <ul style="padding-left:20px; line-height:1.7;">
-        ${discountCode ? `<li><strong>20% off</strong> any course, workshop, or 1:1 — code: <code style="background:#fffae0; padding:3px 8px; border:1.5px solid #1a1a1a; font-family:'Courier New',monospace;">${discountCode}</code></li>` : ''}
+        ${discountCode ? `<li><strong>20% off</strong> any course or 1:1 — code: <code style="background:#fffae0; padding:3px 8px; border:1.5px solid #1a1a1a; font-family:'Courier New',monospace;">${discountCode}</code></li>` : ''}
         <li>Monthly live call with me (recording shared after)</li>
         <li>Open async office hours on Discord</li>
         <li>Featured product showcases on the platform</li>
@@ -440,7 +440,7 @@ export function memberApprovedEmail(opts: {
       `- Skill, Contributor, and Event badges`,
       `- Monthly live call + open Discord office hours`,
       `- Featured product showcases`,
-      discountCode ? `- 20% off courses/workshops/1:1 — code: ${discountCode}` : '',
+      discountCode ? `- 20% off courses/1:1 — code: ${discountCode}` : '',
       ``,
       `QUICK LINKS (bookmark these)`,
       `Sign in page:  ${loginUrl}`,

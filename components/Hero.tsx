@@ -102,7 +102,7 @@ export default function Hero(){
 
           <motion.div variants={childVariants}>
             <p style={{ fontFamily:"'IBM Plex Mono',monospace", fontSize:11, color:'var(--text-muted)', letterSpacing:'0.05em', marginTop:16 }}>
-              Cohorts · 1:1 mentoring · Workshops · Curated community
+              Cohorts · 1:1 mentoring · Curated community
             </p>
           </motion.div>
         </motion.div>

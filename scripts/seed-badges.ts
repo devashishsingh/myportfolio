@@ -16,7 +16,7 @@ const BADGES = [
   { slug: 'builder-3', name: 'Builder III', category: 'contributor', tier: 3, description: 'Earned 5,000 Builder Points.', iconEmoji: '🥇' },
   { slug: 'builder-4', name: 'Builder IV', category: 'contributor', tier: 4, description: 'Earned 10,000 Builder Points.', iconEmoji: '🏆' },
   { slug: 'helper', name: 'Helper', category: 'contributor', tier: null, description: '10 marked-helpful answers.', iconEmoji: '🤝' },
-  { slug: 'mentor', name: 'Mentor', category: 'contributor', tier: null, description: 'Hosted 3 member workshops.', iconEmoji: '🧭' },
+  { slug: 'mentor', name: 'Mentor', category: 'contributor', tier: null, description: 'Mentored 3 members through reviews or 1:1 sessions.', iconEmoji: '🧭' },
   { slug: 'curator', name: 'Curator', category: 'contributor', tier: null, description: 'Shared 10 resources saved by others.', iconEmoji: '📚' },
 
   // Skill tracks (tier 1 = Apprentice)

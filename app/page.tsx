@@ -72,7 +72,7 @@ export default function Home(){
             cta="Request Invitation"
             icon="community"
           >
-            Be part of a curated community to share ideas, collaborate by region, contribute posts, join workshops, and solve real-world digital problems together.
+            Be part of a curated community to share ideas, collaborate by region, contribute posts, and solve real-world digital problems together.
           </ServiceCard>
           <ServiceCard
             title="Let's Study Together"

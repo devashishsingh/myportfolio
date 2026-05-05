@@ -14,7 +14,6 @@ const SITE_KEYWORDS = [
   'Career Growth',
   'Book Session',
   'Consulting',
-  'Workshops',
   'DMARC',
   'InMyBox',
   'Career Intelligence Platform',
@@ -33,7 +32,7 @@ const SITE_KEYWORDS = [
 const SEARCH_ROUTING = [
   { terms: ['about', 'profile', 'bio'], href: '/about' },
   { terms: ['work', 'project', 'projects', 'case study', 'portfolio', 'inmybox'], href: '/work' },
-  { terms: ['services', 'service', 'consulting', 'mentorship', 'coaching', 'workshops'], href: '/services' },
+  { terms: ['services', 'service', 'consulting', 'mentorship', 'coaching'], href: '/services' },
   { terms: ['book session', 'booking', 'session'], href: '/book-session' },
   { terms: ['community', 'join community', 'builders hub'], href: '/community' },
   { terms: ['contact', 'collaborate'], href: '/contact' },
@@ -123,9 +122,6 @@ export default function Header(){
                 </Link>
                 <Link href="/study" className="nav-dropdown-item" role="menuitem">
                   <span className="nav-dropdown-title">Learning Courses &amp; Mentoring</span>
-                </Link>
-                <Link href="/services#workshops" className="nav-dropdown-item" role="menuitem">
-                  <span className="nav-dropdown-title">Workshops &amp; Talks</span>
                 </Link>
                 <Link href="/services#portfolio" className="nav-dropdown-item" role="menuitem">
                   <span className="nav-dropdown-title">Portfolio &amp; Positioning</span>

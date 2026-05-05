@@ -119,7 +119,7 @@ export default async function CommunityWelcomePage() {
       {discountCode && (
         <Section title="04 · Member discount" eyebrow="Perks">
           <p style={{ marginBottom: 10, lineHeight: 1.7 }}>
-            Members get <strong>20% off</strong> any course, workshop, or 1:1 booking. Use this code at checkout:
+            Members get <strong>20% off</strong> any course or 1:1 booking. Use this code at checkout:
           </p>
           <code style={{ display: 'inline-block', background: '#fffae0', padding: '8px 16px', border: '2px solid #1a1a1a', boxShadow: '3px 3px 0 0 #1a1a1a', fontSize: 16, letterSpacing: '0.08em' }}>
             {discountCode}

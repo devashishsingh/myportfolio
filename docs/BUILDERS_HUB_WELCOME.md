@@ -151,7 +151,7 @@ The pulse of the Hub. Channel layout:
 
 ## 💸 Member perks
 
-- **20% off** any course, workshop, or 1:1 booking via the member discount code (in your approval email).
+- **20% off** any course or 1:1 booking via the member discount code (in your approval email).
 - **Early access** to new courses, ebooks, templates.
 - **Free seats** in select small-group cohorts.
 - **Member-only** publishing slots in the newsletter (top contributors featured).
@@ -204,7 +204,7 @@ Members-only, coming in Phase 3 (Builder Points are already accumulating). Top 3
 **Q: How do I get a skill badge?**
 Win a challenge tagged with that track. Badge slug must match (e.g. `cyber-apprentice` for cyber-track challenges).
 
-**Q: Can I run a workshop for members?**
+**Q: Can I run a cohort for members?**
 Yes — DM Devashish on Discord with a 3-bullet pitch. If approved, you get a feature post + your own paid cohort with 100% revenue share.
 
 ---

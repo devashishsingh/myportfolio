@@ -3,12 +3,12 @@ import ServiceCard from '../../components/ServiceCard'
 
 export const metadata: Metadata = {
   title: 'Services',
-  description: 'Consulting, cybersecurity reviews, learning cohorts, mentoring, workshops, and 1:1 sessions by Devashish Singh. Each engagement scoped to clear outcomes.',
-  keywords: ['cybersecurity consulting', 'mentoring', 'portfolio review', 'workshops', 'technical advisory', 'learning cohorts', 'Devashish Singh'],
+  description: 'Consulting, cybersecurity reviews, learning cohorts, mentoring, and 1:1 sessions by Devashish Singh. Each engagement scoped to clear outcomes.',
+  keywords: ['cybersecurity consulting', 'mentoring', 'portfolio review', 'technical advisory', 'learning cohorts', 'Devashish Singh'],
   alternates: { canonical: '/services' },
   openGraph: {
     title: 'Services — Devashish Singh',
-    description: 'Consulting, cybersecurity reviews, learning cohorts, mentoring, workshops, and 1:1 sessions. Scoped to clear outcomes.',
+    description: 'Consulting, cybersecurity reviews, learning cohorts, mentoring, and 1:1 sessions. Scoped to clear outcomes.',
     url: '/services',
   },
 }
@@ -18,7 +18,7 @@ export default function Services(){
     <section className="container-wide" style={{ paddingTop: 40, paddingBottom: 60 }}>
       <h1 className="display-font text-4xl">Services</h1>
       <p className="mt-4 text-gray-700 max-w-3xl">
-        Six clear ways to work together. Pick what fits — every engagement is scoped to a defined
+        Five clear ways to work together. Pick what fits — every engagement is scoped to a defined
         outcome, with timelines and deliverables agreed upfront.
       </p>
 
@@ -33,10 +33,6 @@ export default function Services(){
 
         <ServiceCard title="Learning Courses & Mentoring" subtitle="Project-first cohorts" href="/study" cta="Browse Courses">
           Small cohorts in cybersecurity, AI, and indie SaaS. Every course ends with a shipped project, and you only pay when you finish. Ongoing 1:1 mentoring also available.
-        </ServiceCard>
-
-        <ServiceCard title="Workshops & Talks" subtitle="For teams & events" href="/contact" cta="Inquire">
-          Custom workshops for engineering and product teams, plus keynotes and guest lectures on cybersecurity, AI-assisted development, and building in public.
         </ServiceCard>
 
         <ServiceCard title="Portfolio & Positioning" subtitle="For early professionals" href="/contact" cta="Get Started">

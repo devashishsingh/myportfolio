@@ -5,7 +5,6 @@ import { useState } from 'react'
 const SESSION_TYPES = [
   { value: 'mentorship', label: 'Mentorship & Coaching', desc: 'Career guidance, skill roadmap, 1-on-1 mentoring' },
   { value: 'consulting', label: 'Consulting', desc: 'Technical strategy, architecture review, product advisory' },
-  { value: 'workshop', label: 'Workshop / Talk', desc: 'Team training, speaking engagement, workshop facilitation' },
   { value: 'other', label: 'Other', desc: 'Something else — tell me about it' },
 ]
 
@@ -97,7 +96,7 @@ export default function BookSessionPage() {
           Let&apos;s Talk
         </h1>
         <p style={{ fontSize: 16, lineHeight: 1.7, color: '#666', maxWidth: 500 }}>
-          Whether it&apos;s mentorship, consulting, or a workshop — pick a time that works for you.
+          Whether it&apos;s mentorship or consulting — pick a time that works for you.
           I&apos;ll confirm within 24 hours.
         </p>
       </div>
