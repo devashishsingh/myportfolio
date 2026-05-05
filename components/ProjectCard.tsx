@@ -82,6 +82,18 @@ const TECH_ICONS: Record<string, JSX.Element> = {
       <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/>
     </svg>
   ),
+  'TypeScript': (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+      <rect width="24" height="24" rx="3" fill="#3178C6"/>
+      <path d="M9.5 11h6v1.5h-2.25V19h-1.5v-6.5H9.5V11zm10 6.4c.4.7 1 1.1 1.7 1.1.7 0 1.1-.3 1.1-.8 0-.4-.2-.6-.9-.9l-.5-.2c-1.1-.5-1.8-1.1-1.8-2.3 0-1.1.9-2 2.2-2 1 0 1.7.3 2.2 1.2l-1.2.8c-.3-.5-.6-.7-1-.7-.5 0-.8.3-.8.7 0 .5.3.7 1 1l.5.2c1.3.5 2 1.1 2 2.4 0 1.4-1.1 2.1-2.5 2.1-1.4 0-2.3-.7-2.7-1.5l1.2-.7z" fill="#fff"/>
+    </svg>
+  ),
+  'JavaScript': (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+      <rect width="24" height="24" rx="3" fill="#F7DF1E"/>
+      <path d="M7.5 18.4c.3.5.6.9 1.3.9.6 0 1-.2 1-1.2V12h1.5v6.1c0 1.6-.9 2.3-2.3 2.3-1.2 0-1.9-.6-2.3-1.4l1.2-.7zm5.4-.1c.4.7 1 1.2 1.9 1.2.8 0 1.3-.4 1.3-1 0-.7-.5-.9-1.4-1.3l-.5-.2c-1.4-.6-2.3-1.3-2.3-2.8 0-1.4 1.1-2.5 2.7-2.5 1.2 0 2 .4 2.6 1.5l-1.4.9c-.3-.6-.6-.8-1.2-.8-.6 0-1 .4-1 .8 0 .6.4.9 1.3 1.2l.5.2c1.6.7 2.4 1.4 2.4 2.9 0 1.7-1.3 2.6-3.1 2.6-1.7 0-2.8-.8-3.4-1.9l1.4-.8z" fill="#000"/>
+    </svg>
+  ),
 }
 
 function TechIcon({ name }: { name: string }) {
@@ -95,6 +107,7 @@ function TechIcon({ name }: { name: string }) {
 }
 
 export default function ProjectCard({ title, category, excerpt, href = '#', github, tech, cta = 'View' }: Props) {
+  const isExternal = /^https?:\/\//i.test(href)
   return (
     <motion.article
       className="group"
@@ -117,10 +130,17 @@ export default function ProjectCard({ title, category, excerpt, href = '#', gith
           </div>
         )}
         <div className="project-card-cta-row" style={{ transform: 'translateZ(15px)' }}>
-          <Link href={href} className="project-card-cta">
-            {cta}
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
-          </Link>
+          {isExternal ? (
+            <a href={href} target="_blank" rel="noopener noreferrer" className="project-card-cta">
+              {cta}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+            </a>
+          ) : (
+            <Link href={href} className="project-card-cta">
+              {cta}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+            </Link>
+          )}
         </div>
       </div>
     </motion.article>

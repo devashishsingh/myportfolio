@@ -23,7 +23,7 @@ export default function Work(){
 
       <div className="mt-8 grid md:grid-cols-2 gap-8">
         {projects.map((p, i) => (
-          <ProjectCard key={i} title={p.title} category={p.category} excerpt={p.excerpt} href={p.href} tech={p.tech} />
+          <ProjectCard key={i} title={p.title} category={p.category} excerpt={p.excerpt} href={p.href} github={(p as any).github} tech={p.tech} />
         ))}
       </div>
     </section>

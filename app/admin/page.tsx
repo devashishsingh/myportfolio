@@ -246,6 +246,156 @@ function DashboardTab() {
           </div>
         </div>
       )}
+
+      <EmailHealthPanel />
+    </div>
+  )
+}
+
+/* ──────────────── EMAIL HEALTH PANEL ──────────────── */
+interface EmailDiag {
+  configured: boolean
+  sender: string
+  adminEmail: string
+  baseUrl: string
+  calendarUrl: string | null
+  templates: { key: string; label: string }[]
+}
+
+function EmailHealthPanel() {
+  const [diag, setDiag] = useState<EmailDiag | null>(null)
+  const [recipient, setRecipient] = useState('')
+  const [template, setTemplate] = useState('contactAutoReply')
+  const [sending, setSending] = useState(false)
+  const [result, setResult] = useState<{ ok: boolean; message: string } | null>(null)
+
+  useEffect(() => {
+    fetch('/api/admin/test-email')
+      .then(r => r.json())
+      .then(d => {
+        setDiag(d)
+        if (d.adminEmail) setRecipient(d.adminEmail)
+      })
+      .catch(() => setDiag(null))
+  }, [])
+
+  async function send() {
+    if (!recipient || !template) return
+    setSending(true)
+    setResult(null)
+    try {
+      const res = await fetch('/api/admin/test-email', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ recipient, template }),
+      })
+      const json = await res.json()
+      if (res.ok) {
+        setResult({ ok: true, message: `${json.delivered ? '✅ Sent' : 'ℹ️ Logged only'} — "${json.subject}". ${json.note}` })
+      } else {
+        setResult({ ok: false, message: json.error || 'Failed to send.' })
+      }
+    } catch (e: any) {
+      setResult({ ok: false, message: e?.message || 'Network error.' })
+    } finally {
+      setSending(false)
+    }
+  }
+
+  if (!diag) {
+    return (
+      <div style={{ marginTop: 32, padding: 16, border: '1px solid var(--border)', borderRadius: 8 }}>
+        <p style={{ color: 'var(--muted)', fontSize: 13 }}>Loading email diagnostics…</p>
+      </div>
+    )
+  }
+
+  return (
+    <div style={{ marginTop: 40, padding: 20, border: '1px solid var(--border)', borderRadius: 10, background: '#fff' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 600, margin: 0 }}>Email System Health</h3>
+        <span
+          style={{
+            padding: '4px 10px',
+            borderRadius: 999,
+            fontSize: 12,
+            fontWeight: 600,
+            background: diag.configured ? '#dcfce7' : '#fef3c7',
+            color: diag.configured ? '#166534' : '#92400e',
+          }}
+        >
+          {diag.configured ? 'RESEND_API_KEY set' : 'No API key — emails log to console only'}
+        </span>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 8, marginBottom: 16, fontSize: 13, color: 'var(--muted)' }}>
+        <div><strong style={{ color: 'var(--text-primary)' }}>Sender:</strong> {diag.sender}</div>
+        <div><strong style={{ color: 'var(--text-primary)' }}>Admin inbox:</strong> {diag.adminEmail}</div>
+        <div><strong style={{ color: 'var(--text-primary)' }}>Base URL:</strong> {diag.baseUrl}</div>
+        <div><strong style={{ color: 'var(--text-primary)' }}>Calendar:</strong> {diag.calendarUrl || '— not set —'}</div>
+      </div>
+
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'flex-end' }}>
+        <div style={{ flex: '1 1 220px', minWidth: 200 }}>
+          <label style={{ display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 4 }}>Template</label>
+          <select
+            value={template}
+            onChange={e => setTemplate(e.target.value)}
+            style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, fontSize: 14, background: '#fff' }}
+          >
+            {diag.templates.map(t => (
+              <option key={t.key} value={t.key}>{t.label}</option>
+            ))}
+          </select>
+        </div>
+        <div style={{ flex: '1 1 220px', minWidth: 200 }}>
+          <label style={{ display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 4 }}>Recipient</label>
+          <input
+            type="email"
+            value={recipient}
+            onChange={e => setRecipient(e.target.value)}
+            placeholder="you@example.com"
+            style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, fontSize: 14 }}
+          />
+        </div>
+        <button
+          onClick={send}
+          disabled={sending || !recipient}
+          style={{
+            padding: '9px 18px',
+            background: '#111',
+            color: '#fff',
+            border: 'none',
+            borderRadius: 6,
+            fontSize: 14,
+            fontWeight: 600,
+            cursor: sending ? 'wait' : 'pointer',
+            opacity: sending || !recipient ? 0.6 : 1,
+          }}
+        >
+          {sending ? 'Sending…' : 'Send Test Email'}
+        </button>
+      </div>
+
+      {result && (
+        <div
+          style={{
+            marginTop: 14,
+            padding: '10px 14px',
+            borderRadius: 6,
+            fontSize: 13,
+            background: result.ok ? '#f0fdf4' : '#fef2f2',
+            color: result.ok ? '#166534' : '#991b1b',
+            border: `1px solid ${result.ok ? '#bbf7d0' : '#fecaca'}`,
+          }}
+        >
+          {result.message}
+        </div>
+      )}
+
+      <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>
+        Tip: run each template at least once after adding <code>RESEND_API_KEY</code>. If &ldquo;configured&rdquo; is false, fix <code>.env.local</code> (or Vercel project env) and restart the dev server.
+      </p>
     </div>
   )
 }

@@ -101,22 +101,17 @@ export default function StudyTogetherPage() {
     <section className="container-wide" style={{ paddingTop: 60, paddingBottom: 80 }}>
       {/* Hero */}
       <div style={{ maxWidth: 760, margin: '0 auto 48px', textAlign: 'center' }}>
-        <p className="muted-label" style={{ marginBottom: 12 }}>Let&apos;s Study Together</p>
-        <h1 className="display-font" style={{ fontSize: 'clamp(32px, 6vw, 52px)', lineHeight: 1.1, marginBottom: 12 }}>
-          Less theory. More projects. Real outcomes.
+        <p className="muted-label" style={{ marginBottom: 12 }}>Study Together</p>
+        <h1 className="display-font" style={{ fontSize: 'clamp(32px, 6vw, 52px)', lineHeight: 1.1, marginBottom: 16 }}>
+          Cohorts that end in shipped work.
         </h1>
-        <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--text-primary)', marginBottom: 14, letterSpacing: '0.01em' }}>
-          Your one-stop shop for every learning — cybersecurity, AI, indie SaaS and more.
+        <p style={{ color: 'var(--muted)', fontSize: 17, lineHeight: 1.7, marginBottom: 18 }}>
+          Small, project-first cohorts in cybersecurity, AI, and indie SaaS. Every course ends with
+          a shipped project &mdash; and you only pay when you finish.
         </p>
-        <p style={{ color: 'var(--muted)', fontSize: 17, lineHeight: 1.7, marginBottom: 24 }}>
-          Hands-on cohorts where we roll up sleeves and build real things together. Every course
-          ends with a shipped project &mdash; and you only pay when you finish.
+        <p className="display-font" style={{ fontStyle: 'italic', color: 'var(--muted)', fontSize: 16, marginTop: 8 }}>
+          Project-first cohorts. You only pay when you ship.
         </p>
-        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginTop: 16 }}>
-          <span className="community-badge">✅ Pay only on completion</span>
-          <span className="community-badge">🛠️ Project-first, not theory-first</span>
-          <span className="community-badge">📺 Video demos &amp; live sessions</span>
-        </div>
       </div>
 
       {/* How it works */}
@@ -125,22 +120,22 @@ export default function StudyTogetherPage() {
           How it works
         </h2>
         <div className="grid md:grid-cols-3 gap-6">
-          <div className="card-3d" style={{ padding: 20 }}>
-            <div style={{ fontSize: 28, marginBottom: 8 }}>1️⃣</div>
+          <div style={{ padding: 24, border: '1px solid var(--border)', borderRadius: 10 }}>
+            <div className="display-font" style={{ fontSize: 28, color: 'var(--muted)', marginBottom: 10, letterSpacing: '0.02em' }}>01</div>
             <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 6 }}>Pick a course &amp; show interest</h3>
             <p style={{ color: 'var(--muted)', fontSize: 14, lineHeight: 1.6 }}>
-              Browse the list, watch the demo, and tell us a bit about why you want in. No upfront fee.
+              Browse the list, watch the demo, and share why you want in. No upfront fee.
             </p>
           </div>
-          <div className="card-3d" style={{ padding: 20 }}>
-            <div style={{ fontSize: 28, marginBottom: 8 }}>2️⃣</div>
+          <div style={{ padding: 24, border: '1px solid var(--border)', borderRadius: 10 }}>
+            <div className="display-font" style={{ fontSize: 28, color: 'var(--muted)', marginBottom: 10, letterSpacing: '0.02em' }}>02</div>
             <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 6 }}>Build alongside the cohort</h3>
             <p style={{ color: 'var(--muted)', fontSize: 14, lineHeight: 1.6 }}>
               Weekly hands-on tasks, code reviews, and accountability check-ins. Less talking, more shipping.
             </p>
           </div>
-          <div className="card-3d" style={{ padding: 20 }}>
-            <div style={{ fontSize: 28, marginBottom: 8 }}>3️⃣</div>
+          <div style={{ padding: 24, border: '1px solid var(--border)', borderRadius: 10 }}>
+            <div className="display-font" style={{ fontSize: 28, color: 'var(--muted)', marginBottom: 10, letterSpacing: '0.02em' }}>03</div>
             <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 6 }}>Pay only when you finish</h3>
             <p style={{ color: 'var(--muted)', fontSize: 14, lineHeight: 1.6 }}>
               Complete the projects and ship. Then &mdash; and only then &mdash; the fee is due.
@@ -164,7 +159,7 @@ export default function StudyTogetherPage() {
               type="search"
               value={query}
               onChange={e => setQuery(e.target.value)}
-              placeholder="🔍 Search courses by topic, skill, or keyword…"
+              placeholder="Search courses by topic, skill, or keyword…"
               className="editor-input"
               aria-label="Search courses"
             />
@@ -214,9 +209,8 @@ export default function StudyTogetherPage() {
 
         {/* Empty state */}
         {filteredCourses.length === 0 && (
-          <div className="card-3d" style={{ padding: 40, textAlign: 'center', maxWidth: 560, margin: '0 auto' }}>
-            <div style={{ fontSize: 42, marginBottom: 12 }}>📚</div>
-            <h3 className="display-font" style={{ fontSize: 22, marginBottom: 10 }}>
+          <div style={{ padding: 40, textAlign: 'center', maxWidth: 560, margin: '0 auto', border: '1px solid var(--border)', borderRadius: 10 }}>
+            <h3 className="display-font" style={{ fontSize: 24, marginBottom: 12 }}>
               {COURSES.length === 0 ? 'Courses dropping soon' : 'No courses match your filters'}
             </h3>
             <p style={{ color: 'var(--muted)', fontSize: 14, lineHeight: 1.7, marginBottom: 18 }}>
@@ -372,8 +366,7 @@ export default function StudyTogetherPage() {
           >
             {status === 'sent' ? (
               <div style={{ textAlign: 'center' }}>
-                <span style={{ fontSize: 40, display: 'block', marginBottom: 12 }}>🎉</span>
-                <h3 className="display-font" style={{ fontSize: 22, marginBottom: 10 }}>You&apos;re on the list</h3>
+                <h3 className="display-font" style={{ fontSize: 24, marginBottom: 10 }}>You&apos;re on the list</h3>
                 <p style={{ color: 'var(--muted)', fontSize: 14, lineHeight: 1.6, marginBottom: 20 }}>
                   Thanks for your interest in <strong>{selected.title}</strong>. I&apos;ll personally reach out
                   before the next cohort starts.

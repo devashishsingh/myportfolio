@@ -3,8 +3,17 @@
     "title": "InMyBox — DMARC Intelligence Platform",
     "category": "Cybersecurity SaaS",
     "excerpt": "AI-powered low-cost platform built to simplify email authentication reporting, visibility, and security posture management for businesses.",
-    "tech": ["VS Code", "AI Tools", "GitHub", "Vercel", "Supabase"],
-    "href": "/work/case-study/sample"
+    "tech": ["TypeScript", "Next.js", "Vercel", "Supabase", "AI Tools"],
+    "href": "/work/case-study/sample",
+    "github": "https://github.com/devashishsingh/inmybox.io"
+  },
+  {
+    "title": "DMARC Labs",
+    "category": "Email Security Tool",
+    "excerpt": "Open-source DMARC aggregate report analyzer. Parses XML reports into actionable intelligence so domain owners can see who is sending mail on their behalf — and stop spoofing fast.",
+    "tech": ["TypeScript", "GitHub", "AI Tools"],
+    "href": "https://github.com/devashishsingh/dmarclabs",
+    "github": "https://github.com/devashishsingh/dmarclabs"
   },
   {
     "title": "Career Intelligence Platform",
@@ -26,5 +35,45 @@
     "excerpt": "A collaborative ecosystem for innovators, thinkers, and builders to share ideas, showcase products, and solve real-world digital problems together.",
     "tech": ["Next.js", "Prisma", "SQLite", "Tailwind CSS"],
     "href": "/community"
+  },
+  {
+    "title": "CIS Made Easy",
+    "category": "Security Hardening",
+    "excerpt": "A lightweight tool that helps organisations tailor CIS benchmarks to their environment without wading through hundreds of generic controls. Less paperwork, more posture.",
+    "tech": ["JavaScript", "GitHub"],
+    "href": "https://github.com/devashishsingh/cis-made-easy",
+    "github": "https://github.com/devashishsingh/cis-made-easy"
+  },
+  {
+    "title": "Ensirius Web Security",
+    "category": "Browser Extension",
+    "excerpt": "A browser extension that lets organisations enforce safe-browsing policies through simple, deployable rules — no proxy, no agent, no bloat.",
+    "tech": ["JavaScript", "GitHub"],
+    "href": "https://github.com/devashishsingh/Ensirius-web-security",
+    "github": "https://github.com/devashishsingh/Ensirius-web-security"
+  },
+  {
+    "title": "AppLocker Management Console",
+    "category": "Endpoint Hardening",
+    "excerpt": "A practical management layer for Microsoft AppLocker — still one of the most underrated tools to stop unwanted software from running on Windows endpoints.",
+    "tech": ["GitHub"],
+    "href": "https://github.com/devashishsingh/applocker",
+    "github": "https://github.com/devashishsingh/applocker"
+  },
+  {
+    "title": "GDrive Scanner",
+    "category": "Data Discovery",
+    "excerpt": "Scans a Google Drive and reports file types, MIME types, and last-modified timestamps — useful for data classification, cleanup, and shadow-IT discovery.",
+    "tech": ["JavaScript", "Cloud Systems", "GitHub"],
+    "href": "https://github.com/devashishsingh/Gdrivescanner",
+    "github": "https://github.com/devashishsingh/Gdrivescanner"
+  },
+  {
+    "title": "Thesis Collective",
+    "category": "Web Build",
+    "excerpt": "Marketing site for a professional academic writing service. Modern, fully responsive, dark/light themes, and a clear pitch for PhD-level expertise.",
+    "tech": ["GitHub"],
+    "href": "https://github.com/devashishsingh/thesis-collective-website",
+    "github": "https://github.com/devashishsingh/thesis-collective-website"
   }
 ]

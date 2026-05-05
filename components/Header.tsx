@@ -107,7 +107,37 @@ export default function Header(){
           <nav aria-label="Primary navigation" className="header-nav">
             <Link href="/about" className="nav-link">About</Link>
             <Link href="/work" className="nav-link">Work</Link>
-            <Link href="/services" className="nav-link">Services</Link>
+            <div className="nav-dropdown-wrap">
+              <Link href="/services" className="nav-link nav-dropdown-trigger" aria-haspopup="true">
+                Services
+                <svg aria-hidden="true" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: 4, opacity: 0.6 }}>
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </Link>
+              <div className="nav-dropdown-menu" role="menu" aria-label="Services">
+                <Link href="/services#consulting" className="nav-dropdown-item" role="menuitem">
+                  <span className="nav-dropdown-title">Consulting &amp; Advisory</span>
+                </Link>
+                <Link href="/services#cybersecurity" className="nav-dropdown-item" role="menuitem">
+                  <span className="nav-dropdown-title">Cybersecurity Reviews</span>
+                </Link>
+                <Link href="/study" className="nav-dropdown-item" role="menuitem">
+                  <span className="nav-dropdown-title">Learning Courses &amp; Mentoring</span>
+                </Link>
+                <Link href="/services#workshops" className="nav-dropdown-item" role="menuitem">
+                  <span className="nav-dropdown-title">Workshops &amp; Talks</span>
+                </Link>
+                <Link href="/services#portfolio" className="nav-dropdown-item" role="menuitem">
+                  <span className="nav-dropdown-title">Portfolio &amp; Positioning</span>
+                </Link>
+                <Link href="/book-session" className="nav-dropdown-item" role="menuitem">
+                  <span className="nav-dropdown-title">1:1 Booking</span>
+                </Link>
+                <div className="nav-dropdown-footer">
+                  <Link href="/services" className="nav-dropdown-all">View all services →</Link>
+                </div>
+              </div>
+            </div>
             <Link href="/community" className="nav-link">Community</Link>
             <Link href="/blog" className="nav-link">Writing</Link>
           </nav>
