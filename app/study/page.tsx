@@ -8,24 +8,21 @@ import Link from 'next/link'
 const COHORT = {
   id: 'cyber-foundations-c1',
   title: 'Cyber Foundations — Cohort #1',
-  tagline: 'Zero to job-ready in 12 weeks. Real labs. Recruiter intros. Capped at 30 seats.',
+  tagline: 'A small, hands-on cohort. Live sessions, weekly labs, personal feedback.',
   startDate: 'Aug 11, 2026',
   duration: '12 weeks',
   cadence: '2 live sessions/week + 1 weekly lab',
   seats: 30,
-  fee: { inr: '₹14,999', usd: '$179', earlyBirdInr: '₹9,999', earlyBirdUsd: '$129' },
-  earlyBirdEndsLabel: 'first 10 seats',
   outcomes: [
-    'Build a portfolio of 6 hands-on labs (DMARC analyser, log-triage tool, phishing sim, IR runbook, SOC dashboard, policy review)',
+    'Hands-on labs each week — curriculum being finalized for Cohort #1',
     'Earn the Builders Hub Cyber Apprentice badge on your public profile',
-    'Live capstone presented to a panel of practicing security engineers',
-    'Recruiter intros for top 5 capstones (curated, not spray-and-pray)',
-    'Lifetime access to the Builders Hub + alumni Discord channel',
+    'A capstone project you build alongside the cohort',
+    'Lifetime access to the Builders Hub + alumni channel',
   ],
   forWhom: [
-    'Career-switchers eyeing SOC, GRC, or AppSec roles',
-    'CS / IT students who want a portfolio that beats a CV',
-    'Sysadmins / devs adding security to their toolbelt',
+    'Curious learners new to cybersecurity',
+    'Students or career-changers exploring the field',
+    'Devs and sysadmins adding security to their toolbelt',
   ],
   notForWhom: [
     'People wanting passive video lectures (this is hands-on, weekly)',
@@ -36,32 +33,32 @@ const COHORT = {
 const FREE_COURSE = {
   id: 'cyber-essentials-free',
   title: 'Cyber Essentials — 5 lesson email course',
-  tagline: 'A no-fluff intro to thinking like a defender. Delivered to your inbox over 5 days.',
+  tagline: 'A short, honest intro to how I think about security. Delivered to your inbox over 5 days.',
   lessons: [
     'Day 1 · How attackers actually pick their targets',
     'Day 2 · The SOC mindset — alerts, noise, and what matters',
-    'Day 3 · DMARC explained without the jargon',
-    'Day 4 · The 5 logs every analyst opens first',
-    'Day 5 · Your 30/60/90-day roadmap into a security role',
+    'Day 3 · Incident response basics',
+    'Day 4 · Network basics for security',
+    'Day 5 · Cloud security fundamentals',
   ],
 }
 
 const FAQ = [
   {
-    q: 'Why should I pay you instead of doing TryHackMe / YouTube?',
-    a: "Free resources teach you tools. They don't teach you triage, communication, or how to talk to a hiring manager. The cohort is structured around the muscles you actually flex on the job — plus we ship a capstone you can show recruiters. If self-study worked alone, this market wouldn't exist.",
+    q: 'How is this different from TryHackMe / YouTube / a Udemy course?',
+    a: "Free and pre-recorded resources are great — I use them too. The difference here is that you learn alongside a small group, with someone who's actually working in the field, who'll answer your questions and look at your work each week. It's slower, smaller, and more personal.",
   },
   {
     q: 'I have zero background. Will I keep up?',
-    a: "Yes — Cohort #1 is calibrated for beginners with comfort using a terminal. We send a 2-hour pre-work module before week 1 to get everyone level. If after week 2 you feel it's too advanced, full refund.",
+    a: "Cohort #1 is calibrated for beginners who are comfortable using a terminal. There's a short pre-work module before week 1 to get everyone level. If it doesn't feel like the right fit after the first couple of weeks, just say so and we'll figure it out together.",
+  },
+  {
+    q: 'How much does it cost?',
+    a: "I'll share pricing privately when seats open — it's intentionally affordable, especially for students and career-switchers. Join the waitlist and I'll personally email you the details.",
   },
   {
     q: 'Is there a refund policy?',
-    a: "Yes. 100% refund within the first 14 days, no questions asked. After that, prorated refunds if you're not progressing — we'd rather you move on than feel stuck.",
-  },
-  {
-    q: 'What about the certificate?',
-    a: 'Cohort grads get a verifiable certificate (signed, on-chain hash) plus a permanent Cyber Apprentice badge on your Builders Hub profile. Top 3 capstones get featured on the public Community page.',
+    a: "Yes. 100% refund within the first 14 days, no questions asked. After that, we'll work out something fair if you need to step away.",
   },
   {
     q: 'Will recordings be available?',
@@ -69,7 +66,7 @@ const FAQ = [
   },
   {
     q: 'Do you offer scholarships?',
-    a: '3 scholarship seats per cohort for under-represented backgrounds in tech. Apply via the waitlist form with a short note in the "anything else" box.',
+    a: 'A few scholarship seats are reserved each cohort for people who genuinely need them. Mention it in the waitlist form and I&apos;ll be in touch.',
   },
 ]
 
@@ -92,20 +89,19 @@ function Hero() {
   return (
     <section style={{ background: '#fdfaf6', borderBottom: '2px solid #1a1a1a' }}>
       <div className="container-wide" style={{ paddingTop: 70, paddingBottom: 60, textAlign: 'center', maxWidth: 880, margin: '0 auto' }}>
-        <p className="muted-label" style={{ marginBottom: 14 }}>Cohort-based courses · Built by an industry practitioner</p>
+        <p className="muted-label" style={{ marginBottom: 14 }}>Small cohorts · Personal teaching</p>
         <h1 className="display-font" style={{ fontSize: 'clamp(36px, 7vw, 64px)', lineHeight: 1.05, marginBottom: 18 }}>
-          Land your first cybersecurity or AI role —<br />
-          <span style={{ background: 'linear-gradient(transparent 60%, #fffae0 60%)' }}>in 90 days, with a portfolio that beats a CV.</span>
+          Learn cybersecurity &amp; AI <span style={{ background: 'linear-gradient(transparent 60%, #fffae0 60%)' }}>with me.</span>
         </h1>
         <p style={{ fontSize: 18, color: 'var(--muted)', maxWidth: 660, margin: '0 auto 28px', lineHeight: 1.7 }}>
-          12-week cohorts taught by someone who&apos;s actually shipped security at scale (ex-AirAsia InfoSec, founder of <Link href="/work" style={{ textDecoration: 'underline' }}>InMyBox</Link> + DMARC Labs). Weekly live labs, real capstones, recruiter intros for top grads.
+          Small, hands-on cohorts and 1:1 guidance from someone who&apos;s spent 14+ years in the field (ex-AirAsia InfoSec, building security products independently since). I teach what I&apos;m actually doing each week, in a room small enough that I&apos;ll know your name.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 18 }}>
-          <a href="#cohort" className="btn btn-3d">See the next cohort →</a>
-          <a href="#free" className="btn-outline">Start with the free mini-course</a>
+          <a href="#cohort" className="btn btn-3d">See the cohort →</a>
+          <a href="#free" className="btn-outline">Start with the free 5-day intro</a>
         </div>
         <p style={{ fontSize: 13, color: 'var(--muted-2)' }}>
-          🪑 {COHORT.seats} seats · Starts {COHORT.startDate} · Early-bird pricing for the first 10
+          Cohort #1 · {COHORT.duration} · Starts {COHORT.startDate} · Small group
         </p>
       </div>
     </section>
@@ -311,7 +307,7 @@ function WaitlistForm() {
       <div>
         <h3 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>You&apos;re on the list 🎉</h3>
         <p style={{ color: 'var(--muted)', lineHeight: 1.6 }}>
-          Early-bird seats open 7 days before the cohort. You&apos;ll get the link first. In the meantime, <Link href="/community/join" style={{ textDecoration: 'underline', fontWeight: 600 }}>apply to the Builders Hub</Link> to get warm with the room.
+          I&apos;ll personally email you when Cohort #1 opens with all the details. In the meantime, <Link href="/community/join" style={{ textDecoration: 'underline', fontWeight: 600 }}>apply to the Builders Hub</Link> to start meeting the room.
         </p>
       </div>
     )
@@ -319,9 +315,9 @@ function WaitlistForm() {
 
   return (
     <form onSubmit={submit}>
-      <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 6 }}>Reserve a seat (waitlist)</h3>
+      <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 6 }}>Join the waitlist</h3>
       <p style={{ color: 'var(--muted)', fontSize: 14, marginBottom: 16, lineHeight: 1.6 }}>
-        Free to reserve. <strong>You only pay closer to the start date</strong> — I&apos;ll email you a few days before with enrolment details. Early-bird at <strong>{COHORT.fee.earlyBirdInr}</strong> / {COHORT.fee.earlyBirdUsd} for the {COHORT.earlyBirdEndsLabel} who confirm. Standard {COHORT.fee.inr} / {COHORT.fee.usd} after. Priced to be genuinely affordable for students and career-switchers.
+        Free to join. I&apos;ll personally email you when seats open with all the details — including pricing, which is intentionally affordable.
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10, marginBottom: 10 }}>
         <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Full name" required style={inputStyle} />
@@ -329,7 +325,7 @@ function WaitlistForm() {
       </div>
       <textarea value={why} onChange={e => setWhy(e.target.value)} placeholder="Briefly: where you are now, where you want to be (optional)" rows={3} style={{ ...inputStyle, marginBottom: 12, fontFamily: 'inherit', resize: 'vertical' }} />
       <button type="submit" disabled={status === 'sending'} className="btn btn-3d" style={{ padding: '12px 28px' }}>
-        {status === 'sending' ? 'Reserving…' : 'Reserve my seat →'}
+        {status === 'sending' ? 'Adding…' : 'Add me to the list →'}
       </button>
       {status === 'error' && (
         <p style={{ marginTop: 10, fontSize: 13, color: '#dc2626' }}>{errorMsg}</p>
@@ -351,16 +347,16 @@ const inputStyle: React.CSSProperties = {
 // ─── How It Works ────────────────────────────────────────────────────
 function HowItWorks() {
   const steps = [
-    { n: '01', t: 'Join the waitlist', d: 'Free. We email you the moment seats open. Early-bird pricing for the first 10 to confirm.' },
-    { n: '02', t: 'Build alongside the cohort', d: '2 live sessions/week (recorded). 1 weekly lab in the Builders Hub. Weekly check-ins.' },
-    { n: '03', t: 'Ship a capstone', d: 'Real project, presented to a panel. Top 3 featured publicly. Top 5 get recruiter intros.' },
-    { n: '04', t: 'Stay in the room', d: 'Lifetime alumni access to the Builders Hub. Continuous job board, mentorship, peer reviews.' },
+    { n: '01', t: 'Join the waitlist', d: 'Free. I&apos;ll personally email you when seats open with all the details.' },
+    { n: '02', t: 'Learn alongside the cohort', d: '2 live sessions/week (recorded). 1 weekly lab. Weekly check-ins. Small enough that I&apos;ll know your name.' },
+    { n: '03', t: 'Build a capstone', d: 'A real project you build alongside the cohort, with personal feedback from me each step.' },
+    { n: '04', t: 'Stay in the room', d: 'Lifetime alumni access to the Builders Hub. Keep learning, keep building, keep meeting people.' },
   ]
   return (
     <section style={{ background: '#fff', padding: '80px 20px', borderBottom: '2px solid #1a1a1a' }}>
       <div style={{ maxWidth: 1080, margin: '0 auto' }}>
         <h2 className="display-font" style={{ fontSize: 'clamp(28px, 5vw, 40px)', textAlign: 'center', marginBottom: 12 }}>How it works</h2>
-        <p style={{ color: 'var(--muted)', textAlign: 'center', marginBottom: 40, fontSize: 16 }}>Less talking. More shipping.</p>
+        <p style={{ color: 'var(--muted)', textAlign: 'center', marginBottom: 40, fontSize: 16 }}>Small group. Honest teaching. Hands-on the whole way through.</p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 18 }}>
           {steps.map(s => (
             <div key={s.n} style={{ padding: 22, border: '2px solid #1a1a1a', background: '#fdfaf6' }}>
@@ -380,20 +376,20 @@ function WhyMe() {
   return (
     <section style={{ background: '#fdfaf6', padding: '70px 20px', borderBottom: '2px solid #1a1a1a' }}>
       <div style={{ maxWidth: 880, margin: '0 auto', textAlign: 'center' }}>
-        <p className="muted-label" style={{ marginBottom: 12 }}>Built by a practitioner, not a YouTuber</p>
+        <p className="muted-label" style={{ marginBottom: 12 }}>A bit about me</p>
         <h2 className="display-font" style={{ fontSize: 'clamp(26px, 5vw, 38px)', lineHeight: 1.15, marginBottom: 18 }}>
-          Why this isn&apos;t another bootcamp.
+          Why learn with me.
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 18, marginTop: 24 }}>
-          <Stat n="8+ yrs" l="Building security at scale (ex-AirAsia)" />
-          <Stat n="50K+" l="Mailboxes protected via InMyBox + DMARC Labs" />
-          <Stat n="3" l="Open-source security tools shipped" />
-          <Stat n="100%" l="Of cohort capstones get reviewed by me, personally" />
+          <Stat n="14+ yrs" l="In cybersecurity, including time at AirAsia&apos;s InfoSec team" />
+          <Stat n="Indie" l="Building security products independently for the last several years" />
+          <Stat n="Open" l="Open-source contributions and tools shared with the community" />
+          <Stat n="Personal" l="Cohorts kept small enough that I review every learner&apos;s work" />
         </div>
         <p style={{ marginTop: 28, color: 'var(--muted)', fontSize: 15, lineHeight: 1.7, maxWidth: 640, marginLeft: 'auto', marginRight: 'auto' }}>
-          I teach what I do every week. No outdated 2019 slides. No theory that doesn&apos;t show up in real triage. Each lab is something I&apos;ve actually run in production.
+          I teach what I&apos;m actually working on. The labs and topics evolve with what&apos;s relevant in the field, not what&apos;s left over from a 2019 syllabus.
         </p>
-        <Link href="/about" style={{ display: 'inline-block', marginTop: 20, fontSize: 14, textDecoration: 'underline', fontWeight: 600 }}>Read the full backstory →</Link>
+        <Link href="/about" style={{ display: 'inline-block', marginTop: 20, fontSize: 14, textDecoration: 'underline', fontWeight: 600 }}>Read more about me →</Link>
       </div>
     </section>
   )
@@ -411,43 +407,39 @@ function Stat({ n, l }: { n: string; l: string }) {
 // ─── Pricing ─────────────────────────────────────────────────────────
 function Pricing() {
   return (
-    <section id="pricing" style={{ background: '#fff', padding: '80px 20px', borderBottom: '2px solid #1a1a1a' }}>
+    <section id="formats" style={{ background: '#fff', padding: '80px 20px', borderBottom: '2px solid #1a1a1a' }}>
       <div style={{ maxWidth: 980, margin: '0 auto' }}>
-        <h2 className="display-font" style={{ fontSize: 'clamp(28px, 5vw, 40px)', textAlign: 'center', marginBottom: 12 }}>Pricing</h2>
-        <p style={{ color: 'var(--muted)', textAlign: 'center', marginBottom: 40, fontSize: 16 }}>
-          Genuinely affordable. Reserve free now — pay only closer to the cohort start. 14-day full refund. Scholarship seats reserved each cohort.
+        <h2 className="display-font" style={{ fontSize: 'clamp(28px, 5vw, 40px)', textAlign: 'center', marginBottom: 12 }}>Three ways to learn</h2>
+        <p style={{ color: 'var(--muted)', textAlign: 'center', marginBottom: 40, fontSize: 16, maxWidth: 600, marginLeft: 'auto', marginRight: 'auto' }}>
+          Pick the format that fits where you are. Reach out and we&apos;ll talk through the right one for you.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 18 }}>
-          <PriceTier
+          <FormatTier
             name="Self-paced"
-            price="₹2,999"
-            usd="$39"
+            description="Recorded lessons and labs you can work through on your own time."
             features={['All recordings', 'Weekly labs (async)', 'Builders Hub access', 'Cyber Apprentice badge on completion']}
           />
-          <PriceTier
-            name="Cohort (early-bird)"
+          <FormatTier
+            name="Cohort"
             highlight
-            price={COHORT.fee.earlyBirdInr}
-            usd={COHORT.fee.earlyBirdUsd}
-            note={`First 10 seats only · then ${COHORT.fee.inr}`}
-            features={['Everything in Self-paced', '2 live sessions/week', 'Weekly cohort lab', 'Capstone review + recruiter intro pool', '14-day refund guarantee']}
+            description="Learn alongside a small group, with live sessions and personal feedback."
+            features={['Everything in Self-paced', '2 live sessions/week', 'Weekly cohort lab', 'Capstone with personal review', '14-day refund window']}
           />
-          <PriceTier
-            name="Cohort + 4× 1:1"
-            price="₹24,999"
-            usd="$299"
-            features={['Everything in Cohort', '4× 30-min 1:1 with me (career strategy + capstone deep-dive)', 'Priority recruiter intros', 'Resume + LinkedIn audit']}
+          <FormatTier
+            name="Cohort + 1:1"
+            description="Cohort plus dedicated time with me for career and project guidance."
+            features={['Everything in Cohort', '1:1 sessions with me (career strategy + capstone deep-dive)', 'Resume / portfolio review']}
           />
         </div>
         <p style={{ marginTop: 28, fontSize: 13, color: 'var(--muted-2)', textAlign: 'center' }}>
-          No payment today. Reserve free — I&apos;ll personally email enrolment details before the cohort starts. Direct bank/UPI transfer for now (online checkout coming later). Scholarship seats available; mention it in the waitlist form.
+          Pricing is intentionally affordable, especially for students and career-switchers. I&apos;ll share full details when you reach out.
         </p>
       </div>
     </section>
   )
 }
 
-function PriceTier({ name, price, usd, features, highlight, note }: { name: string; price: string; usd: string; features: string[]; highlight?: boolean; note?: string }) {
+function FormatTier({ name, description, features, highlight }: { name: string; description: string; features: string[]; highlight?: boolean }) {
   return (
     <div style={{
       padding: 24,
@@ -455,18 +447,17 @@ function PriceTier({ name, price, usd, features, highlight, note }: { name: stri
       background: highlight ? '#fffae0' : '#fdfaf6',
       boxShadow: highlight ? '6px 6px 0 0 #f4b942' : '5px 5px 0 0 #1a1a1a',
       position: 'relative',
+      display: 'flex',
+      flexDirection: 'column',
     }}>
       {highlight && (
         <div style={{ position: 'absolute', top: -14, left: 16, padding: '4px 10px', background: '#1a1a1a', color: '#fffae0', fontFamily: 'IBM Plex Mono, monospace', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase' }}>
           Most popular
         </div>
       )}
-      <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}>{name}</h3>
-      <p style={{ fontSize: 32, fontWeight: 700, lineHeight: 1, marginBottom: 4 }}>
-        {price} <span style={{ fontSize: 14, fontWeight: 400, color: 'var(--muted)' }}>/ {usd}</span>
-      </p>
-      {note && <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 14 }}>{note}</p>}
-      <ul style={{ listStyle: 'none', padding: 0, margin: '14px 0 18px' }}>
+      <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>{name}</h3>
+      <p style={{ color: 'var(--muted)', fontSize: 14, lineHeight: 1.6, marginBottom: 14 }}>{description}</p>
+      <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 18px', flexGrow: 1 }}>
         {features.map(f => (
           <li key={f} style={{ display: 'flex', gap: 8, marginBottom: 6, fontSize: 14, lineHeight: 1.5 }}>
             <span style={{ color: '#f4b942', flexShrink: 0 }}>✓</span>
@@ -474,9 +465,9 @@ function PriceTier({ name, price, usd, features, highlight, note }: { name: stri
           </li>
         ))}
       </ul>
-      <a href="#cohort" className={highlight ? 'btn btn-3d' : 'btn-outline'} style={{ display: 'inline-block', padding: '10px 20px', width: '100%', textAlign: 'center' }}>
-        Reserve seat →
-      </a>
+      <Link href="/contact" className={highlight ? 'btn btn-3d' : 'btn-outline'} style={{ display: 'inline-block', padding: '10px 20px', width: '100%', textAlign: 'center' }}>
+        Contact me about this →
+      </Link>
     </div>
   )
 }

@@ -35,7 +35,8 @@ export default function ContactForm(){
         <button className="px-5 py-3 btn btn-3d">Send message</button>
       </div>
 
-      {status==='sent' && <div className="text-sm" style={{color:'#6BCB77'}}>Thanks — your message was recorded (placeholder).</div>}
+      {status==='sent' && <div className="text-sm" style={{color:'#6BCB77'}}>Thanks — your message is in. I&apos;ll reply personally within 1–2 working days.</div>}
+      {status==='error' && <div className="text-sm" style={{color:'#E74C3C'}}>Something went wrong sending that. Please email me directly at <a href="mailto:hello@devashishsingh.com" style={{textDecoration:'underline'}}>hello@devashishsingh.com</a>.</div>}
     </form>
   )
 }

@@ -23,7 +23,14 @@ export default function Footer(){
             </a>
           </div>
         </div>
-        <div className="mt-6 md:mt-0 text-right" style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:12,color:'var(--text-muted)'}}>© {new Date().getFullYear()} Devashish Singh</div>
+        <div className="mt-6 md:mt-0 text-right" style={{fontFamily:"'IBM Plex Mono',monospace",fontSize:12,color:'var(--text-muted)'}}>
+          <div style={{display:'flex',gap:14,justifyContent:'flex-end',marginBottom:8}}>
+            <a href="/privacy" style={{color:'var(--text-muted)',textDecoration:'underline'}}>Privacy</a>
+            <a href="/terms" style={{color:'var(--text-muted)',textDecoration:'underline'}}>Terms</a>
+            <a href="/contact" style={{color:'var(--text-muted)',textDecoration:'underline'}}>Contact</a>
+          </div>
+          © {new Date().getFullYear()} Devashish Singh
+        </div>
       </div>
     </footer>
   )

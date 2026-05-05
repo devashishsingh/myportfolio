@@ -3,20 +3,15 @@ import type { Metadata } from 'next'
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://devashishsingh.com'
 
 export const metadata: Metadata = {
-  title: 'Cyber Foundations Cohort — Land your first cybersecurity role in 90 days',
+  title: 'Cyber & AI Cohorts — Learn with Devashish Singh',
   description:
-    '12-week cybersecurity cohort taught by an industry practitioner. Real labs, live capstones, recruiter intros for top grads. Free 5-day email mini-course. Early-bird seats from ₹9,999.',
+    'Small, hands-on cybersecurity and AI cohorts taught personally by an indie practitioner with 14+ years in the field. Live sessions, weekly labs, personal feedback. Free 5-day email intro to start.',
   keywords: [
-    'cybersecurity cohort course',
+    'cybersecurity cohort',
     'learn cybersecurity online',
-    'cybersecurity bootcamp india',
-    'SOC analyst training',
-    'GRC training course',
-    'AppSec course',
-    'DMARC training',
+    'AI cohort course',
+    'small cohort cybersecurity',
     'cybersecurity mentor',
-    'land cybersecurity job',
-    'career switch to cybersecurity',
     'free cybersecurity email course',
     'cohort based course',
     'Devashish Singh courses',
@@ -24,17 +19,17 @@ export const metadata: Metadata = {
   alternates: { canonical: '/study' },
   openGraph: {
     type: 'website',
-    title: 'Cyber Foundations Cohort — Devashish Singh',
+    title: 'Cyber & AI Cohorts — Devashish Singh',
     description:
-      '12-week cybersecurity cohort with real labs, live capstones, and recruiter intros. Free 5-day email mini-course to start.',
+      'Small, hands-on cohorts taught personally. Live sessions, weekly labs, personal feedback. Free 5-day email intro to start.',
     url: `${siteUrl}/study`,
-    images: [{ url: '/og/png/home', width: 1200, height: 630, alt: 'Cyber Foundations Cohort' }],
+    images: [{ url: '/og/png/home', width: 1200, height: 630, alt: 'Cyber & AI Cohorts' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Cyber Foundations Cohort — Land your first cybersecurity role',
+    title: 'Cyber & AI Cohorts — Learn with Devashish Singh',
     description:
-      '12-week cohort with real labs, live capstones, recruiter intros. Free 5-day email mini-course.',
+      'Small, hands-on cohorts. Live sessions, weekly labs, personal feedback. Free 5-day email intro.',
     images: ['/og/png/home'],
   },
 }
@@ -43,10 +38,10 @@ export default function StudyLayout({ children }: { children: React.ReactNode })
   const courseListJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'EducationalOrganization',
-    name: 'Devashish Singh — Cyber Foundations',
+    name: 'Devashish Singh — Cyber & AI Cohorts',
     url: `${siteUrl}/study`,
     description:
-      'Cohort-based cybersecurity courses with hands-on labs, live capstones, and recruiter intros. Free 5-day email mini-course available.',
+      'Small, hands-on cybersecurity and AI cohorts with live sessions, weekly labs, and personal feedback. Free 5-day email intro available.',
     sameAs: [
       'https://www.linkedin.com/in/devashishsingh',
       'https://github.com/devashishsingh',
