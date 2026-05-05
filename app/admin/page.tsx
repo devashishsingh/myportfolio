@@ -134,8 +134,8 @@ export default function Admin() {
     { key: 'feedback', label: 'Feedback' },
     { key: 'newsletter', label: 'Newsletter' },
     { key: 'bookings', label: 'Bookings' },
-    { key: 'leads', label: 'ðŸ“Š Leads' },
-    { key: 'challenges', label: 'ðŸŽ¯ Challenges' },
+    { key: 'leads', label: '📊 Leads' },
+    { key: 'challenges', label: '🎯 Challenges' },
   ]
 
   return (
@@ -176,7 +176,7 @@ export default function Admin() {
   )
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ DASHBOARD TAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ──────────────── DASHBOARD TAB ──────────────── */
 function DashboardTab() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [regionData, setRegionData] = useState<{ invitations: { region: string; count: number }[]; subscribers: { region: string; count: number }[] }>({ invitations: [], subscribers: [] })
@@ -254,7 +254,7 @@ function DashboardTab() {
   )
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ EMAIL HEALTH PANEL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ──────────────── EMAIL HEALTH PANEL ──────────────── */
 interface EmailDiag {
   configured: boolean
   sender: string
@@ -292,7 +292,7 @@ function EmailHealthPanel() {
       })
       const json = await res.json()
       if (res.ok) {
-        setResult({ ok: true, message: `${json.delivered ? 'âœ… Sent' : 'â„¹ï¸ Logged only'} â€” "${json.subject}". ${json.note}` })
+        setResult({ ok: true, message: `${json.delivered ? '✅ Sent' : 'ℹ️ Logged only'} — "${json.subject}". ${json.note}` })
       } else {
         setResult({ ok: false, message: json.error || 'Failed to send.' })
       }
@@ -306,7 +306,7 @@ function EmailHealthPanel() {
   if (!diag) {
     return (
       <div style={{ marginTop: 32, padding: 16, border: '1px solid var(--border)', borderRadius: 8 }}>
-        <p style={{ color: 'var(--muted)', fontSize: 13 }}>Loading email diagnosticsâ€¦</p>
+        <p style={{ color: 'var(--muted)', fontSize: 13 }}>Loading email diagnostics…</p>
       </div>
     )
   }
@@ -325,7 +325,7 @@ function EmailHealthPanel() {
             color: diag.configured ? '#166534' : '#92400e',
           }}
         >
-          {diag.configured ? 'RESEND_API_KEY set' : 'No API key â€” emails log to console only'}
+          {diag.configured ? 'RESEND_API_KEY set' : 'No API key — emails log to console only'}
         </span>
       </div>
 
@@ -333,7 +333,7 @@ function EmailHealthPanel() {
         <div><strong style={{ color: 'var(--text-primary)' }}>Sender:</strong> {diag.sender}</div>
         <div><strong style={{ color: 'var(--text-primary)' }}>Admin inbox:</strong> {diag.adminEmail}</div>
         <div><strong style={{ color: 'var(--text-primary)' }}>Base URL:</strong> {diag.baseUrl}</div>
-        <div><strong style={{ color: 'var(--text-primary)' }}>Calendar:</strong> {diag.calendarUrl || 'â€” not set â€”'}</div>
+        <div><strong style={{ color: 'var(--text-primary)' }}>Calendar:</strong> {diag.calendarUrl || '— not set —'}</div>
       </div>
 
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'flex-end' }}>
@@ -374,7 +374,7 @@ function EmailHealthPanel() {
             opacity: sending || !recipient ? 0.6 : 1,
           }}
         >
-          {sending ? 'Sendingâ€¦' : 'Send Test Email'}
+          {sending ? 'Sending…' : 'Send Test Email'}
         </button>
       </div>
 
@@ -401,7 +401,7 @@ function EmailHealthPanel() {
   )
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ BLOG EDITOR TAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ──────────────── BLOG EDITOR TAB ──────────────── */
 function BlogTab() {
   const [title, setTitle] = useState('')
   const [slug, setSlug] = useState('')
@@ -516,7 +516,7 @@ function BlogTab() {
           <button type="button" onClick={clearForm} className="btn-outline">Clear</button>
           {publishedSlug && (
             <>
-              <a href={postUrl} target="_blank" rel="noopener noreferrer" className="btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>View Post â†’</a>
+              <a href={postUrl} target="_blank" rel="noopener noreferrer" className="btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>View Post →</a>
               <a href={linkedInUrl} target="_blank" rel="noopener noreferrer" className="btn btn-3d" style={{ background: '#0A66C2', display: 'inline-flex', alignItems: 'center', gap: 6 }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                 Share on LinkedIn
@@ -538,7 +538,7 @@ function BlogTab() {
   )
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ CONTENT TAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ──────────────── CONTENT TAB ──────────────── */
 interface ProfileData {
   name: string
   role: string
@@ -660,7 +660,7 @@ function ContentTab() {
               <input className="editor-input" placeholder="Title" value={c.title} onChange={e => { const u = [...profile.courses]; u[i] = { ...u[i], title: e.target.value }; setProfile({ ...profile, courses: u }) }} />
               <input className="editor-input" placeholder="Provider" value={c.provider} style={{ maxWidth: 200 }} onChange={e => { const u = [...profile.courses]; u[i] = { ...u[i], provider: e.target.value }; setProfile({ ...profile, courses: u }) }} />
               <input className="editor-input" placeholder="Year" value={c.year || ''} style={{ maxWidth: 100 }} onChange={e => { const u = [...profile.courses]; u[i] = { ...u[i], year: e.target.value }; setProfile({ ...profile, courses: u }) }} />
-              <button onClick={() => { const u = profile.courses.filter((_, j) => j !== i); setProfile({ ...profile, courses: u }) }} style={{ fontSize: 12, color: '#dc2626', background: 'none', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>âœ•</button>
+              <button onClick={() => { const u = profile.courses.filter((_, j) => j !== i); setProfile({ ...profile, courses: u }) }} style={{ fontSize: 12, color: '#dc2626', background: 'none', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>✕</button>
             </div>
           ))}
           <button onClick={() => setProfile({ ...profile, courses: [...profile.courses, { title: '', provider: '', year: '' }] })} className="btn-outline" style={{ fontSize: 12, padding: '6px 14px' }}>+ Add Course</button>
@@ -670,7 +670,7 @@ function ContentTab() {
           {profile.certifications.map((c, i) => (
             <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
               <input className="editor-input" value={c} onChange={e => { const u = [...profile.certifications]; u[i] = e.target.value; setProfile({ ...profile, certifications: u }) }} />
-              <button onClick={() => setProfile({ ...profile, certifications: profile.certifications.filter((_, j) => j !== i) })} style={{ fontSize: 12, color: '#dc2626', background: 'none', border: 'none', cursor: 'pointer' }}>âœ•</button>
+              <button onClick={() => setProfile({ ...profile, certifications: profile.certifications.filter((_, j) => j !== i) })} style={{ fontSize: 12, color: '#dc2626', background: 'none', border: 'none', cursor: 'pointer' }}>✕</button>
             </div>
           ))}
           <button onClick={() => setProfile({ ...profile, certifications: [...profile.certifications, ''] })} className="btn-outline" style={{ fontSize: 12, padding: '6px 14px' }}>+ Add Certification</button>
@@ -680,7 +680,7 @@ function ContentTab() {
           {profile.education.map((ed, i) => (
             <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
               <input className="editor-input" value={ed} onChange={e => { const u = [...profile.education]; u[i] = e.target.value; setProfile({ ...profile, education: u }) }} />
-              <button onClick={() => setProfile({ ...profile, education: profile.education.filter((_, j) => j !== i) })} style={{ fontSize: 12, color: '#dc2626', background: 'none', border: 'none', cursor: 'pointer' }}>âœ•</button>
+              <button onClick={() => setProfile({ ...profile, education: profile.education.filter((_, j) => j !== i) })} style={{ fontSize: 12, color: '#dc2626', background: 'none', border: 'none', cursor: 'pointer' }}>✕</button>
             </div>
           ))}
           <button onClick={() => setProfile({ ...profile, education: [...profile.education, ''] })} className="btn-outline" style={{ fontSize: 12, padding: '6px 14px' }}>+ Add Education</button>
@@ -710,8 +710,8 @@ function ContentTab() {
               <div style={{ marginBottom: 12 }}><label className="editor-label">Link (href)</label><input className="editor-input" value={p.href} onChange={e => { const u = [...projects]; u[i] = { ...u[i], href: e.target.value }; setProjects(u) }} /></div>
               <div style={{ marginBottom: 12 }}><label className="editor-label">Tech (comma separated)</label><input className="editor-input" value={p.tech.join(', ')} onChange={e => { const u = [...projects]; u[i] = { ...u[i], tech: e.target.value.split(',').map(t => t.trim()).filter(Boolean) }; setProjects(u) }} /></div>
               <div style={{ display: 'flex', gap: 8 }}>
-                {i > 0 && <button onClick={() => { const u = [...projects]; [u[i-1], u[i]] = [u[i], u[i-1]]; setProjects(u) }} style={{ fontSize: 12, color: '#555', background: 'none', border: '1px solid #ddd', padding: '4px 10px', borderRadius: 4, cursor: 'pointer' }}>â†‘ Move Up</button>}
-                {i < projects.length - 1 && <button onClick={() => { const u = [...projects]; [u[i], u[i+1]] = [u[i+1], u[i]]; setProjects(u) }} style={{ fontSize: 12, color: '#555', background: 'none', border: '1px solid #ddd', padding: '4px 10px', borderRadius: 4, cursor: 'pointer' }}>â†“ Move Down</button>}
+                {i > 0 && <button onClick={() => { const u = [...projects]; [u[i-1], u[i]] = [u[i], u[i-1]]; setProjects(u) }} style={{ fontSize: 12, color: '#555', background: 'none', border: '1px solid #ddd', padding: '4px 10px', borderRadius: 4, cursor: 'pointer' }}>↑ Move Up</button>}
+                {i < projects.length - 1 && <button onClick={() => { const u = [...projects]; [u[i], u[i+1]] = [u[i+1], u[i]]; setProjects(u) }} style={{ fontSize: 12, color: '#555', background: 'none', border: '1px solid #ddd', padding: '4px 10px', borderRadius: 4, cursor: 'pointer' }}>↓ Move Down</button>}
                 <button onClick={() => { if (confirm('Remove this project?')) setProjects(projects.filter((_, j) => j !== i)) }} style={{ fontSize: 12, color: '#dc2626', background: 'none', border: '1px solid #fecaca', padding: '4px 10px', borderRadius: 4, cursor: 'pointer', marginLeft: 'auto' }}>Remove</button>
               </div>
             </div>
@@ -728,7 +728,7 @@ function ContentTab() {
   )
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ INVITATIONS TAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ──────────────── INVITATIONS TAB ──────────────── */
 function InvitationsTab() {
   const [invitations, setInvitations] = useState<Invitation[]>([])
   const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all')
@@ -867,7 +867,7 @@ function InvitationsTab() {
               </div>
             </div>
             <div style={{ marginBottom: 14 }}>
-              <label className="editor-label">Personal Message <span style={{ color: '#666', fontWeight: 400 }}>(optional â€” leave empty for default invite)</span></label>
+              <label className="editor-label">Personal Message <span style={{ color: '#666', fontWeight: 400 }}>(optional — leave empty for default invite)</span></label>
               <textarea
                 value={inviteMessage}
                 onChange={e => setInviteMessage(e.target.value)}
@@ -921,17 +921,17 @@ function InvitationsTab() {
                     <span className={`admin-status-badge status-${inv.status}`}>{inv.status}</span>
                   </div>
                   <p style={{ fontSize: 13, color: 'var(--muted)' }}>
-                    {inv.role} Â· {inv.interest} Â· {inv.region}
+                    {inv.role} · {inv.interest} · {inv.region}
                   </p>
                   <p style={{ fontSize: 12, color: 'var(--muted-2)' }}>
-                    {inv.email} Â· {new Date(inv.createdAt).toLocaleDateString()}
+                    {inv.email} · {new Date(inv.createdAt).toLocaleDateString()}
                   </p>
                 </div>
                 <button
                   onClick={() => setExpandedId(expandedId === inv.id ? null : inv.id)}
                   style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--muted)', padding: '4px 8px' }}
                 >
-                  {expandedId === inv.id ? 'Collapse â–²' : 'Details â–¼'}
+                  {expandedId === inv.id ? 'Collapse ▲' : 'Details ▼'}
                 </button>
               </div>
 
@@ -1012,7 +1012,7 @@ function InvitationsTab() {
   )
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ SUBSCRIBERS TAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ──────────────── SUBSCRIBERS TAB ──────────────── */
 function SubscribersTab() {
   const [subscribers, setSubscribers] = useState<Subscriber[]>([])
   const [loading, setLoading] = useState(true)
@@ -1114,7 +1114,7 @@ function SubscribersTab() {
   )
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ FEEDBACK TAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ──────────────── FEEDBACK TAB ──────────────── */
 function FeedbackTab() {
   const [items, setItems] = useState<FeedbackItem[]>([])
   const [filter, setFilter] = useState<'all' | 'new' | 'reviewed' | 'resolved'>('all')
@@ -1158,7 +1158,7 @@ function FeedbackTab() {
     resolved: items.filter(i => i.status === 'resolved').length,
   }
 
-  const typeIcons: Record<string, string> = { bug: 'ðŸ›', suggestion: 'ðŸ’¡', praise: 'ðŸŽ‰', other: 'ðŸ’¬' }
+  const typeIcons: Record<string, string> = { bug: '🐛', suggestion: '💡', praise: '🎉', other: '💬' }
   const typeColors: Record<string, string> = { bug: '#ef4444', suggestion: '#f59e0b', praise: '#16a34a', other: '#6366f1' }
 
   if (loading) return <p style={{ color: 'var(--muted)' }}>Loading feedback...</p>
@@ -1188,7 +1188,7 @@ function FeedbackTab() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, flexWrap: 'wrap' }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                    <span style={{ fontSize: 18 }}>{typeIcons[fb.type] || 'ðŸ’¬'}</span>
+                    <span style={{ fontSize: 18 }}>{typeIcons[fb.type] || '💬'}</span>
                     <strong style={{ fontSize: 15 }}>{fb.name}</strong>
                     <span style={{
                       padding: '2px 10px', borderRadius: 999, fontSize: 11, fontWeight: 600,
@@ -1202,7 +1202,7 @@ function FeedbackTab() {
                     </span>
                   </div>
                   <p style={{ fontSize: 12, color: 'var(--muted-2)' }}>
-                    {fb.email} Â· {fb.page || 'General'} Â· {new Date(fb.createdAt).toLocaleDateString()}
+                    {fb.email} · {fb.page || 'General'} · {new Date(fb.createdAt).toLocaleDateString()}
                   </p>
                 </div>
               </div>
@@ -1255,7 +1255,7 @@ function FeedbackTab() {
   )
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ NEWSLETTER TAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ──────────────── NEWSLETTER TAB ──────────────── */
 function NewsletterTab() {
   const [newsletters, setNewsletters] = useState<NewsletterItem[]>([])
   const [subject, setSubject] = useState('')
@@ -1353,7 +1353,7 @@ function NewsletterTab() {
               className="btn"
               style={{ fontSize: 13, padding: '8px 20px', background: '#0891b2' }}
             >
-              {sending ? 'Scheduling...' : 'â° Schedule â€” Next Monday 8 AM MYT'}
+              {sending ? 'Scheduling...' : '⏰ Schedule — Next Monday 8 AM MYT'}
             </button>
             <button
               onClick={() => handleSend('draft')}
@@ -1386,7 +1386,7 @@ function NewsletterTab() {
                       ? `Sent to ${nl.sentTo} subscribers on ${new Date(nl.sentAt || nl.createdAt).toLocaleDateString()}`
                       : nl.status === 'scheduled' && nl.scheduledAt
                       ? `Scheduled for ${new Date(nl.scheduledAt).toLocaleDateString('en-MY', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} at 8:00 AM MYT`
-                      : `Draft â€” ${new Date(nl.createdAt).toLocaleDateString()}`
+                      : `Draft — ${new Date(nl.createdAt).toLocaleDateString()}`
                     }
                   </div>
                 </div>
@@ -1414,7 +1414,7 @@ function NewsletterTab() {
   )
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ BOOKINGS TAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ──────────────── BOOKINGS TAB ──────────────── */
 function BookingsTab() {
   const [bookings, setBookings] = useState<BookingItem[]>([])
   const [filter, setFilter] = useState<'all' | 'pending' | 'confirmed' | 'cancelled' | 'completed'>('all')
@@ -1464,10 +1464,10 @@ function BookingsTab() {
   }
 
   const sessionLabels: Record<string, string> = {
-    mentorship: 'ðŸŽ¯ Mentorship',
-    consulting: 'ðŸ’¼ Consulting',
-    workshop: 'ðŸ“š Workshop',
-    other: 'ðŸ’¬ Other',
+    mentorship: '🎯 Mentorship',
+    consulting: '💼 Consulting',
+    workshop: '📚 Workshop',
+    other: '💬 Other',
   }
 
   const statusColors: Record<string, string> = {
@@ -1484,7 +1484,7 @@ function BookingsTab() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
         <h2 style={{ fontSize: 20, fontWeight: 600 }}>Session Bookings ({bookings.length})</h2>
         <a href="/book-session" target="_blank" className="btn-outline" style={{ fontSize: 12, padding: '6px 14px', textDecoration: 'none' }}>
-          View Booking Page â†—
+          View Booking Page ↗
         </a>
       </div>
 
@@ -1509,7 +1509,7 @@ function BookingsTab() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, flexWrap: 'wrap' }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                    <span style={{ fontSize: 18 }}>{sessionLabels[bk.sessionType]?.split(' ')[0] || 'ðŸ’¬'}</span>
+                    <span style={{ fontSize: 18 }}>{sessionLabels[bk.sessionType]?.split(' ')[0] || '💬'}</span>
                     <strong style={{ fontSize: 15 }}>{bk.name}</strong>
                     <span style={{
                       padding: '2px 10px', borderRadius: 999, fontSize: 11, fontWeight: 600,
@@ -1520,7 +1520,7 @@ function BookingsTab() {
                     </span>
                   </div>
                   <p style={{ fontSize: 13, color: 'var(--muted)', margin: '4px 0 0' }}>
-                    {bk.email} Â· {sessionLabels[bk.sessionType]?.split(' ').slice(1).join(' ') || bk.sessionType}
+                    {bk.email} · {sessionLabels[bk.sessionType]?.split(' ').slice(1).join(' ') || bk.sessionType}
                   </p>
                 </div>
                 <div style={{ textAlign: 'right', fontSize: 13 }}>
@@ -1579,7 +1579,7 @@ function BookingsTab() {
   )
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ LEADS TAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ──────────────── LEADS TAB ──────────────── */
 function LeadsTab() {
   const [leads, setLeads] = useState<LeadItem[]>([])
   const [stats, setStats] = useState<LeadStats | null>(null)
@@ -1657,11 +1657,11 @@ function LeadsTab() {
   }
 
   const sourceLabels: Record<string, string> = {
-    contact: 'âœ‰ï¸ Contact',
-    booking: 'ðŸ“… Booking',
-    feedback: 'ðŸ’¬ Feedback',
-    community_invite: 'ðŸ¤ Community Join',
-    community_subscribe: 'ðŸ“¬ Subscribe',
+    contact: '✉️ Contact',
+    booking: '📅 Booking',
+    feedback: '💬 Feedback',
+    community_invite: '🤝 Community Join',
+    community_subscribe: '📬 Subscribe',
   }
 
   const statusColors: Record<string, string> = {
@@ -1730,11 +1730,11 @@ function LeadsTab() {
           }}
         >
           <option value="all">All Sources</option>
-          <option value="contact">âœ‰ï¸ Contact</option>
-          <option value="booking">ðŸ“… Booking</option>
-          <option value="feedback">ðŸ’¬ Feedback</option>
-          <option value="community_invite">ðŸ¤ Community Join</option>
-          <option value="community_subscribe">ðŸ“¬ Subscribe</option>
+          <option value="contact">✉️ Contact</option>
+          <option value="booking">📅 Booking</option>
+          <option value="feedback">💬 Feedback</option>
+          <option value="community_invite">🤝 Community Join</option>
+          <option value="community_subscribe">📬 Subscribe</option>
         </select>
         <form onSubmit={handleSearch} style={{ display: 'flex', gap: 6 }}>
           <input
@@ -1778,7 +1778,7 @@ function LeadsTab() {
                 >
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
-                      <span style={{ fontSize: 16 }}>{sourceLabels[lead.source]?.charAt(0) || 'ðŸ“‹'}</span>
+                      <span style={{ fontSize: 16 }}>{sourceLabels[lead.source]?.charAt(0) || '📋'}</span>
                       <strong style={{ fontSize: 15 }}>{lead.name}</strong>
                       <span style={{
                         padding: '2px 10px', borderRadius: 999, fontSize: 11, fontWeight: 600,
@@ -1795,7 +1795,7 @@ function LeadsTab() {
                       </span>
                     </div>
                     <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0 }}>
-                      {lead.email} Â· {new Date(lead.createdAt).toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                      {lead.email} · {new Date(lead.createdAt).toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"

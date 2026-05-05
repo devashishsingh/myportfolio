@@ -80,7 +80,7 @@ export async function sendEmail({ to, subject, html, text }: EmailPayload): Prom
 }
 
 // ─── Email Templates ─────────────────────────────────────────────────
-// Sketchbook theme: cream paper, hand-drawn borders, offset shadows.
+// Hand-drawn theme: cream paper, dashed borders, offset shadows.
 // No external font/image hosts — Gmail's "host images on sending domain"
 // guideline flags any third-party URLs (incl. fonts.googleapis.com) as
 // suspicious. We rely on system font fallbacks: Comic Sans MS for the
@@ -121,7 +121,7 @@ function baseTemplate(content: string, eyebrow?: string): string {
   <div class="outer">
     <div class="container">
       <div class="header">
-        <p class="brand">${EMAIL_CONFIG.fromName} — sketchbook</p>
+        <p class="brand">${EMAIL_CONFIG.fromName}</p>
         ${eyebrow ? `<p class="eyebrow">${eyebrow}</p>` : ''}
       </div>
       <div class="body">
@@ -150,7 +150,7 @@ export function subscriberConfirmationEmail(name: string, confirmUrl: string): {
       <a href="${confirmUrl}" class="cta">Confirm my subscription →</a>
       <p class="quiet">If you didn't subscribe, you can safely ignore this email.</p>
       <p class="signature">— ${EMAIL_CONFIG.fromName}</p>
-    `, 'Sketchbook · subscribe'),
+    `, 'Subscribe'),
     text: `Hi ${name},\n\nThanks for subscribing! Confirm your email here: ${confirmUrl}\n\nIf you didn't subscribe, ignore this email.\n\n— ${EMAIL_CONFIG.fromName}`,
   }
 }
@@ -173,7 +173,7 @@ export function contactAutoReplyEmail(name: string): { subject: string; html: st
       </ul>
       ${EMAIL_CONFIG.calendarUrl ? `<p>Or skip the wait and grab a slot:</p><a href="${EMAIL_CONFIG.calendarUrl}" class="cta">Book a session →</a>` : ''}
       <p class="signature">— ${EMAIL_CONFIG.fromName}</p>
-    `, 'Sketchbook · contact'),
+    `, 'Contact'),
     text: `Hi ${name},\n\nThanks for getting in touch. I've received your message and will get back to you within 24-48 hours.\n\nBest,\n${EMAIL_CONFIG.fromName}`,
   }
 }
@@ -195,7 +195,7 @@ export function joinAcknowledgmentEmail(name: string): { subject: string; html: 
       </ul>
       <p>Ideas are fuelled here, not stolen.</p>
       <p class="signature">— ${EMAIL_CONFIG.fromName}</p>
-    `, 'Sketchbook · community'),
+    `, 'Community'),
     text: `Hi ${name},\n\nYour application to join the Builders Hub has been received. I personally review every application.\n\nYou'll hear back within a few days.\n\nBest,\n${EMAIL_CONFIG.fromName}`,
   }
 }
@@ -226,7 +226,7 @@ export function bookingConfirmationEmail(
       <p>I'll confirm within 24 hours with a meeting link and a short prep note so we don't waste the first ten minutes.</p>
       ${calendarLink ? `<a href="${calendarLink}" class="cta">Add to calendar →</a>` : ''}
       <p class="signature">— ${EMAIL_CONFIG.fromName}</p>
-    `, 'Sketchbook · booking'),
+    `, 'Booking'),
     text: `Hi ${name},\n\nYour ${sessionType} session has been requested.\n\nDate: ${date}\nTime: ${time}\nTimezone: ${timezone}\n\nI'll confirm within 24 hours.\n\nBest,\n${EMAIL_CONFIG.fromName}`,
   }
 }
@@ -239,14 +239,14 @@ export function newsletterEmail(
   unsubscribeUrl: string
 ): { subject: string; html: string; text: string } {
   const inner = `
-    <span class="badge">Sketchbook issue</span>
+    <span class="badge">Newsletter</span>
     <h2>${subject.replace(/^\[Test\]\s*/i, '')}</h2>
     ${content}
     <p class="signature">— ${EMAIL_CONFIG.fromName}</p>
     <p class="quiet">Reply to this email — it goes straight to my inbox.</p>
   `
   // Reuse base template but inject an extra unsubscribe link in the footer area.
-  const html = baseTemplate(inner, 'Sketchbook · newsletter').replace(
+  const html = baseTemplate(inner, 'Newsletter').replace(
     '<a href="' + EMAIL_CONFIG.baseUrl + '/privacy">privacy</a>',
     '<a href="' + EMAIL_CONFIG.baseUrl + '/privacy">privacy</a> &nbsp;·&nbsp; <a href="' + unsubscribeUrl + '">unsubscribe</a>'
   )
@@ -296,7 +296,7 @@ export function adminNotificationEmail(
         ${rows}
       </table>
       <a href="${EMAIL_CONFIG.baseUrl}/admin" class="cta">Open admin →</a>
-    `, 'Sketchbook · admin'),
+    `, 'Admin notification'),
     text: `${labels[type] || type}\n\n${textRows}\n\nView in admin: ${EMAIL_CONFIG.baseUrl}/admin`,
   }
 }
@@ -407,7 +407,7 @@ export function memberApprovedEmail(opts: {
       <a href="${magicLoginUrl}" class="cta">Sign in &amp; explore →</a>
       <p class="quiet">Reply to this email if anything looks off — it lands in my inbox. Welcome aboard.</p>
       <p class="signature">— ${EMAIL_CONFIG.fromName}</p>
-    `, 'Sketchbook · welcome'),
+    `, 'Builders Hub · welcome'),
     text: [
       `Hi ${name},`,
       ``,
@@ -464,7 +464,7 @@ export function memberLoginEmail(opts: {
       <a href="${magicLoginUrl}" class="cta">Sign in to Builders Hub →</a>
       <p class="quiet">Didn't request this? Ignore the email — the link can't be reused.</p>
       <p class="signature">— ${EMAIL_CONFIG.fromName}</p>
-    `, 'Sketchbook · sign-in'),
+    `, 'Builders Hub · sign-in'),
     text: `Hi ${name},\n\nSign in (15-min link, single use): ${magicLoginUrl}\n\nDidn't request this? Ignore the email.\n\n— ${EMAIL_CONFIG.fromName}`,
   }
 }
