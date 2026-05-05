@@ -440,7 +440,7 @@ function Pricing() {
           />
         </div>
         <p style={{ marginTop: 28, fontSize: 13, color: 'var(--muted-2)', textAlign: 'center' }}>
-          UPI, cards, and international payments accepted at checkout. Scholarship seats available — note in the waitlist form.
+          Reserve a seat first — I&apos;ll personally email you with enrolment + payment details when seats open. Scholarship seats available; mention it in the waitlist form.
         </p>
       </div>
     </section>
