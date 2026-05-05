@@ -69,8 +69,12 @@ export async function sendEmail({ to, subject, html, text }: EmailPayload): Prom
 }
 
 // ─── Email Templates ─────────────────────────────────────────────────
+// Sketchbook theme: cream paper, hand-drawn borders, offset shadows.
+// Fonts load from Google Fonts in clients that support it; fall back gracefully.
 
-function baseTemplate(content: string): string {
+const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Kalam:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap');`
+
+function baseTemplate(content: string, eyebrow?: string): string {
   return `
 <!DOCTYPE html>
 <html>
@@ -78,30 +82,44 @@ function baseTemplate(content: string): string {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; padding: 0; background: #f7f7f7; color: #1a1a1a; }
-    .container { max-width: 600px; margin: 0 auto; background: #fff; }
-    .header { padding: 32px 40px 16px; border-bottom: 2px solid #1a1a1a; }
-    .header h1 { font-size: 20px; font-weight: 700; margin: 0; letter-spacing: -0.5px; }
-    .body { padding: 32px 40px; }
-    .body p { font-size: 15px; line-height: 1.7; margin: 0 0 16px; }
-    .body a { color: #1a1a1a; font-weight: 600; }
-    .cta { display: inline-block; background: #1a1a1a; color: #fff !important; padding: 12px 28px; text-decoration: none; font-size: 14px; font-weight: 600; margin: 16px 0; letter-spacing: 0.5px; }
-    .footer { padding: 24px 40px; border-top: 1px solid #e5e5e5; font-size: 12px; color: #999; }
-    .footer a { color: #999; }
-    .badge { display: inline-block; background: #f0f0f0; padding: 4px 12px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+    ${FONT_IMPORT}
+    body { font-family: 'Kalam', Georgia, 'Times New Roman', serif; margin: 0; padding: 0; background: #fdfaf6; color: #1a1a1a; -webkit-font-smoothing: antialiased; }
+    .outer { padding: 32px 16px; background: #fdfaf6; }
+    .container { max-width: 600px; margin: 0 auto; background: #ffffff; border: 2px solid #1a1a1a; box-shadow: 6px 6px 0 0 #1a1a1a; }
+    .header { padding: 24px 32px 18px; border-bottom: 2px dashed #1a1a1a; }
+    .brand { font-family: 'Patrick Hand', 'Comic Sans MS', cursive; font-size: 28px; font-weight: 400; margin: 0; line-height: 1.1; letter-spacing: 0.5px; }
+    .eyebrow { font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #6b6b6b; margin-top: 6px; }
+    .body { padding: 28px 32px; font-size: 16px; line-height: 1.65; }
+    .body h2 { font-family: 'Patrick Hand', 'Comic Sans MS', cursive; font-size: 26px; font-weight: 400; margin: 0 0 14px; line-height: 1.2; }
+    .body p { margin: 0 0 14px; }
+    .body a { color: #1a1a1a; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+    .body ul { padding-left: 22px; margin: 0 0 14px; }
+    .body ul li { margin-bottom: 6px; }
+    .badge { display: inline-block; background: #fffae0; border: 2px solid #1a1a1a; padding: 5px 14px; font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; box-shadow: 3px 3px 0 0 #1a1a1a; margin: 0 0 18px; }
+    .cta { display: inline-block; background: #1a1a1a; color: #fffae0 !important; padding: 12px 24px; font-family: 'Patrick Hand', 'Comic Sans MS', cursive; font-size: 18px; text-decoration: none; border: 2px solid #1a1a1a; box-shadow: 6px 6px 0 0 #f4b942; margin: 12px 0 6px; letter-spacing: 0.5px; }
+    .detail { width: 100%; border-collapse: collapse; margin: 14px 0 18px; }
+    .detail td { padding: 9px 0; border-bottom: 1px dashed #cfc8bb; font-size: 16px; vertical-align: top; }
+    .detail td.k { font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: #6b6b6b; width: 110px; padding-right: 16px; padding-top: 12px; }
+    .quiet { font-size: 13px; color: #6b6b6b; }
+    .footer { padding: 18px 32px 22px; border-top: 2px dashed #1a1a1a; background: #fdfaf6; font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 11px; letter-spacing: 0.04em; color: #6b6b6b; line-height: 1.7; }
+    .footer a { color: #6b6b6b; text-decoration: underline; }
+    .signature { font-family: 'Patrick Hand', 'Comic Sans MS', cursive; font-size: 22px; margin: 18px 0 4px; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>${EMAIL_CONFIG.fromName}</h1>
-    </div>
-    <div class="body">
-      ${content}
-    </div>
-    <div class="footer">
-      <p>&copy; ${new Date().getFullYear()} ${EMAIL_CONFIG.fromName}. All rights reserved.</p>
-      <p><a href="${EMAIL_CONFIG.baseUrl}">Visit Website</a> &middot; <a href="${EMAIL_CONFIG.baseUrl}/privacy">Privacy Policy</a></p>
+  <div class="outer">
+    <div class="container">
+      <div class="header">
+        <p class="brand">${EMAIL_CONFIG.fromName} — sketchbook</p>
+        ${eyebrow ? `<p class="eyebrow">${eyebrow}</p>` : ''}
+      </div>
+      <div class="body">
+        ${content}
+      </div>
+      <div class="footer">
+        <p style="margin:0 0 6px;">&copy; ${new Date().getFullYear()} ${EMAIL_CONFIG.fromName}. Ideas are fuelled here, not stolen.</p>
+        <p style="margin:0;"><a href="${EMAIL_CONFIG.baseUrl}">website</a> &nbsp;·&nbsp; <a href="${EMAIL_CONFIG.baseUrl}/blog">blog</a> &nbsp;·&nbsp; <a href="${EMAIL_CONFIG.baseUrl}/privacy">privacy</a></p>
+      </div>
     </div>
   </div>
 </body>
@@ -114,13 +132,15 @@ export function subscriberConfirmationEmail(name: string, confirmUrl: string): {
   return {
     subject: 'Confirm your subscription',
     html: baseTemplate(`
-      <div class="badge">Confirm Subscription</div>
+      <span class="badge">Confirm subscription</span>
+      <h2>One quick tap and you're in.</h2>
       <p>Hi ${name},</p>
-      <p>Thanks for subscribing! Please confirm your email to start receiving updates, newsletters, and community highlights.</p>
-      <a href="${confirmUrl}" class="cta">Confirm My Subscription →</a>
-      <p style="font-size:13px; color:#666;">If you didn't subscribe, you can safely ignore this email.</p>
-    `),
-    text: `Hi ${name},\n\nThanks for subscribing! Confirm your email here: ${confirmUrl}\n\nIf you didn't subscribe, ignore this email.`,
+      <p>Thanks for subscribing. Tap the button below to confirm your email — that's the only way I'll know it's really you.</p>
+      <a href="${confirmUrl}" class="cta">Confirm my subscription →</a>
+      <p class="quiet">If you didn't subscribe, you can safely ignore this email.</p>
+      <p class="signature">— ${EMAIL_CONFIG.fromName}</p>
+    `, 'Sketchbook · subscribe'),
+    text: `Hi ${name},\n\nThanks for subscribing! Confirm your email here: ${confirmUrl}\n\nIf you didn't subscribe, ignore this email.\n\n— ${EMAIL_CONFIG.fromName}`,
   }
 }
 
@@ -130,17 +150,19 @@ export function contactAutoReplyEmail(name: string): { subject: string; html: st
   return {
     subject: `Thanks for reaching out, ${name}`,
     html: baseTemplate(`
-      <div class="badge">Message Received</div>
+      <span class="badge">Message received</span>
+      <h2>Got it — your note landed safely.</h2>
       <p>Hi ${name},</p>
-      <p>Thanks for getting in touch. I've received your message and will get back to you within 24-48 hours.</p>
-      <p>In the meantime, feel free to explore:</p>
-      <p>
-        <a href="${EMAIL_CONFIG.baseUrl}/work">My Work</a> &middot; 
-        <a href="${EMAIL_CONFIG.baseUrl}/blog">Blog</a> &middot; 
-        <a href="${EMAIL_CONFIG.baseUrl}/community">Community</a>
-      </p>
-      ${EMAIL_CONFIG.calendarUrl ? `<p>Or book a session directly:</p><a href="${EMAIL_CONFIG.calendarUrl}" class="cta">Book a Session →</a>` : ''}
-    `),
+      <p>Thanks for getting in touch. I read every message myself and usually reply within 24–48 hours. If it's urgent, mention it in your subject and I'll bump it up.</p>
+      <p>While you wait, a few honest places to wander:</p>
+      <ul>
+        <li><a href="${EMAIL_CONFIG.baseUrl}/work">Selected work</a> — case studies and projects.</li>
+        <li><a href="${EMAIL_CONFIG.baseUrl}/blog">Field notes</a> — what I'm thinking through right now.</li>
+        <li><a href="${EMAIL_CONFIG.baseUrl}/community">Builders Hub</a> — small, curated, no noise.</li>
+      </ul>
+      ${EMAIL_CONFIG.calendarUrl ? `<p>Or skip the wait and grab a slot:</p><a href="${EMAIL_CONFIG.calendarUrl}" class="cta">Book a session →</a>` : ''}
+      <p class="signature">— ${EMAIL_CONFIG.fromName}</p>
+    `, 'Sketchbook · contact'),
     text: `Hi ${name},\n\nThanks for getting in touch. I've received your message and will get back to you within 24-48 hours.\n\nBest,\n${EMAIL_CONFIG.fromName}`,
   }
 }
@@ -151,16 +173,18 @@ export function joinAcknowledgmentEmail(name: string): { subject: string; html: 
   return {
     subject: `Welcome to the review queue, ${name}`,
     html: baseTemplate(`
-      <div class="badge">Application Received</div>
+      <span class="badge">Application received</span>
+      <h2>You're in the review queue.</h2>
       <p>Hi ${name},</p>
-      <p>Your application to join the Builders Hub has been received. I personally review every application to keep the community curated and meaningful.</p>
-      <p>You'll hear back within a few days. In the meantime:</p>
-      <ul style="font-size:15px; line-height:1.7;">
-        <li>Read the latest from the <a href="${EMAIL_CONFIG.baseUrl}/blog">blog</a></li>
-        <li>Check out <a href="${EMAIL_CONFIG.baseUrl}/community">what we're building</a></li>
+      <p>Your application to join the Builders Hub has landed. I personally read every one — that's the only way to keep the room small and the signal high.</p>
+      <p>You'll hear back within a few days. While you wait:</p>
+      <ul>
+        <li>Read the latest <a href="${EMAIL_CONFIG.baseUrl}/blog">field notes</a>.</li>
+        <li>See <a href="${EMAIL_CONFIG.baseUrl}/community">what we're building together</a>.</li>
       </ul>
-      <p>Ideas are fuelled here, not stolen. Looking forward to reviewing your application.</p>
-    `),
+      <p>Ideas are fuelled here, not stolen.</p>
+      <p class="signature">— ${EMAIL_CONFIG.fromName}</p>
+    `, 'Sketchbook · community'),
     text: `Hi ${name},\n\nYour application to join the Builders Hub has been received. I personally review every application.\n\nYou'll hear back within a few days.\n\nBest,\n${EMAIL_CONFIG.fromName}`,
   }
 }
@@ -178,18 +202,20 @@ export function bookingConfirmationEmail(
   return {
     subject: `Session booked: ${sessionType}`,
     html: baseTemplate(`
-      <div class="badge">Booking Confirmed</div>
+      <span class="badge">Booking confirmed</span>
+      <h2>Your slot is held.</h2>
       <p>Hi ${name},</p>
-      <p>Your ${sessionType.toLowerCase()} session has been requested. Here are the details:</p>
-      <table style="font-size:15px; margin:16px 0;">
-        <tr><td style="padding:4px 16px 4px 0; font-weight:600;">Session</td><td>${sessionType}</td></tr>
-        <tr><td style="padding:4px 16px 4px 0; font-weight:600;">Date</td><td>${date}</td></tr>
-        <tr><td style="padding:4px 16px 4px 0; font-weight:600;">Time</td><td>${time}</td></tr>
-        <tr><td style="padding:4px 16px 4px 0; font-weight:600;">Timezone</td><td>${timezone}</td></tr>
+      <p>Your ${sessionType.toLowerCase()} session has been requested. Here are the details on paper:</p>
+      <table class="detail" cellspacing="0" cellpadding="0">
+        <tr><td class="k">Session</td><td>${sessionType}</td></tr>
+        <tr><td class="k">Date</td><td>${date}</td></tr>
+        <tr><td class="k">Time</td><td>${time}</td></tr>
+        <tr><td class="k">Timezone</td><td>${timezone}</td></tr>
       </table>
-      <p>I'll confirm the session within 24 hours with a meeting link or next steps.</p>
-      ${calendarLink ? `<a href="${calendarLink}" class="cta">Add to Calendar →</a>` : ''}
-    `),
+      <p>I'll confirm within 24 hours with a meeting link and a short prep note so we don't waste the first ten minutes.</p>
+      ${calendarLink ? `<a href="${calendarLink}" class="cta">Add to calendar →</a>` : ''}
+      <p class="signature">— ${EMAIL_CONFIG.fromName}</p>
+    `, 'Sketchbook · booking'),
     text: `Hi ${name},\n\nYour ${sessionType} session has been requested.\n\nDate: ${date}\nTime: ${time}\nTimezone: ${timezone}\n\nI'll confirm within 24 hours.\n\nBest,\n${EMAIL_CONFIG.fromName}`,
   }
 }
@@ -201,44 +227,21 @@ export function newsletterEmail(
   subject: string,
   unsubscribeUrl: string
 ): { subject: string; html: string; text: string } {
+  const inner = `
+    <span class="badge">Sketchbook issue</span>
+    <h2>${subject.replace(/^\[Test\]\s*/i, '')}</h2>
+    ${content}
+    <p class="signature">— ${EMAIL_CONFIG.fromName}</p>
+    <p class="quiet">Reply to this email — it goes straight to my inbox.</p>
+  `
+  // Reuse base template but inject an extra unsubscribe link in the footer area.
+  const html = baseTemplate(inner, 'Sketchbook · newsletter').replace(
+    '<a href="' + EMAIL_CONFIG.baseUrl + '/privacy">privacy</a>',
+    '<a href="' + EMAIL_CONFIG.baseUrl + '/privacy">privacy</a> &nbsp;·&nbsp; <a href="' + unsubscribeUrl + '">unsubscribe</a>'
+  )
   return {
     subject,
-    html: `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0; padding: 0; background: #f7f7f7; color: #1a1a1a; }
-    .container { max-width: 600px; margin: 0 auto; background: #fff; }
-    .header { padding: 32px 40px 16px; border-bottom: 2px solid #1a1a1a; }
-    .header h1 { font-size: 20px; font-weight: 700; margin: 0; letter-spacing: -0.5px; }
-    .body { padding: 32px 40px; font-size: 15px; line-height: 1.7; }
-    .body a { color: #1a1a1a; font-weight: 600; }
-    .footer { padding: 24px 40px; border-top: 1px solid #e5e5e5; font-size: 12px; color: #999; }
-    .footer a { color: #999; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1>${EMAIL_CONFIG.fromName}</h1>
-    </div>
-    <div class="body">
-      ${content}
-    </div>
-    <div class="footer">
-      <p>&copy; ${new Date().getFullYear()} ${EMAIL_CONFIG.fromName}. All rights reserved.</p>
-      <p>
-        <a href="${EMAIL_CONFIG.baseUrl}">Website</a> &middot; 
-        <a href="${EMAIL_CONFIG.baseUrl}/privacy">Privacy</a> &middot; 
-        <a href="${unsubscribeUrl}">Unsubscribe</a>
-      </p>
-    </div>
-  </div>
-</body>
-</html>`,
+    html,
     text: `${content.replace(/<[^>]+>/g, '')}\n\nUnsubscribe: ${unsubscribeUrl}`,
   }
 }
@@ -250,15 +253,23 @@ export function adminNotificationEmail(
   details: Record<string, string>
 ): { subject: string; html: string; text: string } {
   const labels: Record<string, string> = {
-    contact: '📬 New Contact Message',
-    join: '🚀 New Community Application',
-    feedback: '💬 New Feedback',
-    booking: '📅 New Booking Request',
-    subscriber: '📰 New Subscriber',
+    contact: 'New contact message',
+    join: 'New community application',
+    feedback: 'New feedback',
+    booking: 'New booking request',
+    subscriber: 'New subscriber',
+  }
+
+  const subjects: Record<string, string> = {
+    contact: '📬 New contact message',
+    join: '🚀 New community application',
+    feedback: '💬 New feedback',
+    booking: '📅 New booking request',
+    subscriber: '📰 New subscriber',
   }
 
   const rows = Object.entries(details)
-    .map(([k, v]) => `<tr><td style="padding:4px 16px 4px 0; font-weight:600; vertical-align:top;">${k}</td><td style="padding:4px 0;">${v}</td></tr>`)
+    .map(([k, v]) => `<tr><td class="k">${k}</td><td>${v}</td></tr>`)
     .join('')
 
   const textRows = Object.entries(details)
@@ -266,14 +277,15 @@ export function adminNotificationEmail(
     .join('\n')
 
   return {
-    subject: labels[type] || `New ${type}`,
+    subject: subjects[type] || `New ${type}`,
     html: baseTemplate(`
-      <div class="badge">${labels[type] || type}</div>
-      <table style="font-size:15px; margin:16px 0; width:100%;">
+      <span class="badge">${labels[type] || type}</span>
+      <h2>Something new on the desk.</h2>
+      <table class="detail" cellspacing="0" cellpadding="0">
         ${rows}
       </table>
-      <a href="${EMAIL_CONFIG.baseUrl}/admin" class="cta">View in Admin →</a>
-    `),
-    text: `${labels[type]}\n\n${textRows}\n\nView in admin: ${EMAIL_CONFIG.baseUrl}/admin`,
+      <a href="${EMAIL_CONFIG.baseUrl}/admin" class="cta">Open admin →</a>
+    `, 'Sketchbook · admin'),
+    text: `${labels[type] || type}\n\n${textRows}\n\nView in admin: ${EMAIL_CONFIG.baseUrl}/admin`,
   }
 }
