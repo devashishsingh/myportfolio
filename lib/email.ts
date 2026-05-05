@@ -289,3 +289,60 @@ export function adminNotificationEmail(
     text: `${labels[type] || type}\n\n${textRows}\n\nView in admin: ${EMAIL_CONFIG.baseUrl}/admin`,
   }
 }
+
+// ─── Member Approved (Builders Hub onboarding) ───────────────────────
+
+export function memberApprovedEmail(opts: {
+  name: string
+  founderNumber: number | null
+  magicLoginUrl: string
+  channelUrl: string
+  welcomeUrl: string
+  discountCode?: string
+}): { subject: string; html: string; text: string } {
+  const { name, founderNumber, magicLoginUrl, channelUrl, welcomeUrl, discountCode } = opts
+  const founderLine = founderNumber ? `Founding Member <strong>#${String(founderNumber).padStart(2, '0')}</strong>` : 'Welcome aboard'
+  return {
+    subject: `You're in the Builders Hub${founderNumber ? ` — Founding Member #${String(founderNumber).padStart(2, '0')}` : ''}`,
+    html: baseTemplate(`
+      <span class="badge">Application approved</span>
+      <h2>You're in.</h2>
+      <p>Hi ${name},</p>
+      <p>Welcome to the <strong>Builders Hub</strong> — a small, curated room for tech builders, founders and operators who'd rather ship than scroll.</p>
+      <p style="font-family:'Patrick Hand','Comic Sans MS',cursive; font-size:22px; margin:18px 0 10px;">${founderLine}</p>
+      <p>Your first 5 minutes:</p>
+      <ul>
+        <li><a href="${magicLoginUrl}">Sign in to your member dashboard</a> (one-tap link, valid 15 min)</li>
+        <li><a href="${channelUrl}">Join the private Discord channel</a></li>
+        <li><a href="${welcomeUrl}">Read the welcome page</a> — manifesto, monthly call, member directory</li>
+      </ul>
+      ${discountCode ? `<p>Members get <strong>20% off</strong> any course, workshop, or 1:1 — code: <code style="background:#fffae0; padding:3px 8px; border:1.5px solid #1a1a1a; font-family:'IBM Plex Mono',monospace;">${discountCode}</code></p>` : ''}
+      <a href="${magicLoginUrl}" class="cta">Sign in &amp; explore →</a>
+      <p class="quiet">Reply to this email if anything looks off — it lands in my inbox.</p>
+      <p class="signature">— ${EMAIL_CONFIG.fromName}</p>
+    `, 'Sketchbook · welcome'),
+    text: `Hi ${name},\n\nWelcome to the Builders Hub${founderNumber ? ` — Founding Member #${String(founderNumber).padStart(2, '0')}` : ''}.\n\nSign in (15-min link): ${magicLoginUrl}\nDiscord: ${channelUrl}\nWelcome page: ${welcomeUrl}\n${discountCode ? `\nMember discount: ${discountCode} (20% off)\n` : ''}\n— ${EMAIL_CONFIG.fromName}`,
+  }
+}
+
+// ─── Member Magic-Link Login ─────────────────────────────────────────
+
+export function memberLoginEmail(opts: {
+  name: string
+  magicLoginUrl: string
+}): { subject: string; html: string; text: string } {
+  const { name, magicLoginUrl } = opts
+  return {
+    subject: 'Your Builders Hub sign-in link',
+    html: baseTemplate(`
+      <span class="badge">Sign-in link</span>
+      <h2>Tap to sign in.</h2>
+      <p>Hi ${name},</p>
+      <p>Here's your one-time sign-in link. Valid for 15 minutes — single use.</p>
+      <a href="${magicLoginUrl}" class="cta">Sign in to Builders Hub →</a>
+      <p class="quiet">Didn't request this? Ignore the email — the link can't be reused.</p>
+      <p class="signature">— ${EMAIL_CONFIG.fromName}</p>
+    `, 'Sketchbook · sign-in'),
+    text: `Hi ${name},\n\nSign in (15-min link, single use): ${magicLoginUrl}\n\nDidn't request this? Ignore the email.\n\n— ${EMAIL_CONFIG.fromName}`,
+  }
+}

@@ -75,6 +75,9 @@ export default function CommunityPage() {
             <Link href="/community/join" className="btn btn-3d">Join the Community</Link>
             <Link href="#subscribe" className="btn-outline">Subscribe for Updates</Link>
           </div>
+          <p style={{ marginTop: 18, fontSize: 13, color: 'var(--muted)' }}>
+            Already a member? <Link href="/community/login" style={{ textDecoration: 'underline', fontWeight: 600 }}>Sign in →</Link>
+          </p>
         </div>
       </section>
 

@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -40,48 +40,48 @@ model Subscriber {
 }
 
 model CommunityPost {
-  id              String   @id @default(cuid())
-  title           String
-  summary         String
-  content         String
-  category        String
-  tags            String // comma-separated
-  region          String
-  coverImage      String?
-  authorName      String
-  authorEmail     String
-  promotionReq    Boolean  @default(false)
-  featuredReq     Boolean  @default(false)
-  status          String   @default("draft") // draft | submitted | under_review | approved | rejected | published
-  adminNote       String?
-  featured        Boolean  @default(false)
-  publishedAt     DateTime?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id           String    @id @default(cuid())
+  title        String
+  summary      String
+  content      String
+  category     String
+  tags         String // comma-separated
+  region       String
+  coverImage   String?
+  authorName   String
+  authorEmail  String
+  promotionReq Boolean   @default(false)
+  featuredReq  Boolean   @default(false)
+  status       String    @default("draft") // draft | submitted | under_review | approved | rejected | published
+  adminNote    String?
+  featured     Boolean   @default(false)
+  publishedAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 }
 
 model SpotlightItem {
-  id          String   @id @default(cuid())
-  type        String // person | startup | idea | tool | post | event | opportunity
-  title       String
-  description String
-  imageUrl    String?
-  linkUrl     String?
-  region      String?
-  badge       String?
-  displayOrder Int     @default(0)
-  active      Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String   @id @default(cuid())
+  type         String // person | startup | idea | tool | post | event | opportunity
+  title        String
+  description  String
+  imageUrl     String?
+  linkUrl      String?
+  region       String?
+  badge        String?
+  displayOrder Int      @default(0)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model Feedback {
   id        String   @id @default(cuid())
   name      String
   email     String
-  type      String   // bug | suggestion | praise | other
+  type      String // bug | suggestion | praise | other
   message   String
-  page      String?  // which page the feedback is about
+  page      String? // which page the feedback is about
   status    String   @default("new") // new | reviewed | resolved
   adminNote String?
   createdAt DateTime @default(now())
@@ -102,7 +102,7 @@ model BookingRequest {
   id            String   @id @default(cuid())
   name          String
   email         String
-  sessionType   String   // mentorship | consulting | workshop | other
+  sessionType   String // mentorship | consulting | workshop | other
   preferredDate String
   preferredTime String
   timezone      String   @default("Asia/Kuala_Lumpur")
@@ -116,7 +116,7 @@ model BookingRequest {
 model BlogLike {
   id        String   @id @default(cuid())
   slug      String
-  uid       String   // anonymous fingerprint (hashed IP + UA)
+  uid       String // anonymous fingerprint (hashed IP + UA)
   createdAt DateTime @default(now())
 
   @@unique([slug, uid])
@@ -151,20 +151,108 @@ model BlogPost {
 model SiteContent {
   id        String   @id @default(cuid())
   key       String   @unique // 'profile' or 'projects'
-  value     String   // JSON string
+  value     String // JSON string
   updatedAt DateTime @updatedAt
 }
 
 model Lead {
-  id          String   @id @default(cuid())
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  source    String // contact | booking | feedback | community_invite | community_subscribe
+  sourceId  String? // ID of the related record (booking id, feedback id, etc.)
+  message   String? // summary or original message
+  meta      String? // JSON string with extra data (session type, region, interests, etc.)
+  status    String   @default("new") // new | acknowledged | responded | closed
+  adminNote String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─── Builders Hub: Members & Gamification ────────────────────────────
+
+model Member {
+  id            String          @id @default(cuid())
+  email         String          @unique
+  handle        String          @unique
+  displayName   String
+  avatarUrl     String?
+  bio           String?
+  linkedinUrl   String?
+  githubUrl     String?
+  siteUrl       String?
+  region        String?
+  tracks        String          @default("[]") // JSON array: ["cyber","ai","cloud","systems","networks","coding","gaming","digital"]
+  workingOn     String?
+  openToCollab  Boolean         @default(false)
+  openToHire    Boolean         @default(false)
+  openToMentor  Boolean         @default(false)
+  founderNumber Int?            @unique
+  points        Int             @default(0)
+  monthPoints   Int             @default(0)
+  streakWeeks   Int             @default(0)
+  lastActiveAt  DateTime?
+  joinedAt      DateTime        @default(now())
+  invitationId  String?         @unique
+  subscriberId  String?
+  sessions      MemberSession[]
+  badges        MemberBadge[]
+  pointEvents   PointEvent[]
+
+  @@index([points])
+  @@index([monthPoints])
+}
+
+model MemberSession {
+  id        String    @id @default(cuid())
+  memberId  String
+  member    Member    @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  purpose   String    @default("session") // session | login_request
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([memberId])
+}
+
+model Badge {
+  id          String        @id @default(cuid())
+  slug        String        @unique
   name        String
-  email       String
-  source      String   // contact | booking | feedback | community_invite | community_subscribe
-  sourceId    String?  // ID of the related record (booking id, feedback id, etc.)
-  message     String?  // summary or original message
-  meta        String?  // JSON string with extra data (session type, region, interests, etc.)
-  status      String   @default("new") // new | acknowledged | responded | closed
-  adminNote   String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  category    String // founding | contributor | skill | event
+  tier        Int? // 1-5 nullable
+  description String
+  iconEmoji   String?
+  active      Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  members     MemberBadge[]
+}
+
+model MemberBadge {
+  id       String   @id @default(cuid())
+  memberId String
+  member   Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  badgeId  String
+  badge    Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  note     String?
+  earnedAt DateTime @default(now())
+
+  @@unique([memberId, badgeId])
+  @@index([memberId])
+}
+
+model PointEvent {
+  id        String   @id @default(cuid())
+  memberId  String
+  member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  action    String // joined | post_published | answer_helpful | challenge_submit | challenge_win | quiz_pass | lab_complete | streak_bonus | manual_grant | manual_revoke
+  points    Int
+  refType   String?
+  refId     String?
+  note      String?
+  createdAt DateTime @default(now())
+
+  @@index([memberId])
+  @@index([createdAt])
 }

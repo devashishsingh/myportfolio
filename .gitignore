@@ -13,3 +13,4 @@ yarn-error.log*
 *.local
 
 /lib/generated/prisma
+tsconfig.tsbuildinfo

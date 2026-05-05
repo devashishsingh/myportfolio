@@ -780,7 +780,6 @@ function InvitationsTab() {
   async function updateStatus(id: string, status: string, adminNote?: string) {
     // Optimistic update
     const prev = invitations
-    const target = invitations.find(i => i.id === id)
     setInvitations(invitations.map(i => i.id === id ? { ...i, status, ...(adminNote ? { adminNote } : {}) } : i))
     setActionLoading(id)
 
@@ -792,18 +791,9 @@ function InvitationsTab() {
       })
       if (!res.ok) throw new Error('Update failed')
 
-      // Fire approval email in background (non-blocking)
-      if (status === 'approved' && target) {
-        fetch('/api/admin/send-invite', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({
-            name: target.fullName,
-            email: target.email,
-            message: `Hi ${target.fullName},\n\nGreat news! Your request to join the Builders Hub has been approved.\n\nWelcome to the community. You are now part of a curated group of tech professionals, founders, and innovators.\n\nWe'll be in touch with next steps and community updates.\n\n— Devashish Singh\nCyber Coach · Mentor · Advisor`,
-          }),
-        }).catch(() => {})
-      }
+      // Server-side onboarding orchestration runs inside the PATCH handler
+      // when status === 'approved' (auto-subscribe, founder #, badge, email).
+      // No client-side follow-up needed.
     } catch {
       setInvitations(prev) // rollback
     } finally {
