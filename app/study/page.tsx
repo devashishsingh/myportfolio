@@ -38,7 +38,7 @@ const FREE_COURSE = {
     'Lesson 1 · Cybersecurity — how attackers actually pick their targets',
     "Lesson 2 · AI & ML — what's real and what's hype for builders",
     'Lesson 3 · Data engineering — pipelines, the unsexy backbone of everything',
-    'Lesson 4 · Data science — turning messy data into decisions',
+    'Lesson 4 · Network security — defending the wire, end to end',
     'Lesson 5 · Data analytics — good questions, dashboards, and storytelling',
   ],
 }
