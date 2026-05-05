@@ -81,9 +81,10 @@ export async function sendEmail({ to, subject, html, text }: EmailPayload): Prom
 
 // ─── Email Templates ─────────────────────────────────────────────────
 // Sketchbook theme: cream paper, hand-drawn borders, offset shadows.
-// Fonts load from Google Fonts in clients that support it; fall back gracefully.
-
-const FONT_IMPORT = `@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Kalam:wght@400;700&family=IBM+Plex+Mono:wght@400;500&display=swap');`
+// No external font/image hosts — Gmail's "host images on sending domain"
+// guideline flags any third-party URLs (incl. fonts.googleapis.com) as
+// suspicious. We rely on system font fallbacks: Comic Sans MS for the
+// hand-drawn look, Courier New for monospace, Georgia for body.
 
 function baseTemplate(content: string, eyebrow?: string): string {
   return `
@@ -93,28 +94,27 @@ function baseTemplate(content: string, eyebrow?: string): string {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    ${FONT_IMPORT}
-    body { font-family: 'Kalam', Georgia, 'Times New Roman', serif; margin: 0; padding: 0; background: #fdfaf6; color: #1a1a1a; -webkit-font-smoothing: antialiased; }
+    body { font-family: Georgia, 'Times New Roman', serif; margin: 0; padding: 0; background: #fdfaf6; color: #1a1a1a; -webkit-font-smoothing: antialiased; }
     .outer { padding: 32px 16px; background: #fdfaf6; }
     .container { max-width: 600px; margin: 0 auto; background: #ffffff; border: 2px solid #1a1a1a; box-shadow: 6px 6px 0 0 #1a1a1a; }
     .header { padding: 24px 32px 18px; border-bottom: 2px dashed #1a1a1a; }
-    .brand { font-family: 'Patrick Hand', 'Comic Sans MS', cursive; font-size: 28px; font-weight: 400; margin: 0; line-height: 1.1; letter-spacing: 0.5px; }
-    .eyebrow { font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #6b6b6b; margin-top: 6px; }
+    .brand { font-family: 'Comic Sans MS', 'Marker Felt', cursive; font-size: 28px; font-weight: 400; margin: 0; line-height: 1.1; letter-spacing: 0.5px; }
+    .eyebrow { font-family: 'Courier New', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #6b6b6b; margin-top: 6px; }
     .body { padding: 28px 32px; font-size: 16px; line-height: 1.65; }
-    .body h2 { font-family: 'Patrick Hand', 'Comic Sans MS', cursive; font-size: 26px; font-weight: 400; margin: 0 0 14px; line-height: 1.2; }
+    .body h2 { font-family: 'Comic Sans MS', 'Marker Felt', cursive; font-size: 26px; font-weight: 400; margin: 0 0 14px; line-height: 1.2; }
     .body p { margin: 0 0 14px; }
     .body a { color: #1a1a1a; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
     .body ul { padding-left: 22px; margin: 0 0 14px; }
     .body ul li { margin-bottom: 6px; }
-    .badge { display: inline-block; background: #fffae0; border: 2px solid #1a1a1a; padding: 5px 14px; font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; box-shadow: 3px 3px 0 0 #1a1a1a; margin: 0 0 18px; }
-    .cta { display: inline-block; background: #1a1a1a; color: #fffae0 !important; padding: 12px 24px; font-family: 'Patrick Hand', 'Comic Sans MS', cursive; font-size: 18px; text-decoration: none; border: 2px solid #1a1a1a; box-shadow: 6px 6px 0 0 #f4b942; margin: 12px 0 6px; letter-spacing: 0.5px; }
+    .badge { display: inline-block; background: #fffae0; border: 2px solid #1a1a1a; padding: 5px 14px; font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; box-shadow: 3px 3px 0 0 #1a1a1a; margin: 0 0 18px; }
+    .cta { display: inline-block; background: #1a1a1a; color: #fffae0 !important; padding: 12px 24px; font-family: 'Comic Sans MS', 'Marker Felt', cursive; font-size: 18px; text-decoration: none; border: 2px solid #1a1a1a; box-shadow: 6px 6px 0 0 #f4b942; margin: 12px 0 6px; letter-spacing: 0.5px; }
     .detail { width: 100%; border-collapse: collapse; margin: 14px 0 18px; }
     .detail td { padding: 9px 0; border-bottom: 1px dashed #cfc8bb; font-size: 16px; vertical-align: top; }
-    .detail td.k { font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: #6b6b6b; width: 110px; padding-right: 16px; padding-top: 12px; }
+    .detail td.k { font-family: 'Courier New', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: #6b6b6b; width: 110px; padding-right: 16px; padding-top: 12px; }
     .quiet { font-size: 13px; color: #6b6b6b; }
-    .footer { padding: 18px 32px 22px; border-top: 2px dashed #1a1a1a; background: #fdfaf6; font-family: 'IBM Plex Mono', 'Courier New', monospace; font-size: 11px; letter-spacing: 0.04em; color: #6b6b6b; line-height: 1.7; }
+    .footer { padding: 18px 32px 22px; border-top: 2px dashed #1a1a1a; background: #fdfaf6; font-family: 'Courier New', monospace; font-size: 11px; letter-spacing: 0.04em; color: #6b6b6b; line-height: 1.7; }
     .footer a { color: #6b6b6b; text-decoration: underline; }
-    .signature { font-family: 'Patrick Hand', 'Comic Sans MS', cursive; font-size: 22px; margin: 18px 0 4px; }
+    .signature { font-family: 'Comic Sans MS', 'Marker Felt', cursive; font-size: 22px; margin: 18px 0 4px; }
   </style>
 </head>
 <body>
@@ -326,7 +326,7 @@ export function memberApprovedEmail(opts: {
       <h2>You're in.</h2>
       <p>Hi ${name},</p>
       <p>Welcome to the <strong>Builders Hub</strong> — a small, curated room for tech builders, founders and operators who'd rather ship than scroll. Here's everything that's open to you starting now.</p>
-      <p style="font-family:'Patrick Hand','Comic Sans MS',cursive; font-size:22px; margin:18px 0 10px;">${founderLine}</p>
+      <p style="font-family:'Comic Sans MS','Marker Felt',cursive; font-size:22px; margin:18px 0 10px;">${founderLine}</p>
 
       <h3 style="margin-top:28px;">⚡ Your first 5 minutes</h3>
       <ol style="padding-left:20px; line-height:1.8;">
@@ -386,7 +386,7 @@ export function memberApprovedEmail(opts: {
 
       <h3 style="margin-top:28px;">🎁 Member perks</h3>
       <ul style="padding-left:20px; line-height:1.7;">
-        ${discountCode ? `<li><strong>20% off</strong> any course, workshop, or 1:1 — code: <code style="background:#fffae0; padding:3px 8px; border:1.5px solid #1a1a1a; font-family:'IBM Plex Mono',monospace;">${discountCode}</code></li>` : ''}
+        ${discountCode ? `<li><strong>20% off</strong> any course, workshop, or 1:1 — code: <code style="background:#fffae0; padding:3px 8px; border:1.5px solid #1a1a1a; font-family:'Courier New',monospace;">${discountCode}</code></li>` : ''}
         <li>Monthly live call with me (recording shared after)</li>
         <li>Open async office hours on Discord</li>
         <li>Featured product showcases on the platform</li>
