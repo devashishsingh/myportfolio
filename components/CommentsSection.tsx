@@ -47,8 +47,9 @@ export default function CommentsSection({ slug }: Props) {
         body: JSON.stringify({ slug, name, email, message }),
       })
 
+      const data = await res.json()
+
       if (!res.ok) {
-        const data = await res.json()
         setErrorMsg(data.error || 'Failed to post comment')
         setStatus('error')
         setSubmitting(false)
@@ -59,7 +60,7 @@ export default function CommentsSection({ slug }: Props) {
       setName('')
       setEmail('')
       setMessage('')
-      await loadComments()
+      // Don't reload — pending comments won't appear until approved
     } catch {
       setErrorMsg('Something went wrong. Please try again.')
       setStatus('error')
@@ -125,7 +126,7 @@ export default function CommentsSection({ slug }: Props) {
             {submitting ? 'Posting...' : 'Post Comment'}
           </button>
           {status === 'sent' && (
-            <span className="blog-comment-success">Comment posted!</span>
+            <span className="blog-comment-success">Thanks! Your comment will appear after review.</span>
           )}
           {status === 'error' && (
             <span className="blog-comment-error">{errorMsg}</span>

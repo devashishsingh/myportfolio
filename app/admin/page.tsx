@@ -13,7 +13,7 @@ const BlogEditor = dynamic(() => import('../../components/editor/BlogEditor'), {
   ),
 })
 
-type Tab = 'dashboard' | 'blog' | 'content' | 'invitations' | 'subscribers' | 'feedback' | 'newsletter' | 'bookings' | 'leads' | 'challenges'
+type Tab = 'dashboard' | 'blog' | 'content' | 'invitations' | 'subscribers' | 'feedback' | 'newsletter' | 'bookings' | 'leads' | 'challenges' | 'comments'
 
 interface Stats {
   totalInvitations: number
@@ -136,6 +136,7 @@ export default function Admin() {
     { key: 'bookings', label: 'Bookings' },
     { key: 'leads', label: '📊 Leads' },
     { key: 'challenges', label: '🎯 Challenges' },
+    { key: 'comments', label: '💬 Comments' },
   ]
 
   return (
@@ -171,6 +172,7 @@ export default function Admin() {
         {activeTab === 'bookings' && <BookingsTab />}
         {activeTab === 'leads' && <LeadsTab />}
         {activeTab === 'challenges' && <ChallengesTab />}
+        {activeTab === 'comments' && <CommentsTab />}
       </div>
     </section>
   )
@@ -2156,6 +2158,79 @@ function SubmissionCard({ s, onGrade }: { s: any; onGrade: (id: string, status: 
         <button disabled={busy} onClick={() => decide('approved')} className="btn btn-3d" style={{ padding: '6px 14px', fontSize: 13 }}>? Approve & award</button>
         <button disabled={busy} onClick={() => decide('rejected')} className="btn-outline" style={{ padding: '6px 14px', fontSize: 13, color: '#dc2626' }}>? Reject</button>
       </div>
+    </div>
+  )
+}
+
+/* ──────────────── COMMENTS TAB ──────────────── */
+function CommentsTab() {
+  const [comments, setComments] = useState<any[]>([])
+  const [filter, setFilter] = useState<'pending' | 'approved' | 'all'>('pending')
+  const [loading, setLoading] = useState(true)
+
+  const load = useCallback(async () => {
+    setLoading(true)
+    const res = await fetch(`/api/admin/comments?status=${filter}`)
+    const data = await res.json()
+    setComments(data.comments || [])
+    setLoading(false)
+  }, [filter])
+
+  useEffect(() => { load() }, [load])
+
+  async function setStatus(id: string, status: string) {
+    await fetch('/api/admin/comments', {
+      method: 'PATCH',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ id, status }),
+    })
+    load()
+  }
+
+  async function deleteComment(id: string) {
+    if (!confirm('Delete this comment permanently?')) return
+    await fetch(`/api/admin/comments?id=${id}`, { method: 'DELETE' })
+    load()
+  }
+
+  return (
+    <div>
+      <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}>Blog Comments</h2>
+      <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
+        {(['pending', 'approved', 'all'] as const).map(s => (
+          <button key={s} onClick={() => setFilter(s)} className={filter === s ? 'btn btn-3d' : 'btn-outline'} style={{ padding: '6px 14px', fontSize: 13, textTransform: 'capitalize' }}>{s}</button>
+        ))}
+      </div>
+      {loading ? <p style={{ color: 'var(--muted)' }}>Loading…</p> : comments.length === 0 ? (
+        <p style={{ color: 'var(--muted)', fontStyle: 'italic' }}>No comments with status &quot;{filter}&quot;.</p>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {comments.map(c => (
+            <div key={c.id} style={{ padding: 16, border: '2px solid #1a1a1a', background: '#fff', boxShadow: '4px 4px 0 0 #1a1a1a' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
+                <div>
+                  <strong>{c.name}</strong> <span style={{ fontSize: 12, color: 'var(--muted)' }}>&lt;{c.email}&gt;</span>
+                  <span style={{ marginLeft: 12, fontSize: 12, fontFamily: 'IBM Plex Mono, monospace', padding: '2px 6px', background: c.status === 'approved' ? '#d1fae5' : c.status === 'pending' ? '#fef3c7' : '#fee2e2', border: '1px solid #1a1a1a' }}>{c.status}</span>
+                </div>
+                <span style={{ fontSize: 12, color: 'var(--muted)' }}>on <em>{c.slug}</em> · {new Date(c.createdAt).toLocaleString()}</span>
+              </div>
+              <p style={{ fontSize: 14, lineHeight: 1.6, marginBottom: 12 }}>{c.message}</p>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {c.status !== 'approved' && (
+                  <button onClick={() => setStatus(c.id, 'approved')} className="btn btn-3d" style={{ padding: '4px 12px', fontSize: 12 }}>✓ Approve</button>
+                )}
+                {c.status !== 'pending' && (
+                  <button onClick={() => setStatus(c.id, 'pending')} className="btn-outline" style={{ padding: '4px 12px', fontSize: 12 }}>↩ Set pending</button>
+                )}
+                {c.status !== 'hidden' && (
+                  <button onClick={() => setStatus(c.id, 'hidden')} className="btn-outline" style={{ padding: '4px 12px', fontSize: 12, color: '#92400e' }}>🚫 Hide</button>
+                )}
+                <button onClick={() => deleteComment(c.id)} className="btn-outline" style={{ padding: '4px 12px', fontSize: 12, color: '#dc2626' }}>🗑 Delete</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

@@ -1,7 +1,8 @@
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import { prisma } from '../../../lib/db'
+import { getMemberFromCookie } from '../../../lib/member-auth'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,9 +22,16 @@ export async function generateMetadata({ params }: { params: { handle: string } 
 }
 
 export default async function MemberProfilePage({ params }: { params: { handle: string } }) {
+  const me = await getMemberFromCookie()
+  if (!me) redirect('/community/login?error=invalid_or_expired')
+
   const member = await prisma.member.findUnique({
     where: { handle: params.handle },
-    include: {
+    select: {
+      id: true, handle: true, displayName: true, avatarUrl: true, bio: true,
+      linkedinUrl: true, githubUrl: true, siteUrl: true, region: true,
+      tracks: true, workingOn: true, openToCollab: true, openToHire: true, openToMentor: true,
+      founderNumber: true, points: true, monthPoints: true, streakWeeks: true, joinedAt: true,
       badges: { include: { badge: true }, orderBy: { earnedAt: 'desc' } },
     },
   })

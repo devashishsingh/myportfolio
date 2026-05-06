@@ -42,11 +42,14 @@ export async function POST(req: NextRequest) {
         name: name.trim().substring(0, 100),
         email: email.trim().toLowerCase().substring(0, 200),
         message: message.trim().substring(0, 2000),
+        status: 'pending', // requires admin approval before appearing publicly
       },
     })
 
     return NextResponse.json({
-      comment: { id: comment.id, name: comment.name, message: comment.message, createdAt: comment.createdAt },
+      ok: true,
+      pending: true,
+      message: 'Thanks! Your comment will appear after review.',
     })
   } catch (err) {
     console.error('Comment error:', err)

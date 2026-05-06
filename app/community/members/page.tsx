@@ -1,6 +1,8 @@
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import { prisma } from '../../../lib/db'
+import { getMemberFromCookie } from '../../../lib/member-auth'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,6 +18,9 @@ const TRACK_LABELS: Record<string, string> = {
 }
 
 export default async function MembersDirectoryPage({ searchParams }: { searchParams?: { region?: string; track?: string } }) {
+  const me = await getMemberFromCookie()
+  if (!me) redirect('/community/login?error=invalid_or_expired')
+
   const region = searchParams?.region
   const track = searchParams?.track
 

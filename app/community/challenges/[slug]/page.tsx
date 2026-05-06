@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import { prisma } from '../../../../lib/db'
 import { getMemberFromCookie } from '../../../../lib/member-auth'
@@ -17,17 +17,19 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 const KIND_LABELS: Record<string, string> = { challenge: '🎯 Challenge', quiz: '🧩 Quiz', lab: '🧪 Lab' }
 
 export default async function ChallengeDetailPage({ params }: { params: { slug: string } }) {
+  const me = await getMemberFromCookie()
+  if (!me) redirect('/community/login?error=invalid_or_expired')
+
   const c = await prisma.challenge.findUnique({ where: { slug: params.slug } })
   if (!c || !c.published) notFound()
 
-  const me = await getMemberFromCookie()
   const now = new Date()
   const isLive = c.closesAt > now
 
-  const myPriorSubmission = me ? await prisma.challengeSubmission.findFirst({
+  const myPriorSubmission = await prisma.challengeSubmission.findFirst({
     where: { challengeId: c.id, memberId: me.id },
     orderBy: { submittedAt: 'desc' },
-  }) : null
+  })
 
   const winners = await prisma.challengeSubmission.findMany({
     where: { challengeId: c.id, status: 'approved' },
@@ -68,11 +70,7 @@ export default async function ChallengeDetailPage({ params }: { params: { slug: 
       {/* Submission area */}
       <section style={{ marginBottom: 32 }}>
         <h2 style={{ fontSize: 22, fontWeight: 700, marginBottom: 14 }}>Your submission</h2>
-        {!me ? (
-          <div style={{ padding: 18, border: '2px solid #1a1a1a', background: '#fff', boxShadow: '4px 4px 0 0 #1a1a1a' }}>
-            <p style={{ marginBottom: 10 }}>Members can submit. <Link href="/community/login" style={{ fontWeight: 700, textDecoration: 'underline' }}>Sign in</Link> or <Link href="/community/join" style={{ fontWeight: 700, textDecoration: 'underline' }}>apply to join</Link>.</p>
-          </div>
-        ) : !isLive ? (
+        {!isLive ? (
           <p style={{ color: 'var(--muted)', fontStyle: 'italic' }}>This challenge has closed. New ones land weekly.</p>
         ) : myPriorSubmission ? (
           <div style={{ padding: 18, border: '2px solid #1a1a1a', background: '#fff', boxShadow: '4px 4px 0 0 #1a1a1a' }}>

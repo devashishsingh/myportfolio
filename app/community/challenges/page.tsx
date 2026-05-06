@@ -1,6 +1,8 @@
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import { prisma } from '../../../lib/db'
+import { getMemberFromCookie } from '../../../lib/member-auth'
 import Countdown from '../../../components/Countdown'
 
 export const dynamic = 'force-dynamic'
@@ -14,6 +16,9 @@ export const metadata: Metadata = {
 const KIND_LABELS: Record<string, string> = { challenge: '🎯 Challenge', quiz: '🧩 Quiz', lab: '🧪 Lab' }
 
 export default async function ChallengesPage() {
+  const me = await getMemberFromCookie()
+  if (!me) redirect('/community/login?error=invalid_or_expired')
+
   const now = new Date()
   const [live, closed] = await Promise.all([
     prisma.challenge.findMany({
