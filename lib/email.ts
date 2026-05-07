@@ -481,3 +481,36 @@ export function memberLoginEmail(opts: {
     text: `Hi ${name},\n\nSign in (15-min link, single use): ${magicLoginUrl}\n\nSession lasts 2 hours. Bookmark ${loginUrl} for quick re-entry next time.\n\nDidn't request this? Ignore the email.\n\n— ${EMAIL_CONFIG.fromName}`,
   }
 }
+
+// ─── New Blog Post Notification ──────────────────────────────────────
+
+export function newBlogPostEmail(opts: {
+  title: string
+  description: string
+  slug: string
+  category?: string | null
+  unsubscribeUrl: string
+}): { subject: string; html: string; text: string } {
+  const { title, description, slug, category, unsubscribeUrl } = opts
+  const postUrl = `${EMAIL_CONFIG.baseUrl}/blog/${slug}`
+  const categoryBadge = category ? `<span style="font-family:'Courier New',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:#6b6b6b;">${category}</span><br><br>` : ''
+
+  const inner = `
+    <span class="badge">New post</span>
+    <h2>${title}</h2>
+    ${categoryBadge}
+    <p>${description}</p>
+    <a href="${postUrl}" class="cta">Read the post →</a>
+    <p class="quiet" style="margin-top:18px;">You're getting this because you subscribed to updates. Reply to this email — it goes straight to my inbox.</p>
+    <p class="signature">— ${EMAIL_CONFIG.fromName}</p>
+  `
+  const html = baseTemplate(inner, 'New post').replace(
+    '<a href="' + EMAIL_CONFIG.baseUrl + '/privacy">privacy</a>',
+    '<a href="' + EMAIL_CONFIG.baseUrl + '/privacy">privacy</a> &nbsp;·&nbsp; <a href="' + unsubscribeUrl + '">unsubscribe</a>'
+  )
+  return {
+    subject: `New post: ${title}`,
+    html,
+    text: `New post: ${title}\n\n${description}\n\nRead it here: ${postUrl}\n\nUnsubscribe: ${unsubscribeUrl}`,
+  }
+}
