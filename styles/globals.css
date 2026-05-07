@@ -2831,6 +2831,20 @@ h1,h2,h3,h4,h5,h6,
   letter-spacing:-0.015em !important;
   color:#111 !important;
 }
+/* Remove underline from anchor tags inside headings (MDX auto-link) */
+.blog-post-content h1 a,
+.blog-post-content h2 a,
+.blog-post-content h3 a,
+.blog-post-content h4 a,
+.blog-post-content h5 a,
+.blog-post-content h6 a,
+.blog-post-content .prose h1 a,
+.blog-post-content .prose h2 a,
+.blog-post-content .prose h3 a,
+.blog-post-content .prose h4 a{
+  text-decoration:none !important;
+  color:inherit !important;
+}
 .blog-post-content code,
 .blog-post-content pre,
 .blog-post-content .prose code,
