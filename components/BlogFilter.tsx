@@ -67,9 +67,7 @@ function postMatchesInterest(post: Post, regex: RegExp) {
   return regex.test(haystack)
 }
 
-export default function BlogFilter({ posts, allTags, allCategories }: BlogFilterProps) {
-  const [activeTag, setActiveTag] = useState<string | null>(null)
-  const [activeCategory, setActiveCategory] = useState<string | null>(null)
+export default function BlogFilter({ posts }: Pick<BlogFilterProps, 'posts'>) {
   const [activeInterest, setActiveInterest] = useState<string | null>(null)
   const [forYou, setForYou] = useState(false)
   const [search, setSearch] = useState('')
@@ -106,8 +104,6 @@ export default function BlogFilter({ posts, allTags, allCategories }: BlogFilter
     }
 
     let list = posts.filter(p => {
-      const matchTag = !activeTag || (Array.isArray(p.tags) && p.tags.includes(activeTag))
-      const matchCat = !activeCategory || p.category === activeCategory
       const matchInterest = !activeInterest || (() => {
         const def = INTEREST_DEFINITIONS.find(i => i.id === activeInterest)
         return def ? postMatchesInterest(p, def.match) : true
@@ -117,7 +113,7 @@ export default function BlogFilter({ posts, allTags, allCategories }: BlogFilter
         p.title.toLowerCase().includes(q) ||
         (p.description || '').toLowerCase().includes(q) ||
         (p.tags || []).some(t => t.toLowerCase().includes(q))
-      return matchTag && matchCat && matchInterest && matchSearch
+      return matchInterest && matchSearch
     })
 
     if (forYou && hasTaste) {
@@ -128,10 +124,8 @@ export default function BlogFilter({ posts, allTags, allCategories }: BlogFilter
         .map(x => x.p)
     }
     return list
-  }, [posts, activeTag, activeCategory, activeInterest, search, forYou, taste, interests, hasTaste])
+  }, [posts, activeInterest, search, forYou, taste, interests, hasTaste])
 
-  function toggleTag(tag: string) { setActiveTag(prev => (prev === tag ? null : tag)) }
-  function toggleCategory(cat: string) { setActiveCategory(prev => (prev === cat ? null : cat)) }
   function toggleInterest(id: string) {
     setActiveInterest(prev => (prev === id ? null : id))
     const next = { ...taste, [`interest:${id}`]: (taste[`interest:${id}`] || 0) + 2 }
@@ -177,7 +171,7 @@ export default function BlogFilter({ posts, allTags, allCategories }: BlogFilter
         )}
       </div>
 
-      {/* Interest bar — auto-generated from tags + titles */}
+      {/* Interest bar — always visible */}
       {interests.length > 0 && (
         <div className="blog-interest-bar" role="group" aria-label="Filter by interest">
           <span className="blog-interest-label">Interests</span>
@@ -218,53 +212,15 @@ export default function BlogFilter({ posts, allTags, allCategories }: BlogFilter
         <p className="blog-foryou-hint">Open a few posts and we&apos;ll personalize this list for you.</p>
       )}
 
-      {/* Category filter */}
-      {allCategories.length > 0 && (
-        <div className="blog-filter-row" role="group" aria-label="Filter by category">
-          <button
-            className={`blog-filter-pill${!activeCategory ? ' active' : ''}`}
-            onClick={() => setActiveCategory(null)}
-          >
-            All
-          </button>
-          {allCategories.map(cat => (
-            <button
-              key={cat}
-              className={`blog-filter-pill${activeCategory === cat ? ' active' : ''}`}
-              onClick={() => toggleCategory(cat)}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* Tag filter */}
-      {allTags.length > 0 && (
-        <div className="blog-filter-tags" role="group" aria-label="Filter by tag">
-          {allTags.map(({ tag, count }) => (
-            <button
-              key={tag}
-              className={`blog-tag-filter${activeTag === tag ? ' active' : ''}`}
-              onClick={() => toggleTag(tag)}
-              title={`${count} post${count !== 1 ? 's' : ''}`}
-            >
-              #{tag}
-              <span className="blog-tag-filter-count">{count}</span>
-            </button>
-          ))}
-        </div>
-      )}
-
       {/* Active filters summary + clear */}
-      {(activeTag || activeCategory || activeInterest || search || forYou) && (
+      {(activeInterest || search || forYou) && (
         <div className="blog-filter-active">
           <span className="blog-filter-count">
             {filtered.length} {filtered.length === 1 ? 'post' : 'posts'} found
           </span>
           <button
             className="blog-filter-reset"
-            onClick={() => { setActiveTag(null); setActiveCategory(null); setActiveInterest(null); setSearch(''); setForYou(false) }}
+            onClick={() => { setActiveInterest(null); setSearch(''); setForYou(false) }}
           >
             Clear filters ✕
           </button>
@@ -272,7 +228,7 @@ export default function BlogFilter({ posts, allTags, allCategories }: BlogFilter
       )}
 
       {/* Post count (when no filter active) */}
-      {!activeTag && !activeCategory && !activeInterest && !search && !forYou && (
+      {!activeInterest && !search && !forYou && (
         <p className="blog-filter-total">{posts.length} {posts.length === 1 ? 'post' : 'posts'}</p>
       )}
 
@@ -283,7 +239,7 @@ export default function BlogFilter({ posts, allTags, allCategories }: BlogFilter
             <p>No posts match your filters.</p>
             <button
               className="blog-filter-reset"
-              onClick={() => { setActiveTag(null); setActiveCategory(null); setActiveInterest(null); setSearch(''); setForYou(false) }}
+              onClick={() => { setActiveInterest(null); setSearch(''); setForYou(false) }}
             >
               Clear filters
             </button>
@@ -298,12 +254,7 @@ export default function BlogFilter({ posts, allTags, allCategories }: BlogFilter
                 {post.category && (
                   <>
                     <span className="blog-card-dot">·</span>
-                    <button
-                      className={`blog-card-category-btn${activeCategory === post.category ? ' active' : ''}`}
-                      onClick={() => toggleCategory(post.category!)}
-                    >
-                      {post.category}
-                    </button>
+                    <span className="blog-card-category-btn">{post.category}</span>
                   </>
                 )}
               </div>
@@ -318,13 +269,7 @@ export default function BlogFilter({ posts, allTags, allCategories }: BlogFilter
               {post.tags && post.tags.length > 0 && (
                 <div className="blog-card-tags">
                   {post.tags.slice(0, 4).map((t: string) => (
-                    <button
-                      key={t}
-                      className={`blog-card-tag${activeTag === t ? ' active' : ''}`}
-                      onClick={() => toggleTag(t)}
-                    >
-                      #{t}
-                    </button>
+                    <span key={t} className="blog-card-tag">#{t}</span>
                   ))}
                 </div>
               )}

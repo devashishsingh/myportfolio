@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getAllPosts, getAllTags } from '../../lib/mdx'
+import { getAllPosts } from '../../lib/mdx'
 import BlogFilter from '../../components/BlogFilter'
 
 export const revalidate = 0
@@ -25,17 +25,7 @@ export const metadata: Metadata = {
 }
 
 export default async function Blog() {
-  const [posts, allTags] = await Promise.all([getAllPosts(), getAllTags()])
-
-  // Derive ordered unique categories
-  const categoryCount: Record<string, number> = {}
-  posts.forEach(p => { if (p.category) categoryCount[p.category] = (categoryCount[p.category] || 0) + 1 })
-  const allCategories = Object.entries(categoryCount)
-    .sort((a, b) => b[1] - a[1])
-    .map(([cat]) => cat)
-
-  // Sort tags by count descending
-  const sortedTags = [...allTags].sort((a, b) => b.count - a.count)
+  const posts = await getAllPosts()
 
   // JSON-LD: Blog + ItemList
   const blogListJsonLd = {
@@ -77,7 +67,7 @@ export default async function Blog() {
           <h1 className="display-font text-4xl blog-listing-title">Writing</h1>
           <p className="blog-listing-lead">Thoughtful long-form pieces on cybersecurity, product, AI, and systems thinking — powered by MDX and crafted for clarity.</p>
         </div>
-        <BlogFilter posts={posts as any} allTags={sortedTags} allCategories={allCategories} />
+        <BlogFilter posts={posts as any} />
       </section>
     </>
   )
