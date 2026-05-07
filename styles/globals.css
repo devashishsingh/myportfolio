@@ -2779,6 +2779,12 @@ h1,h2,h3,h4,h5,h6,
   font-weight:700 !important;
   text-decoration:none !important;
 }
+/* Strip underline from every link that wraps a blog card title */
+.blog-card a,
+.blog-card a:hover,
+.blog-card a:visited{
+  text-decoration:none !important;
+}
 
 /* Blog post detail page — readable serif body, clean sans heading */
 .blog-post-page,
@@ -2790,6 +2796,12 @@ h1,h2,h3,h4,h5,h6,
   font-weight:800 !important;
   letter-spacing:-0.02em !important;
   line-height:1.2 !important;
+  text-decoration:none !important;
+}
+/* Strip underline from any link inside the post header */
+.blog-post-header a,
+.blog-post-header a:hover,
+.blog-post-header a:visited{
   text-decoration:none !important;
 }
 .blog-post-content,
