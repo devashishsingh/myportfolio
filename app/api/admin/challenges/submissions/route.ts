@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '../../../../../lib/db'
 import { isAuthenticated } from '../../../../../lib/auth'
 import { awardPoints, revokePoints } from '../../../../../lib/points'
+import { sendEmail, submissionApprovedEmail, EMAIL_CONFIG } from '../../../../../lib/email'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -34,7 +35,10 @@ export async function PATCH(req: NextRequest) {
 
   const submission = await prisma.challengeSubmission.findUnique({
     where: { id },
-    include: { challenge: true },
+    include: {
+      challenge: true,
+      member: { select: { id: true, handle: true, displayName: true, email: true } },
+    },
   })
   if (!submission) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
@@ -70,6 +74,22 @@ export async function PATCH(req: NextRequest) {
           data: { memberId: submission.memberId, badgeId: badge.id, note: `Won: ${submission.challenge.title}` },
         }).catch(() => { /* unique constraint — already has it */ })
       }
+    }
+
+    // Notify submitting member
+    try {
+      const email = submissionApprovedEmail({
+        name: submission.member.displayName,
+        challengeTitle: submission.challenge.title,
+        kind: submission.challenge.kind,
+        points: submission.challenge.points,
+        score: updated.score,
+        adminNote: updated.adminNote,
+        leaderboardUrl: `${EMAIL_CONFIG.baseUrl}/community/leaderboard`,
+      })
+      await sendEmail({ to: submission.member.email, ...email })
+    } catch (e) {
+      console.error('[submissions] approval email error:', e)
     }
   }
 

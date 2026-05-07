@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '../../../../lib/db'
 import { isAuthenticated } from '../../../../lib/auth'
+import { sendEmail, newChallengeEmail, EMAIL_CONFIG } from '../../../../lib/email'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -66,6 +67,11 @@ export async function POST(req: NextRequest) {
     },
   })
 
+  // Notify all members if published immediately
+  if (created.published) {
+    notifyMembersNewChallenge(created).catch(e => console.error('[challenges] notify error:', e))
+  }
+
   return NextResponse.json({ ok: true, challenge: created })
 }
 
@@ -76,6 +82,9 @@ export async function PATCH(req: NextRequest) {
 
   const { id, ...rest } = body
   if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 })
+
+  // Snapshot previous published state to detect publish transition
+  const before = await prisma.challenge.findUnique({ where: { id }, select: { published: true } })
 
   const data: any = {}
   for (const f of ['title', 'brief', 'body', 'rubric', 'badgeSlug']) {
@@ -88,6 +97,12 @@ export async function PATCH(req: NextRequest) {
   if (typeof rest.closesAt === 'string') data.closesAt = new Date(rest.closesAt)
 
   const updated = await prisma.challenge.update({ where: { id }, data })
+
+  // Notify members only on the publish transition (draft → live)
+  if (!before?.published && updated.published) {
+    notifyMembersNewChallenge(updated).catch(e => console.error('[challenges] notify error:', e))
+  }
+
   return NextResponse.json({ ok: true, challenge: updated })
 }
 
@@ -97,4 +112,27 @@ export async function DELETE(req: NextRequest) {
   if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 })
   await prisma.challenge.delete({ where: { id } })
   return NextResponse.json({ ok: true })
+}
+
+// ─── Internal helper ─────────────────────────────────────────────────
+
+async function notifyMembersNewChallenge(challenge: {
+  slug: string; title: string; brief: string; kind: string;
+  track: string | null; points: number; closesAt: Date
+}) {
+  const members = await prisma.member.findMany({ select: { email: true, displayName: true } })
+  const challengeUrl = `${EMAIL_CONFIG.baseUrl}/community/challenges/${challenge.slug}`
+  for (const m of members) {
+    const email = newChallengeEmail({
+      name: m.displayName,
+      title: challenge.title,
+      brief: challenge.brief,
+      kind: challenge.kind,
+      track: challenge.track,
+      points: challenge.points,
+      closesAt: challenge.closesAt,
+      challengeUrl,
+    })
+    await sendEmail({ to: m.email, ...email })
+  }
 }

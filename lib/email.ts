@@ -514,3 +514,88 @@ export function newBlogPostEmail(opts: {
     text: `New post: ${title}\n\n${description}\n\nRead it here: ${postUrl}\n\nUnsubscribe: ${unsubscribeUrl}`,
   }
 }
+
+// ─── New Challenge / Quiz / Lab Notification (Members) ───────────────
+
+const KIND_LABEL: Record<string, string> = {
+  challenge: 'Challenge',
+  quiz: 'Quiz',
+  lab: 'Lab',
+}
+const KIND_EMOJI: Record<string, string> = {
+  challenge: '⚔️',
+  quiz: '🧠',
+  lab: '🔬',
+}
+
+export function newChallengeEmail(opts: {
+  name: string
+  title: string
+  brief: string
+  kind: string
+  track?: string | null
+  points: number
+  closesAt: Date
+  challengeUrl: string
+}): { subject: string; html: string; text: string } {
+  const { name, title, brief, kind, track, points, closesAt, challengeUrl } = opts
+  const label = KIND_LABEL[kind] || 'Challenge'
+  const emoji = KIND_EMOJI[kind] || '⚔️'
+  const closes = closesAt.toUTCString().replace(' GMT', ' UTC')
+  const trackLine = track ? `<tr><td class="k">Track</td><td style="text-transform:capitalize;">${track}</td></tr>` : ''
+
+  return {
+    subject: `New ${label}: ${title}`,
+    html: baseTemplate(`
+      <span class="badge">${emoji} New ${label}</span>
+      <h2>${title}</h2>
+      <p>Hi ${name},</p>
+      <p>${brief}</p>
+      <table class="detail" cellspacing="0" cellpadding="0">
+        <tr><td class="k">Type</td><td>${label}</td></tr>
+        ${trackLine}
+        <tr><td class="k">Points</td><td>${points} pts on win</td></tr>
+        <tr><td class="k">Closes</td><td>${closes}</td></tr>
+      </table>
+      <a href="${challengeUrl}" class="cta">View ${label} →</a>
+      <p class="quiet" style="margin-top:18px;">You're receiving this as a Builders Hub member. Manage preferences at <a href="${EMAIL_CONFIG.baseUrl}/community/me">${EMAIL_CONFIG.baseUrl}/community/me</a>.</p>
+      <p class="signature">— ${EMAIL_CONFIG.fromName}</p>
+    `, `Builders Hub · ${label}`),
+    text: `New ${label}: ${title}\n\nHi ${name},\n\n${brief}\n\nPoints: ${points} pts\nCloses: ${closes}\n\nView it: ${challengeUrl}\n\n— ${EMAIL_CONFIG.fromName}`,
+  }
+}
+
+// ─── Challenge Submission Approved (Member) ───────────────────────────
+
+export function submissionApprovedEmail(opts: {
+  name: string
+  challengeTitle: string
+  kind: string
+  points: number
+  score?: number | null
+  adminNote?: string | null
+  leaderboardUrl: string
+}): { subject: string; html: string; text: string } {
+  const { name, challengeTitle, kind, points, score, adminNote, leaderboardUrl } = opts
+  const label = KIND_LABEL[kind] || 'Challenge'
+  const scoreLine = typeof score === 'number' ? `<tr><td class="k">Score</td><td>${score}/100</td></tr>` : ''
+  const noteLine = adminNote ? `<p><em>${adminNote}</em></p>` : ''
+
+  return {
+    subject: `✅ ${label} approved: ${challengeTitle}`,
+    html: baseTemplate(`
+      <span class="badge">✅ Submission approved</span>
+      <h2>Your submission passed.</h2>
+      <p>Hi ${name},</p>
+      <p>Your submission for <strong>${challengeTitle}</strong> has been reviewed and approved.</p>
+      <table class="detail" cellspacing="0" cellpadding="0">
+        ${scoreLine}
+        <tr><td class="k">Points</td><td>+${points} pts added to your account</td></tr>
+      </table>
+      ${noteLine}
+      <a href="${leaderboardUrl}" class="cta">See the leaderboard →</a>
+      <p class="signature">— ${EMAIL_CONFIG.fromName}</p>
+    `, `Builders Hub · ${label} result`),
+    text: `Submission approved: ${challengeTitle}\n\nHi ${name},\n\nYour submission has been approved. +${points} pts added.\n${typeof score === 'number' ? `Score: ${score}/100\n` : ''}${adminNote ? `\nNote: ${adminNote}\n` : ''}\nLeaderboard: ${leaderboardUrl}\n\n— ${EMAIL_CONFIG.fromName}`,
+  }
+}

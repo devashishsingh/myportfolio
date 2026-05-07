@@ -46,10 +46,17 @@ export async function POST(req: NextRequest) {
       },
     })
 
-    // Notify all subscribers when a new post is published
+    // Notify all subscribers + members when a new post is published
     if (isNew) {
       try {
-        const subscribers = await prisma.subscriber.findMany({ select: { email: true, id: true, unsubscribeToken: true } })
+        const [subscribers, members] = await Promise.all([
+          prisma.subscriber.findMany({ select: { email: true, id: true, unsubscribeToken: true } }),
+          prisma.member.findMany({ select: { email: true, id: true } }),
+        ])
+
+        // Deduplicate: members who are also subscribers shouldn't get it twice
+        const subscriberEmails = new Set(subscribers.map((s: { email: string }) => s.email.toLowerCase()))
+
         for (const sub of subscribers) {
           const unsubUrl = `${EMAIL_CONFIG.baseUrl}/api/subscribe/unsubscribe?token=${sub.unsubscribeToken || sub.id}`
           const email = newBlogPostEmail({
@@ -61,9 +68,21 @@ export async function POST(req: NextRequest) {
           })
           await sendEmail({ to: sub.email, ...email })
         }
+
+        for (const member of members) {
+          if (subscriberEmails.has(member.email.toLowerCase())) continue // already sent above
+          const unsubUrl = `${EMAIL_CONFIG.baseUrl}/community/me`
+          const email = newBlogPostEmail({
+            title,
+            description: description || title,
+            slug: finalSlug,
+            category: category || null,
+            unsubscribeUrl: unsubUrl,
+          })
+          await sendEmail({ to: member.email, ...email })
+        }
       } catch (notifyErr) {
-        // Non-fatal: log but don't fail the post creation
-        console.error('[create-post] Subscriber notification error:', notifyErr)
+        console.error('[create-post] Notification error:', notifyErr)
       }
     }
 
