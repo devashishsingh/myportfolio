@@ -108,6 +108,7 @@ function TechIcon({ name }: { name: string }) {
 
 export default function ProjectCard({ title, category, excerpt, href = '#', github, tech, cta = 'View' }: Props) {
   const isExternal = /^https?:\/\//i.test(href)
+  const isDisabled = href === '#'
   return (
     <motion.article
       className="group"
@@ -130,7 +131,11 @@ export default function ProjectCard({ title, category, excerpt, href = '#', gith
           </div>
         )}
         <div className="project-card-cta-row" style={{ transform: 'translateZ(15px)' }}>
-          {isExternal ? (
+          {isDisabled ? (
+            <span className="project-card-cta" style={{ cursor: 'not-allowed', opacity: 0.6 }} aria-disabled="true">
+              {cta}
+            </span>
+          ) : isExternal ? (
             <a href={href} target="_blank" rel="noopener noreferrer" className="project-card-cta">
               {cta}
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7" /></svg>

@@ -89,12 +89,12 @@ export default function Hero(){
             <div className="hero-cta" style={{transform:'translateZ(20px)', display:'flex', gap:16, alignItems:'center', flexWrap:'wrap'}}>
               <MagneticButton strength={0.35}>
                 <motion.div whileTap={{ scale: 0.97 }}>
-                  <Link href="/study" className="btn btn-3d" style={{ height:44, minWidth:200, display:'inline-flex', alignItems:'center', justifyContent:'center', borderRadius:8 }}>Explore the cohorts →</Link>
+                  <Link href="/study#free" className="btn btn-3d" style={{ height:44, minWidth:200, display:'inline-flex', alignItems:'center', justifyContent:'center', borderRadius:8 }}>Free 5-lesson intro →</Link>
                 </motion.div>
               </MagneticButton>
               <MagneticButton strength={0.35}>
                 <motion.div whileTap={{ scale: 0.97 }}>
-                  <Link href="/study#free" className="btn-outline btn-3d" style={{ height:44, minWidth:200, display:'inline-flex', alignItems:'center', justifyContent:'center', borderRadius:8 }}>Free 5-lesson intro</Link>
+                  <Link href="/study" className="btn-outline btn-3d" style={{ height:44, minWidth:200, display:'inline-flex', alignItems:'center', justifyContent:'center', borderRadius:8 }}>Explore the cohorts</Link>
                 </motion.div>
               </MagneticButton>
             </div>

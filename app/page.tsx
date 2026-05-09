@@ -103,8 +103,8 @@ export default function Home(){
               category="Cybersecurity SaaS"
               excerpt="AI-powered low-cost platform built to simplify email authentication reporting, visibility, and security posture management for businesses."
               tech={['VS Code', 'AI Tools', 'GitHub', 'Vercel', 'Supabase']}
-              href="/work/case-study/sample"
-              cta="View Case Study"
+              href="#"
+              cta="Coming Soon"
             />
           </div>
           <div style={{ minWidth: 420, maxWidth: 480, flexShrink: 0 }}>
@@ -113,8 +113,8 @@ export default function Home(){
               category="AI Platform"
               excerpt="A student-focused intelligence platform designed to provide career clarity, growth roadmaps, and skill direction using AI-powered insights."
               tech={['VS Code', 'Claude', 'Supabase', 'Render']}
-              href="/work"
-              cta="View Platform"
+              href="#"
+              cta="In Progress"
             />
           </div>
           <div style={{ minWidth: 420, maxWidth: 480, flexShrink: 0 }}>
@@ -123,8 +123,8 @@ export default function Home(){
               category="Startup MVP"
               excerpt="A platform built to help businesses identify underutilized digital resources and reduce unnecessary technology spend."
               tech={['AI Tools', 'VS Code', 'Cloud Systems', 'GitHub']}
-              href="/work"
-              cta="View Solution"
+              href="#"
+              cta="In Progress"
             />
           </div>
           <div style={{ minWidth: 420, maxWidth: 480, flexShrink: 0 }}>
@@ -148,15 +148,15 @@ export default function Home(){
             <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 6, fontFamily: "'IBM Plex Mono', monospace", letterSpacing: '0.05em' }}>Years Experience</p>
           </div>
           <div>
-            <CounterReveal value={50} suffix="+" style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 800, fontFamily: 'var(--font-display)', color: '#111', lineHeight: 1 }} />
+            <CounterReveal value={20} suffix="+" style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 800, fontFamily: 'var(--font-display)', color: '#111', lineHeight: 1 }} />
             <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 6, fontFamily: "'IBM Plex Mono', monospace", letterSpacing: '0.05em' }}>Projects Delivered</p>
           </div>
           <div>
-            <CounterReveal value={200} suffix="+" style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 800, fontFamily: 'var(--font-display)', color: '#111', lineHeight: 1 }} />
+            <CounterReveal value={50} suffix="+" style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 800, fontFamily: 'var(--font-display)', color: '#111', lineHeight: 1 }} />
             <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 6, fontFamily: "'IBM Plex Mono', monospace", letterSpacing: '0.05em' }}>People Mentored</p>
           </div>
           <div>
-            <CounterReveal value={6} suffix="" style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 800, fontFamily: 'var(--font-display)', color: '#111', lineHeight: 1 }} />
+            <CounterReveal value={8} suffix="" style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 800, fontFamily: 'var(--font-display)', color: '#111', lineHeight: 1 }} />
             <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 6, fontFamily: "'IBM Plex Mono', monospace", letterSpacing: '0.05em' }}>Countries Reached</p>
           </div>
         </div>
@@ -221,9 +221,58 @@ export default function Home(){
         </div>
       </section>
 
-      <section className="container-wide mt-12">
+      <section className="container-wide mt-12" style={{ paddingBottom: 60 }}>
         <h3 className="text-lg font-semibold" style={{color:'var(--text-primary)'}}>Featured writing</h3>
         <p className="mt-4" style={{color:'var(--text-muted)'}}>Thoughtful pieces on product thinking, design, and research.</p>
+        {/* TODO: Make this dynamic by fetching from getAllPosts() in a server component wrapper. Hardcoded for now. */}
+        <div style={{ marginTop: 24, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+          {[
+            {
+              slug: '2026-05-07-the-wall-is-breaking-domain-experts-become-builders',
+              title: "The Wall Is Breaking: How Domain Experts Are Becoming the World's New Builders",
+              date: '2026-05-07',
+              category: 'AI',
+              description: "13,000 people applied to Anthropic's Claude Code hackathon. The winners? A lawyer, a cardiologist, an infrastructure specialist, and a musician.",
+            },
+            {
+              slug: '2026-05-03-indie-developers-surface-break-the-monopoly',
+              title: "Stop Letting Your Code Rot in GitHub — The World Needs What You're Building",
+              date: '2026-05-03',
+              category: 'Indie Dev',
+              description: 'Indie developers hold the power to break platform monopolies and change lives. Here\u2019s why you need to stop hiding.',
+            },
+            {
+              slug: '2026-04-05-why-business-emails-dont-reach-inbox-dmarc',
+              title: "Why Your Business Emails Don't Reach the Inbox (And Why It's Costing You More Than You Think)?",
+              date: '2026-04-05',
+              category: 'Email Security',
+              description: 'A practical business-focused guide to why emails land in spam or never arrive, and how DMARC helps improve trust and deliverability.',
+            },
+          ].map(p => (
+            <Link
+              key={p.slug}
+              href={`/blog/${p.slug}`}
+              style={{
+                display: 'block',
+                padding: 20,
+                border: '1px solid rgba(0,0,0,0.08)',
+                background: '#fff',
+                textDecoration: 'none',
+                color: 'inherit',
+                transition: 'transform .2s ease, box-shadow .2s ease',
+              }}
+              className="featured-post-card"
+            >
+              <p style={{ fontSize: 11, fontFamily: "'IBM Plex Mono', monospace", letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 8 }}>{p.category} · {p.date}</p>
+              <h4 style={{ fontSize: 17, fontWeight: 700, lineHeight: 1.3, marginBottom: 10, color: 'var(--text-primary)' }}>{p.title}</h4>
+              <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.6 }}>{p.description}</p>
+              <span style={{ display: 'inline-block', marginTop: 12, fontSize: 13, fontWeight: 600, textDecoration: 'underline' }}>Read more →</span>
+            </Link>
+          ))}
+        </div>
+        <div style={{ marginTop: 24 }}>
+          <Link href="/blog" className="btn-outline" style={{ display: 'inline-block', padding: '10px 20px' }}>All writing →</Link>
+        </div>
       </section>
     </HomeInteractive>
     {/* Keep modal outside HomeInteractive to avoid section index wrapping side effects */}

@@ -30,6 +30,21 @@ const COHORT = {
   ],
 }
 
+const CURRICULUM = [
+  { week: 'Week 1', topic: 'Attack surface mapping — OSINT and reconnaissance with Shodan, Maltego, theHarvester' },
+  { week: 'Week 2', topic: 'Network fundamentals and scanning — reading network topology, Nmap, Wireshark basics' },
+  { week: 'Week 3', topic: 'Vulnerability scanning — OpenVAS, Nessus basics, reading CVE and CVSS scores' },
+  { week: 'Week 4', topic: 'Web application security — OWASP Top 10, Burp Suite community edition, manual testing basics' },
+  { week: 'Week 5', topic: 'Authentication and access control — how auth flows break, session hijacking concepts, MFA analysis' },
+  { week: 'Week 6', topic: 'Incident response fundamentals — what IR actually looks like, timelines, containment, communication' },
+  { week: 'Week 7', topic: 'Log analysis and SIEM basics — reading logs like a defender, Splunk/ELK intro, spotting anomalies' },
+  { week: 'Week 8', topic: 'Email security deep dive — DMARC, SPF, DKIM, BIMI, real-world phishing analysis' },
+  { week: 'Week 9', topic: 'Cloud security basics — AWS/GCP/Azure security fundamentals, IAM, misconfigurations' },
+  { week: 'Week 10', topic: 'Social engineering and phishing — how attackers think, pretexting, awareness training design' },
+  { week: 'Week 11', topic: 'Capstone project work — building your chosen security project with weekly feedback' },
+  { week: 'Week 12', topic: 'Capstone presentations, career strategy, next steps and alumni onboarding' },
+]
+
 const FREE_COURSE = {
   id: 'career-foundations-free',
   title: 'Career Foundations — 5 lesson email course',
@@ -244,6 +259,25 @@ function FlagshipCohort() {
           </Card>
         </div>
 
+        {/* Draft Curriculum */}
+        <div style={{ marginTop: 36, padding: 24, border: '2px solid #1a1a1a', background: '#fff', boxShadow: '6px 6px 0 0 #1a1a1a' }}>
+          <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>Draft curriculum — Cohort #1 (12 weeks)</h3>
+          <p style={{ color: 'var(--muted)', fontSize: 14, marginBottom: 18, lineHeight: 1.6 }}>
+            Subject to refinement with the cohort. Topics drawn from 14 years of real field work.
+          </p>
+          <ol style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: 8 }}>
+            {CURRICULUM.map(item => (
+              <li key={item.week} style={{ display: 'grid', gridTemplateColumns: '90px 1fr', gap: 14, padding: '10px 0', borderBottom: '1px dashed rgba(0,0,0,0.12)' }}>
+                <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 12, fontWeight: 700, letterSpacing: '0.05em', color: '#1a1a1a' }}>{item.week}</span>
+                <span style={{ fontSize: 14, lineHeight: 1.6 }}>{item.topic}</span>
+              </li>
+            ))}
+          </ol>
+          <p style={{ marginTop: 18, fontSize: 13, color: 'var(--muted)', fontStyle: 'italic', lineHeight: 1.6 }}>
+            Curriculum evolves with the cohort. If there&apos;s a topic you need covered, bring it to Week 1 — we&apos;ll work it in.
+          </p>
+        </div>
+
         <div style={{ marginTop: 36, padding: 24, border: '2px solid #1a1a1a', background: '#fff', boxShadow: '6px 6px 0 0 #1a1a1a' }}>
           <WaitlistForm />
         </div>
@@ -418,17 +452,20 @@ function Pricing() {
             name="Self-paced"
             description="Recorded lessons and labs you can work through on your own time."
             features={['All recordings', 'Weekly labs (async)', 'Builders Hub access', 'Cyber Apprentice badge on completion']}
+            priceNote="From RM 150 · Scholarships available"
           />
           <FormatTier
             name="Cohort"
             highlight
             description="Learn alongside a small group, with live sessions and personal feedback."
             features={['Everything in Self-paced', '2 live sessions/week', 'Weekly cohort lab', 'Capstone with personal review', '14-day refund window']}
+            priceNote="From RM 350 for 12 weeks · Scholarships available · 14-day refund"
           />
           <FormatTier
             name="Cohort + 1:1"
             description="Cohort plus dedicated time with me for career and project guidance."
             features={['Everything in Cohort', '1:1 sessions with me (career strategy + capstone deep-dive)', 'Resume / portfolio review']}
+            priceNote="From RM 600 for 12 weeks · Scholarships available · 14-day refund"
           />
         </div>
         <p style={{ marginTop: 28, fontSize: 13, color: 'var(--muted-2)', textAlign: 'center' }}>
@@ -439,7 +476,7 @@ function Pricing() {
   )
 }
 
-function FormatTier({ name, description, features, highlight }: { name: string; description: string; features: string[]; highlight?: boolean }) {
+function FormatTier({ name, description, features, highlight, priceNote }: { name: string; description: string; features: string[]; highlight?: boolean; priceNote?: string }) {
   return (
     <div style={{
       padding: 24,
@@ -465,6 +502,11 @@ function FormatTier({ name, description, features, highlight }: { name: string; 
           </li>
         ))}
       </ul>
+      {priceNote && (
+        <p style={{ fontSize: 13, fontWeight: 600, color: '#1a1a1a', marginBottom: 12, fontFamily: 'IBM Plex Mono, monospace' }}>
+          {priceNote}
+        </p>
+      )}
       <Link href="/contact" className={highlight ? 'btn btn-3d' : 'btn-outline'} style={{ display: 'inline-block', padding: '10px 20px', width: '100%', textAlign: 'center' }}>
         Contact me about this →
       </Link>

@@ -142,9 +142,12 @@ export default function Admin() {
   return (
     <section className="container-wide" style={{ paddingTop: 32, paddingBottom: 60 }}>
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
         <h1 className="display-font" style={{ fontSize: 28 }}>Admin Portal</h1>
-        <button onClick={logout} className="btn-outline" style={{ fontSize: 13, padding: '6px 14px' }}>Logout</button>
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <a href="/admin/meeting-invite" className="btn-outline" style={{ fontSize: 13, padding: '6px 14px' }}>📅 Draft meeting invite</a>
+          <button onClick={logout} className="btn-outline" style={{ fontSize: 13, padding: '6px 14px' }}>Logout</button>
+        </div>
       </div>
 
       {/* Tabs */}

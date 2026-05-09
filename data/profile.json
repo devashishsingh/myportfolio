@@ -1,21 +1,39 @@
 {
   "name": "Devashish Singh",
   "role": "Cyber Coach — Mentor — Advisor",
-  "summary": "Coach and advisor on security-aware product strategy, incident response, and technical leadership. Previously: Manager / Information Security Advisor at AirAsia.",
+  "summary": "Coach and advisor on security-aware product strategy, incident response, and technical leadership. 14+ years in cybersecurity including time as Manager / Information Security Advisor at AirAsia. Now building indie security products and teaching practical cybersecurity through small, hands-on cohorts.",
+  "timeline": [
+    {
+      "period": "Current",
+      "title": "Indie founder & cohort instructor",
+      "company": "Independent",
+      "summary": "Building InMyBox (DMARC intelligence platform) and BLOYI (indie developer marketplace). Teaching cybersecurity cohorts and mentoring 1:1."
+    },
+    {
+      "period": "Previous",
+      "title": "Manager / Information Security Advisor",
+      "company": "AirAsia",
+      "summary": "Advised on incident response, threat detection, security architecture, and training for engineering teams."
+    }
+  ],
   "teachingLinks": [
     {
-      "title": "Advanced Cyber Incident Response (15-day)",
+      "title": "Advanced Cyber Incident Response (15-day programme)",
       "url": "",
-      "note": "Add a public link or upload materials to /public/teaching/ and paste the URL here."
-    }
-  ],
-  "courses": [
+      "note": "Available on request — reach out via /contact"
+    },
     {
-      "title": "Threat Hunting & Incident Response",
-      "provider": "Self / Private cohorts",
-      "year": ""
+      "title": "Threat Hunting & Incident Response — Self / Private Cohorts",
+      "url": "",
+      "note": "Tailored to individual or team needs"
+    },
+    {
+      "title": "Cyber Foundations — Cohort #1",
+      "url": "/study",
+      "note": "Opening soon — join the waitlist"
     }
   ],
+  "courses": [],
   "tutorials": [],
   "experience": [
     {
@@ -26,5 +44,15 @@
     }
   ],
   "certifications": [],
-  "education": []
+  "education": [],
+  "building": [
+    {
+      "name": "InMyBox",
+      "description": "DMARC intelligence platform — simplifying email authentication for businesses."
+    },
+    {
+      "name": "BLOYI",
+      "description": "Indie developer marketplace — helping independent builders ship and earn."
+    }
+  ]
 }

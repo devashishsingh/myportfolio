@@ -14,59 +14,100 @@ export const metadata: Metadata = {
   },
 }
 
+type TeachingLink = { title: string; url?: string; note?: string }
+type TimelineItem = { period: string; title: string; company?: string; summary?: string }
+type Building = { name: string; description: string }
+
 export default function About(){
+  const timeline: TimelineItem[] = (profile as any).timeline || []
+  const teachingLinks: TeachingLink[] = profile.teachingLinks || []
+  const certifications: string[] = profile.certifications || []
+  const education: string[] = profile.education || []
+  const building: Building[] = (profile as any).building || []
+
   return (
     <section className="container-wide" style={{ paddingTop: 40, paddingBottom: 60 }}>
       <h1 className="display-font text-4xl">About</h1>
+
+      {/* Professional Summary */}
       <p className="mt-6 max-w-3xl text-gray-700">{profile.summary}</p>
 
-      <div className="mt-12">
-        <h2 className="text-2xl font-semibold">Teaching & Tutorials</h2>
-        <ul className="mt-4 list-disc pl-6 text-gray-700">
-          {profile.teachingLinks.map((t, i) => (
-            <li key={i} className="mt-2">
-              {t.url ? <a href={t.url} className="underline" target="_blank">{t.title}</a> : <span>{t.title} — <em className="text-sm">(add URL in data/profile.json)</em></span>}
-              {t.note ? <div className="text-sm text-gray-500">{t.note}</div> : null}
-            </li>
-          ))}
-        </ul>
-
-        <h2 className="mt-8 text-2xl font-semibold">Courses</h2>
-        <div className="mt-4 grid md:grid-cols-2 gap-6">
-          {profile.courses.map((c, i) => (
-            <div key={i} className="p-4 border">
-              <div className="font-semibold">{c.title}</div>
-              <div className="text-sm text-gray-600">{c.provider} {c.year ? `• ${c.year}` : ''}</div>
-            </div>
-          ))}
-        </div>
-
-        <h2 className="mt-8 text-2xl font-semibold">Experience</h2>
-        <div className="mt-4 space-y-4">
-          {profile.experience.map((e, i) => (
-            <div key={i} className="p-4 border">
-              <div className="font-semibold">{e.title} — {e.company}</div>
-              <div className="text-sm text-gray-600">{e.dates}</div>
-              <div className="mt-2 text-gray-700">{e.summary}</div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-8 grid md:grid-cols-2 gap-6">
-          <div>
-            <h3 className="font-semibold">Certifications</h3>
-            <ul className="mt-3 list-disc pl-6 text-gray-700">
-              {profile.certifications.length ? profile.certifications.map((c,i)=>(<li key={i}>{c}</li>)) : <li><em>Add certifications in data/profile.json</em></li>}
-            </ul>
+      {/* Career Timeline */}
+      {timeline.length > 0 && (
+        <div className="mt-12">
+          <h2 className="text-2xl font-semibold">Career Timeline</h2>
+          <div className="mt-4 space-y-4">
+            {timeline.map((t, i) => (
+              <div key={i} className="p-4 border">
+                <div className="text-xs uppercase tracking-wider text-gray-500">{t.period}</div>
+                <div className="font-semibold mt-1">{t.title}{t.company ? ` — ${t.company}` : ''}</div>
+                {t.summary ? <div className="mt-2 text-gray-700">{t.summary}</div> : null}
+              </div>
+            ))}
           </div>
-          <div>
-            <h3 className="font-semibold">Education</h3>
+        </div>
+      )}
+
+      {/* Certifications & Education */}
+      <div className="mt-12 grid md:grid-cols-2 gap-6">
+        <div>
+          <h3 className="text-xl font-semibold">Certifications</h3>
+          {certifications.length ? (
             <ul className="mt-3 list-disc pl-6 text-gray-700">
-              {profile.education.length ? profile.education.map((ed,i)=>(<li key={i}>{ed}</li>)) : <li><em>Add education entries in data/profile.json</em></li>}
+              {certifications.map((c, i) => (<li key={i}>{c}</li>))}
             </ul>
-          </div>
+          ) : (
+            <p className="mt-3 text-gray-500 italic">Certifications being updated — check back soon.</p>
+          )}
+        </div>
+        <div>
+          <h3 className="text-xl font-semibold">Education</h3>
+          {education.length ? (
+            <ul className="mt-3 list-disc pl-6 text-gray-700">
+              {education.map((ed, i) => (<li key={i}>{ed}</li>))}
+            </ul>
+          ) : (
+            <p className="mt-3 text-gray-500 italic">Education details being updated — check back soon.</p>
+          )}
         </div>
       </div>
+
+      {/* Teaching & Courses */}
+      {teachingLinks.length > 0 && (
+        <div className="mt-12">
+          <h2 className="text-2xl font-semibold">Teaching & Courses</h2>
+          <ul className="mt-4 list-disc pl-6 text-gray-700">
+            {teachingLinks.map((t, i) => (
+              <li key={i} className="mt-2">
+                {t.url ? (
+                  <a href={t.url} className="underline" target={t.url.startsWith('/') ? undefined : '_blank'} rel={t.url.startsWith('/') ? undefined : 'noopener noreferrer'}>{t.title}</a>
+                ) : (
+                  <span>{t.title}</span>
+                )}
+                {t.note ? <div className="text-sm text-gray-500">{t.note}</div> : null}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* What I'm Building */}
+      {building.length > 0 && (
+        <div className="mt-12">
+          <h2 className="text-2xl font-semibold">What I&apos;m Building</h2>
+          <div className="mt-4 grid md:grid-cols-2 gap-6">
+            {building.map((b, i) => (
+              <div key={i} className="p-4 border">
+                <div className="font-semibold">{b.name}</div>
+                <div className="mt-2 text-gray-700">{b.description}</div>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 text-sm text-gray-600">
+            See more on <a href="/work" className="underline">my work page →</a>
+          </p>
+        </div>
+      )}
     </section>
   )
 }
