@@ -35,7 +35,7 @@ function defaultStart(): string {
 export default function MeetingInvitePage() {
   const [invite, setInvite] = useState<MeetingInvite>({
     organizerName: 'Devashish Singh',
-    organizerEmail: 'hello@devashishsingh.com',
+    organizerEmail: 'founder@devashishsingh.com',
     recipientName: '',
     recipientEmail: '',
     title: '1:1 Mentoring Session',

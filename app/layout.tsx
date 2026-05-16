@@ -8,7 +8,6 @@ import FeedbackWidget from '../components/FeedbackWidget'
 import CursorFollower from '../components/CursorFollower'
 import ScrollProgress from '../components/ScrollProgress'
 import PageTransition from '../components/PageTransition'
-import AnnouncementModal from '../components/AnnouncementModal'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://devashishsingh.com'
 
@@ -112,7 +111,6 @@ export default function RootLayout({children}:{children:React.ReactNode}){
         <Footer />
         <WhatsAppButton />
         <FeedbackWidget />
-        <AnnouncementModal />
         <CursorFollower />
       </body>
     </html>

@@ -1,6 +1,6 @@
 import { prisma } from './db'
 
-type LeadSource = 'contact' | 'booking' | 'feedback' | 'community_invite' | 'community_subscribe' | 'study_interest'
+type LeadSource = 'contact' | 'booking' | 'feedback' | 'community_invite' | 'community_subscribe' | 'study_interest' | 'workshop'
 
 interface CreateLeadInput {
   name: string

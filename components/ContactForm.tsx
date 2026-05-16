@@ -49,7 +49,7 @@ export default function ContactForm(){
       </div>
 
       {status==='sent' && <div className="text-sm" style={{color:'#6BCB77'}}>Thanks — your message is in. I&apos;ll reply personally within 1–2 working days.</div>}
-      {status==='error' && <div className="text-sm" style={{color:'#E74C3C'}}>{errorMsg || 'Something went wrong sending that. Please email me directly at'} {!errorMsg && <a href="mailto:hello@devashishsingh.com" style={{textDecoration:'underline'}}>hello@devashishsingh.com</a>}.</div>}
+      {status==='error' && <div className="text-sm" style={{color:'#E74C3C'}}>{errorMsg || 'Something went wrong sending that. Please email me directly at'} {!errorMsg && <a href="mailto:founder@devashishsingh.com" style={{textDecoration:'underline'}}>founder@devashishsingh.com</a>}.</div>}
     </form>
   )
 }

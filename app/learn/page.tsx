@@ -15,9 +15,9 @@ const COHORT = {
   seats: 30,
   outcomes: [
     'Hands-on labs each week — curriculum being finalized for Cohort #1',
-    'Earn the Builders Hub Cyber Apprentice badge on your public profile',
+    'Certificate of completion provided',
     'A capstone project you build alongside the cohort',
-    'Lifetime access to the Builders Hub + alumni channel',
+    'Resume-ready portfolio piece for your job hunt',
   ],
   forWhom: [
     'Curious learners new to cybersecurity',
@@ -42,7 +42,7 @@ const CURRICULUM = [
   { week: 'Week 9', topic: 'Cloud security basics — AWS/GCP/Azure security fundamentals, IAM, misconfigurations' },
   { week: 'Week 10', topic: 'Social engineering and phishing — how attackers think, pretexting, awareness training design' },
   { week: 'Week 11', topic: 'Capstone project work — building your chosen security project with weekly feedback' },
-  { week: 'Week 12', topic: 'Capstone presentations, career strategy, next steps and alumni onboarding' },
+  { week: 'Week 12', topic: 'Capstone presentations, career strategy, next steps and certificate of completion' },
 ]
 
 const FREE_COURSE = {
@@ -59,6 +59,10 @@ const FREE_COURSE = {
 }
 
 const FAQ = [
+  {
+    q: 'Will this help me get a job?',
+    a: "That’s the whole point. The curriculum is built around the skills employers actually screen for — SOC workflows, log analysis, cloud security, IR, vuln management. You’ll finish with a capstone project you can show in interviews, a portfolio of weekly labs, and a clear career roadmap. I also do resume reviews and mock interviews if you take the 1:1 track.",
+  },
   {
     q: 'How is this different from TryHackMe / YouTube / a Udemy course?',
     a: "Free and pre-recorded resources are great — I use them too. The difference here is that you learn alongside a small group, with someone who's actually working in the field, who'll answer your questions and look at your work each week. It's slower, smaller, and more personal.",
@@ -85,16 +89,19 @@ const FAQ = [
   },
 ]
 
-export default function StudyPage() {
+export default function LearnPage() {
   return (
     <div>
       <Hero />
       <FreeMiniCourse />
+      <WhatYouLearn />
       <FlagshipCohort />
       <HowItWorks />
       <WhyMe />
       <Pricing />
+      <Mentorship />
       <FAQSection />
+      <FinalCTA />
     </div>
   )
 }
@@ -104,12 +111,12 @@ function Hero() {
   return (
     <section style={{ background: '#fdfaf6', borderBottom: '2px solid #1a1a1a' }}>
       <div className="container-wide" style={{ paddingTop: 70, paddingBottom: 60, textAlign: 'center', maxWidth: 880, margin: '0 auto' }}>
-        <p className="muted-label" style={{ marginBottom: 14 }}>Small cohorts · Personal teaching</p>
+        <p className="muted-label" style={{ marginBottom: 14 }}>Hands-on · Practitioner-led</p>
         <h1 className="display-font" style={{ fontSize: 'clamp(36px, 7vw, 64px)', lineHeight: 1.05, marginBottom: 18 }}>
-          Learn cybersecurity &amp; AI <span style={{ background: 'linear-gradient(transparent 60%, #fffae0 60%)' }}>with me.</span>
+          Learn Cybersecurity. <span style={{ background: 'linear-gradient(transparent 60%, #fffae0 60%)' }}>Land the Job.</span>
         </h1>
         <p style={{ fontSize: 18, color: 'var(--muted)', maxWidth: 660, margin: '0 auto 28px', lineHeight: 1.7 }}>
-          Small, hands-on cohorts and 1:1 guidance from someone who&apos;s spent 14+ years in the field. I teach what I&apos;ve actually been doing in the trenches — the kind of practical work that lands you a real job.
+          Hands-on training, real-world labs, and personal mentorship from a 14-year practitioner. Not theory — the practical skills employers want.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 18 }}>
           <a href="#cohort" className="btn btn-3d">See the cohort →</a>
@@ -341,7 +348,7 @@ function WaitlistForm() {
       <div>
         <h3 style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>You&apos;re on the list 🎉</h3>
         <p style={{ color: 'var(--muted)', lineHeight: 1.6 }}>
-          I&apos;ll personally email you when Cohort #1 opens with all the details. In the meantime, <Link href="/community/join" style={{ textDecoration: 'underline', fontWeight: 600 }}>apply to the Builders Hub</Link> to start meeting the room.
+          I&apos;ll personally email you when Cohort #1 opens with all the details. In the meantime, check out the <Link href="/blog" style={{ textDecoration: 'underline', fontWeight: 600 }}>blog</Link> for hands-on notes from the field.
         </p>
       </div>
     )
@@ -384,7 +391,7 @@ function HowItWorks() {
     { n: '01', t: 'Join the waitlist', d: 'Free. I&apos;ll personally email you when seats open with all the details.' },
     { n: '02', t: 'Learn alongside the cohort', d: '2 live sessions/week (recorded). 1 weekly lab. Weekly check-ins. Small enough that I&apos;ll know your name.' },
     { n: '03', t: 'Build a capstone', d: 'A real project you build alongside the cohort, with personal feedback from me each step.' },
-    { n: '04', t: 'Stay in the room', d: 'Lifetime alumni access to the Builders Hub. Keep learning, keep building, keep meeting people.' },
+    { n: '04', t: 'Get your certificate', d: 'Receive a certificate of completion and a resume-ready portfolio project you can show employers.' },
   ]
   return (
     <section style={{ background: '#fff', padding: '80px 20px', borderBottom: '2px solid #1a1a1a' }}>
@@ -417,7 +424,7 @@ function WhyMe() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 18, marginTop: 24 }}>
           <Stat n="14+ yrs" l="In cybersecurity, including time at AirAsia&apos;s InfoSec team" />
           <Stat n="Indie" l="Building security products independently for the last several years" />
-          <Stat n="Open" l="Open-source contributions and tools shared with the community" />
+          <Stat n="Open" l="Open-source contributions and tools shared with the field" />
           <Stat n="Personal" l="Cohorts kept small enough that I review every learner&apos;s work" />
         </div>
         <p style={{ marginTop: 28, color: 'var(--muted)', fontSize: 15, lineHeight: 1.7, maxWidth: 640, marginLeft: 'auto', marginRight: 'auto' }}>
@@ -451,7 +458,7 @@ function Pricing() {
           <FormatTier
             name="Self-paced"
             description="Recorded lessons and labs you can work through on your own time."
-            features={['All recordings', 'Weekly labs (async)', 'Builders Hub access', 'Cyber Apprentice badge on completion']}
+            features={['All recordings', 'Weekly labs (async)', 'Self-paced timeline', 'Certificate of completion']}
             priceNote="From RM 150 · Scholarships available"
           />
           <FormatTier
@@ -514,7 +521,98 @@ function FormatTier({ name, description, features, highlight, priceNote }: { nam
   )
 }
 
-// ─── FAQ ─────────────────────────────────────────────────────────────
+// ─── What You’ll Learn ────────────────────────────────────────
+const FIELDS = [
+  { t: 'Security Operations (SOC)', d: 'Triage alerts, run playbooks, hand off incidents like a real analyst.' },
+  { t: 'Cloud Security', d: 'AWS / Azure / GCP — IAM, misconfigurations, posture management.' },
+  { t: 'Penetration Testing', d: 'Recon, vuln discovery, web app testing, methodical reporting.' },
+  { t: 'Incident Response', d: 'Timelines, containment, evidence, communications under pressure.' },
+  { t: 'SIEM / EDR / XDR', d: 'Splunk, ELK, modern endpoint tooling — detection from the inside.' },
+  { t: 'DevSecOps', d: 'Shifting security left — CI/CD, IaC scanning, secrets, supply chain.' },
+  { t: 'Identity & Access (IAM)', d: 'How identity actually breaks: SSO, OIDC, OAuth, privilege escalation.' },
+  { t: 'GRC & Compliance', d: 'ISO 27001, SOC 2, NIST — frameworks that map to real engineering.' },
+  { t: 'AI Security', d: 'Prompt injection, model abuse, data exfil through LLMs, OWASP for AI.' },
+  { t: 'Detection Engineering', d: 'Writing detections that catch attackers — not just generate noise.' },
+]
+
+function WhatYouLearn() {
+  return (
+    <section style={{ background: '#fdfaf6', padding: '80px 20px', borderBottom: '2px solid #1a1a1a' }}>
+      <div style={{ maxWidth: 1080, margin: '0 auto' }}>
+        <p className="muted-label" style={{ marginBottom: 12, textAlign: 'center' }}>10 fields. One curriculum.</p>
+        <h2 className="display-font" style={{ fontSize: 'clamp(28px, 5vw, 40px)', textAlign: 'center', marginBottom: 12, lineHeight: 1.1 }}>What you&apos;ll learn</h2>
+        <p style={{ color: 'var(--muted)', textAlign: 'center', marginBottom: 40, fontSize: 16, maxWidth: 640, marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.6 }}>
+          A practitioner&apos;s map of cybersecurity — the 10 fields you actually need to know to land and grow in a real job.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 16 }}>
+          {FIELDS.map(f => (
+            <div key={f.t} style={{ padding: 20, border: '2px solid #1a1a1a', background: '#fff', boxShadow: '4px 4px 0 0 #1a1a1a' }}>
+              <h3 style={{ fontSize: 16, fontWeight: 800, marginBottom: 8, lineHeight: 1.3 }}>{f.t}</h3>
+              <p style={{ color: 'var(--muted)', fontSize: 14, lineHeight: 1.6 }}>{f.d}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── Mentorship ───────────────────────────────────────────────────────
+function Mentorship() {
+  return (
+    <section style={{ background: '#fff', padding: '80px 20px', borderBottom: '2px solid #1a1a1a' }}>
+      <div style={{ maxWidth: 980, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 36 }}>
+          <p className="muted-label" style={{ marginBottom: 12 }}>Personal guidance</p>
+          <h2 className="display-font" style={{ fontSize: 'clamp(28px, 5vw, 40px)', lineHeight: 1.1, marginBottom: 12 }}>1:1 Mentorship</h2>
+          <p style={{ color: 'var(--muted)', fontSize: 16, maxWidth: 620, margin: '0 auto', lineHeight: 1.7 }}>
+            Direct, focused sessions for people who want a clear path forward — whether you&apos;re breaking in or levelling up.
+          </p>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 18, marginBottom: 32 }}>
+          {[
+            { t: '45-min sessions', d: 'Focused calls. Career strategy, technical deep-dives, or interview prep — your call.' },
+            { t: 'Async notes', d: 'Written summaries after each session so you can act on the advice, not re-watch.' },
+            { t: 'Career roadmap', d: 'A clear 6-12 month plan tailored to your starting point and target role.' },
+          ].map(c => (
+            <div key={c.t} style={{ padding: 22, border: '2px solid #1a1a1a', background: '#fdfaf6' }}>
+              <h3 style={{ fontSize: 17, fontWeight: 800, marginBottom: 8 }}>{c.t}</h3>
+              <p style={{ color: 'var(--muted)', fontSize: 14, lineHeight: 1.6 }}>{c.d}</p>
+            </div>
+          ))}
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <Link href="/contact" className="btn btn-3d" style={{ display: 'inline-block', padding: '14px 28px' }}>
+            Book a mentorship session →
+          </Link>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── Final CTA ─────────────────────────────────────────────────────────
+function FinalCTA() {
+  return (
+    <section style={{ background: '#1a1a1a', color: '#fff', padding: '80px 20px' }}>
+      <div style={{ maxWidth: 760, margin: '0 auto', textAlign: 'center' }}>
+        <h2 className="display-font" style={{ fontSize: 'clamp(28px, 5vw, 42px)', lineHeight: 1.1, marginBottom: 16 }}>
+          Ready to take the next step?
+        </h2>
+        <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 16, marginBottom: 28, lineHeight: 1.7 }}>
+          Start free with the 5-lesson email course, join the cohort waitlist, or book a 1:1 session — whichever fits where you are.
+        </p>
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <a href="#free" className="btn btn-3d" style={{ background: '#fff', color: '#1a1a1a' }}>Start free →</a>
+          <a href="#cohort" className="btn-outline" style={{ borderColor: '#fff', color: '#fff' }}>Join cohort waitlist</a>
+          <Link href="/contact" className="btn-outline" style={{ borderColor: '#fff', color: '#fff' }}>Book a session</Link>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+// ─── FAQ ────────────────────────────────────────────────────────────
 function FAQSection() {
   return (
     <section style={{ background: '#fdfaf6', padding: '80px 20px' }}>

@@ -10,11 +10,11 @@ export const EMAIL_CONFIG = {
   apiKey: process.env.RESEND_API_KEY || '',
 
   // Your verified sender email (must match domain verified in Resend)
-  fromEmail: lc(process.env.SENDER_EMAIL, 'hello@devashishsingh.com'),
+  fromEmail: lc(process.env.SENDER_EMAIL, 'founder@devashishsingh.com'),
   fromName: process.env.SENDER_NAME || 'Devashish',
 
   // Where admin notifications go
-  adminEmail: lc(process.env.CONTACT_TARGET_EMAIL, 'hello@devashishsingh.com'),
+  adminEmail: lc(process.env.CONTACT_TARGET_EMAIL, 'founder@devashishsingh.com'),
 
   // Base URL for links in emails
   baseUrl: process.env.BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'),

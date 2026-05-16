@@ -67,7 +67,7 @@ export default function Hero(){
 
           <motion.div variants={childVariants}>
             <div className="muted-label" style={{display:'flex',alignItems:'center',gap:6}}>
-              Cybersecurity practitioner · Cohort instructor · Indie founder
+              Cybersecurity Mentor · Practitioner · Educator
               <Sparkle />
             </div>
           </motion.div>
@@ -82,19 +82,19 @@ export default function Hero(){
           </motion.div>
 
           <motion.div variants={childVariants}>
-            <p className="hero-lead" style={{transform:'translateZ(15px)'}}>I run small, hands-on cohorts in <strong>cybersecurity &amp; AI</strong> — the kind I wish I&apos;d had when I was starting out.<br/><br/>14+ years in the field. I teach what I&apos;ve actually been doing in the trenches — the kind of practical work that lands you a real job, in a room small enough that I&apos;ll know your name.<br/><br/>If that sounds like the kind of learning you want, start with the free 5-lesson intro — or have a look at the cohorts and reach out.</p>
+            <p className="hero-lead" style={{transform:'translateZ(15px)'}}>14+ years in cybersecurity across banking, aviation, insurance &amp; tech. I run hands-on training, labs, and mentorship programs that help people land real cybersecurity jobs — and I consult with teams who need to get their security right.</p>
           </motion.div>
 
           <motion.div variants={childVariants}>
             <div className="hero-cta" style={{transform:'translateZ(20px)', display:'flex', gap:16, alignItems:'center', flexWrap:'wrap'}}>
               <MagneticButton strength={0.35}>
                 <motion.div whileTap={{ scale: 0.97 }}>
-                  <Link href="/study#free" className="btn btn-3d" style={{ height:44, minWidth:200, display:'inline-flex', alignItems:'center', justifyContent:'center', borderRadius:8 }}>Free 5-lesson intro →</Link>
+                  <Link href="/learn" className="btn btn-3d" style={{ height:44, minWidth:200, display:'inline-flex', alignItems:'center', justifyContent:'center', borderRadius:8 }}>Start Learning →</Link>
                 </motion.div>
               </MagneticButton>
               <MagneticButton strength={0.35}>
                 <motion.div whileTap={{ scale: 0.97 }}>
-                  <Link href="/study" className="btn-outline btn-3d" style={{ height:44, minWidth:200, display:'inline-flex', alignItems:'center', justifyContent:'center', borderRadius:8 }}>Explore the cohorts</Link>
+                  <Link href="/events" className="btn-outline btn-3d" style={{ height:44, minWidth:200, display:'inline-flex', alignItems:'center', justifyContent:'center', borderRadius:8 }}>Upcoming Events →</Link>
                 </motion.div>
               </MagneticButton>
             </div>
@@ -102,7 +102,7 @@ export default function Hero(){
 
           <motion.div variants={childVariants}>
             <p style={{ fontFamily:"'IBM Plex Mono',monospace", fontSize:11, color:'var(--text-muted)', letterSpacing:'0.05em', marginTop:16 }}>
-              Cohorts · 1:1 mentoring · Curated community
+              Cohorts · Workshops · 1:1 Mentorship
             </p>
           </motion.div>
         </motion.div>

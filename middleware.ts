@@ -19,8 +19,40 @@ async function verifySessionEdge(sessionValue: string): Promise<boolean> {
   return mismatch === 0
 }
 
+// Permanent route redirects (site restructure)
+const REDIRECTS: Record<string, string> = {
+  '/services': '/',
+  '/work': '/about',
+  '/study': '/learn',
+  '/community': '/',
+  '/community/join': '/',
+  '/community/subscribe': '/',
+}
+
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
+
+  // Redirects — match exact path or any subpath of /community
+  if (REDIRECTS[pathname]) {
+    const target = req.nextUrl.clone()
+    target.pathname = REDIRECTS[pathname]
+    return NextResponse.redirect(target, 308)
+  }
+  if (pathname.startsWith('/community/') || pathname === '/community') {
+    const target = req.nextUrl.clone()
+    target.pathname = '/'
+    return NextResponse.redirect(target, 308)
+  }
+  if (pathname.startsWith('/work/') || pathname === '/work') {
+    const target = req.nextUrl.clone()
+    target.pathname = '/about'
+    return NextResponse.redirect(target, 308)
+  }
+  if (pathname.startsWith('/study/') || pathname === '/study') {
+    const target = req.nextUrl.clone()
+    target.pathname = '/learn'
+    return NextResponse.redirect(target, 308)
+  }
 
   // Only protect /admin page (not /api/admin/login)
   if (pathname.startsWith('/admin') && !pathname.startsWith('/api')) {
@@ -37,5 +69,14 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: [
+    '/admin/:path*',
+    '/services',
+    '/work',
+    '/work/:path*',
+    '/study',
+    '/study/:path*',
+    '/community',
+    '/community/:path*',
+  ],
 }

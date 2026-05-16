@@ -271,7 +271,7 @@ interface EmailDiag {
 
 function EmailHealthPanel() {
   const [diag, setDiag] = useState<EmailDiag | null>(null)
-  const [recipient, setRecipient] = useState('devashish.singh12@gmail.com')
+  const [recipient, setRecipient] = useState('founder@devashishsingh.com')
   const [template, setTemplate] = useState('contactAutoReply')
   const [sending, setSending] = useState(false)
   const [result, setResult] = useState<{ ok: boolean; message: string } | null>(null)
