@@ -6,7 +6,7 @@ import ReserveCTA from '../../components/workshop/ReserveCTA'
 export const metadata: Metadata = {
   title: 'Free Cybersecurity Career Workshop — Devashish Singh',
   description:
-    'Join a free 90-minute mentorship workshop with Devashish Singh (14+ years in cybersecurity) to discover which of the top 10 cybersecurity fields fits you. Only 25 seats.',
+    'Join a free 90-minute mentorship workshop with Devashish Singh (14+ years in cybersecurity) to discover which of the top 10 cybersecurity fields fits you. Only 5 seats.',
   keywords: [
     'cybersecurity workshop',
     'cybersecurity career',
@@ -22,14 +22,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Free Cybersecurity Career Workshop — Devashish Singh',
     description:
-      'Which cybersecurity field is right for you? Free 90-minute mentorship workshop. Only 25 seats.',
+      'Which cybersecurity field is right for you? Free 90-minute mentorship workshop. Only 5 seats.',
     url: '/workshop',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Free Cybersecurity Career Workshop — Devashish Singh',
-    description: 'Free 90-min mentorship workshop. Only 25 seats.',
+    description: 'Free 90-min mentorship workshop. Only 5 seats.',
   },
 }
 
@@ -62,9 +62,9 @@ const AGENDA = [
   { time: '01:10–01:20', title: 'Q&A + Mentorship' },
 ]
 
-const TAGS = ['Live Session', 'Only 25 Seats', 'Completely Free', 'Career Roadmap Included']
+const TAGS = ['Live Session', 'Only 5 Seats', 'Completely Free', 'Career Roadmap Included']
 
-const SHARE_MESSAGE = 'Free cybersecurity workshop by a 14+ year expert — only 25 seats! Register: https://devashishsingh.com/workshop'
+const SHARE_MESSAGE = 'Free cybersecurity workshop by a 14+ year expert — only 5 seats! Register: https://devashishsingh.com/workshop'
 const SHARE_URL = 'https://devashishsingh.com/workshop'
 
 export default function WorkshopPage() {
@@ -78,7 +78,7 @@ export default function WorkshopPage() {
     eventStatus: 'https://schema.org/EventScheduled',
     organizer: { '@type': 'Person', name: 'Devashish Singh', url: 'https://devashishsingh.com' },
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD', availability: 'https://schema.org/LimitedAvailability' },
-    maximumAttendeeCapacity: 25,
+    maximumAttendeeCapacity: 5,
   }
 
   return (
@@ -104,7 +104,7 @@ export default function WorkshopPage() {
               fontWeight: 500,
             }}
           >
-            🔴 Free Workshop · Only 25 Seats
+            🔴 Free Workshop · Only 5 Seats
           </span>
 
           <h1

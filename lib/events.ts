@@ -32,7 +32,7 @@ export const UPCOMING_EVENTS: UpcomingEvent[] = [
     time: '90 minutes',
     format: 'Online',
     price: 'Free',
-    seatsTotal: 25,
+    seatsTotal: 5,
     seatsRemainingApi: '/api/workshop',
     description:
       'A free mentorship session covering the top 10 cybersecurity career paths, salary ranges, and a 90-day roadmap. Built for students and early-career professionals.',

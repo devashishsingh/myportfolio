@@ -42,7 +42,7 @@ export default function RegistrationForm() {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'sent' | 'error' | 'closed'>('idle')
   const [error, setError] = useState('')
   const [remaining, setRemaining] = useState<number | null>(null)
-  const SEAT_TOTAL = 25
+  const SEAT_TOTAL = 5
 
   useEffect(() => {
     fetch('/api/workshop')
@@ -67,8 +67,10 @@ export default function RegistrationForm() {
         }}
       >
         <div style={{ fontSize: 40, marginBottom: 8 }}>✅</div>
-        <h3 className="display-font" style={{ fontSize: 24, margin: '4px 0 8px' }}>You&rsquo;re In!</h3>
-        <p style={{ color: 'var(--text-muted)', margin: 0 }}>Check your email for the meeting link and prep note.</p>
+        <h3 className="display-font" style={{ fontSize: 24, margin: '4px 0 8px' }}>You&rsquo;re Registered!</h3>
+        <p style={{ color: 'var(--text-muted)', margin: 0, lineHeight: 1.6 }}>
+          Thanks for signing up. We&rsquo;ll get back to you within 24 hours with the meeting link and agenda. See you soon!
+        </p>
       </div>
     )
   }
@@ -84,9 +86,10 @@ export default function RegistrationForm() {
           background: 'var(--surface-2)',
         }}
       >
+        <div style={{ fontSize: 36, marginBottom: 6 }}>🔒</div>
         <h3 className="display-font" style={{ fontSize: 22, margin: '0 0 8px' }}>Registrations Closed</h3>
-        <p style={{ color: 'var(--text-muted)', margin: 0 }}>
-          All 25 seats are taken. Drop a note via <a href="/contact" style={{ textDecoration: 'underline' }}>contact</a> to be notified about the next session.
+        <p style={{ color: 'var(--text-muted)', margin: 0, lineHeight: 1.6 }}>
+          All 5 spots have been filled. We&rsquo;ll open another session soon.
         </p>
       </div>
     )
@@ -136,7 +139,7 @@ export default function RegistrationForm() {
         <p style={{ margin: '6px 0 0', color: 'var(--text-muted)', fontSize: 14 }}>
           {remaining === null
             ? 'Loading seat availability…'
-            : `Only ${remaining} of ${SEAT_TOTAL} seats remaining`}
+            : `⚡ Only ${remaining} of ${SEAT_TOTAL} seats remaining`}
         </p>
       </div>
 
