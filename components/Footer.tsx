@@ -4,7 +4,7 @@ const LINKEDIN_URL = 'https://www.linkedin.com/in/devashish-singh-52a050112'
 const EMAIL = 'founder@devashishsingh.com'
 const WHATSAPP_URL = 'https://wa.me/60174224379'
 const DISCORD_URL = 'https://discord.gg/cDHg2fKY'
-const YOUTUBE_URL = 'https://www.youtube.com/@devashishsingh'
+const YOUTUBE_URL = 'https://youtube.com/@thefirstthought-ds'
 
 const NAV_LINKS = [
   { label: 'About', href: '/about' },
