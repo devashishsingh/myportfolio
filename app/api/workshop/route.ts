@@ -4,7 +4,7 @@ import { createLead } from '../../../lib/leads'
 
 export const dynamic = 'force-dynamic'
 
-const SEAT_LIMIT = 5
+const SEAT_LIMIT = 25
 
 async function workshopCount() {
   try {
@@ -24,30 +24,28 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const data = await request.json()
-    const { name, email, phone, college, year, field, _hp } = data
+    const { name, email, college, year, field, _hp } = data
 
     // Honeypot
     if (_hp) return NextResponse.json({ status: 'sent' })
 
-    if (!name || !email || !phone || !college || !year || !field) {
+    if (!name || !email || !college || !year || !field) {
       return NextResponse.json({ error: 'Please fill in all required fields.' }, { status: 400 })
     }
 
     const nameStr = String(name).trim().slice(0, 100)
     const emailStr = String(email).trim().toLowerCase().slice(0, 254)
-    const phoneStr = String(phone).trim().slice(0, 40)
     const collegeStr = String(college).trim().slice(0, 200)
     const yearStr = String(year).trim().slice(0, 50)
     const fieldStr = String(field).trim().slice(0, 100)
 
     if (nameStr.length < 2) return NextResponse.json({ error: 'Name is too short.' }, { status: 400 })
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailStr)) return NextResponse.json({ error: 'Invalid email address.' }, { status: 400 })
-    if (!/^[+0-9()\-\s]{6,}$/.test(phoneStr)) return NextResponse.json({ error: 'Invalid phone number.' }, { status: 400 })
 
     // Seat limit
     const current = await workshopCount()
     if (current >= SEAT_LIMIT) {
-      return NextResponse.json({ error: 'Registrations are closed — all 5 seats are taken.', closed: true }, { status: 409 })
+      return NextResponse.json({ error: `Registrations are closed — all ${SEAT_LIMIT} seats are taken.`, closed: true }, { status: 409 })
     }
 
     // Block duplicate registration
@@ -65,7 +63,7 @@ export async function POST(request: Request) {
       email: emailStr,
       source: 'workshop',
       message,
-      meta: { phone: phoneStr, college: collegeStr, year: yearStr, field: fieldStr },
+      meta: { college: collegeStr, year: yearStr, field: fieldStr },
     })
 
     const after = current + 1

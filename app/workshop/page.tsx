@@ -6,7 +6,7 @@ import ReserveCTA from '../../components/workshop/ReserveCTA'
 export const metadata: Metadata = {
   title: 'Free Cybersecurity Career Workshop — Devashish Singh',
   description:
-    'Join a free 90-minute mentorship workshop with Devashish Singh (14+ years in cybersecurity) to discover which of the top 10 cybersecurity fields fits you. Only 5 seats.',
+    'Join a free 90-minute mentorship workshop with Devashish Singh (14+ years in cybersecurity) to discover which of the top 10 cybersecurity fields fits you. Only 25 seats.',
   keywords: [
     'cybersecurity workshop',
     'cybersecurity career',
@@ -22,14 +22,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Free Cybersecurity Career Workshop — Devashish Singh',
     description:
-      'Which cybersecurity field is right for you? Free 90-minute mentorship workshop. Only 5 seats.',
+      'Which cybersecurity field is right for you? Free 90-minute mentorship workshop. Only 25 seats.',
     url: '/workshop',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Free Cybersecurity Career Workshop — Devashish Singh',
-    description: 'Free 90-min mentorship workshop. Only 5 seats.',
+    description: 'Free 90-min mentorship workshop. Only 25 seats.',
   },
 }
 
@@ -62,9 +62,9 @@ const AGENDA = [
   { time: '01:10–01:20', title: 'Q&A + Mentorship' },
 ]
 
-const TAGS = ['Live Session', 'Only 5 Seats', 'Completely Free', 'Career Roadmap Included']
+const TAGS = ['Live Session · 3 June 2026 · 2 PM IST', 'Only 25 Seats', 'Completely Free', 'Career Roadmap Included']
 
-const SHARE_MESSAGE = 'Free cybersecurity workshop by a 14+ year expert — only 5 seats! Register: https://devashishsingh.com/workshop'
+const SHARE_MESSAGE = 'Free cybersecurity workshop by a 14+ year expert — 3 June 2026, 2 PM IST. Register: https://devashishsingh.com/workshop'
 const SHARE_URL = 'https://devashishsingh.com/workshop'
 
 export default function WorkshopPage() {
@@ -76,9 +76,11 @@ export default function WorkshopPage() {
       'A free 90-minute mentorship workshop by Devashish Singh covering the top 10 cybersecurity career paths, salary expectations, and a 90-day roadmap.',
     eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
     eventStatus: 'https://schema.org/EventScheduled',
+    startDate: '2026-06-03T14:00:00+05:30',
+    endDate: '2026-06-03T15:30:00+05:30',
     organizer: { '@type': 'Person', name: 'Devashish Singh', url: 'https://devashishsingh.com' },
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD', availability: 'https://schema.org/LimitedAvailability' },
-    maximumAttendeeCapacity: 5,
+    maximumAttendeeCapacity: 25,
   }
 
   return (
@@ -104,7 +106,7 @@ export default function WorkshopPage() {
               fontWeight: 500,
             }}
           >
-            🔴 Free Workshop · Only 5 Seats
+            🔴 Free Workshop · 3 June 2026 · 2 PM IST · Only 25 Seats
           </span>
 
           <h1

@@ -43,12 +43,12 @@ export async function GET(req: Request) {
 
     const url = new URL(req.url)
     if (url.searchParams.get('format') === 'csv') {
-      const headers = ['Name', 'Email', 'Phone', 'College', 'Year', 'Interest', 'Submitted']
+      const headers = ['Name', 'Email', 'College', 'Year', 'Interest', 'Submitted']
       const escape = (v: string) => `"${String(v ?? '').replace(/"/g, '""')}"`
       const lines = [
         headers.join(','),
         ...registrations.map((r: any) =>
-          [r.name, r.email, r.phone, r.college, r.year, r.field, new Date(r.createdAt).toISOString()]
+          [r.name, r.email, r.college, r.year, r.field, new Date(r.createdAt).toISOString()]
             .map(escape)
             .join(','),
         ),

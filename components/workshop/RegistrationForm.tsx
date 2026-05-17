@@ -42,7 +42,7 @@ export default function RegistrationForm() {
   const [status, setStatus] = useState<'idle' | 'submitting' | 'sent' | 'error' | 'closed'>('idle')
   const [error, setError] = useState('')
   const [remaining, setRemaining] = useState<number | null>(null)
-  const SEAT_TOTAL = 5
+  const SEAT_TOTAL = 25
 
   useEffect(() => {
     fetch('/api/workshop')
@@ -89,7 +89,7 @@ export default function RegistrationForm() {
         <div style={{ fontSize: 36, marginBottom: 6 }}>🔒</div>
         <h3 className="display-font" style={{ fontSize: 22, margin: '0 0 8px' }}>Registrations Closed</h3>
         <p style={{ color: 'var(--text-muted)', margin: 0, lineHeight: 1.6 }}>
-          All 5 spots have been filled. We&rsquo;ll open another session soon.
+          All 25 spots have been filled. We&rsquo;ll open another session soon.
         </p>
       </div>
     )
@@ -105,7 +105,6 @@ export default function RegistrationForm() {
         const payload = {
           name: fd.get('name'),
           email: fd.get('email'),
-          phone: fd.get('phone'),
           college: fd.get('college'),
           year: fd.get('year'),
           field: fd.get('field'),
@@ -160,11 +159,6 @@ export default function RegistrationForm() {
       <label>
         <span style={labelStyle}>Email *</span>
         <input name="email" type="email" required maxLength={254} style={inputStyle} />
-      </label>
-
-      <label>
-        <span style={labelStyle}>WhatsApp / Phone *</span>
-        <input name="phone" type="tel" required maxLength={40} placeholder="+91 98xxxxxxxx" style={inputStyle} />
       </label>
 
       <label>

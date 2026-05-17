@@ -28,11 +28,11 @@ export const UPCOMING_EVENTS: UpcomingEvent[] = [
   {
     id: 'cyber-fields-workshop',
     title: 'Which Cybersecurity Field is Right for You?',
-    date: 'TBA — May 2026',
-    time: '90 minutes',
+    date: '3 June 2026',
+    time: '2:00 PM IST · 90 minutes',
     format: 'Online',
     price: 'Free',
-    seatsTotal: 5,
+    seatsTotal: 25,
     seatsRemainingApi: '/api/workshop',
     description:
       'A free mentorship session covering the top 10 cybersecurity career paths, salary ranges, and a 90-day roadmap. Built for students and early-career professionals.',
